@@ -1,0 +1,22 @@
+﻿@model IEnumerable<g16_dotnet.Models.Domain.Groep>
+
+
+<div class="container">
+    <form method="post">
+        <input name="inputCode" type="number" placeholder="Code" />
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+<h1>The code is @TempData["code"]</h1>
+
+@if (Model != null) {
+    <p>Beschikbare groepen: </p>
+
+    @foreach (var item in Model) {
+        <li>@item.Groepsnaam</li>
+
+    }
+}
+
+
