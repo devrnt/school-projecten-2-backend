@@ -20,7 +20,7 @@ namespace g16_dotnet.Controllers {
 
         [HttpPost]
         public IActionResult Index(int inputCode) {
-            Sessie sessie = _sessieController.GetSessie(inputCode);
+            Sessie sessie = _sessieController.GetById(inputCode);
             if(sessie != null) {
                 TempData["code"] = "geldig";
                 var groepen = new List<Groep> { new Groep(), new Groep()};

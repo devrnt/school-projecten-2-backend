@@ -50,7 +50,7 @@ namespace g16_dotnet
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Spel}/{action=Index}/{id?}");
             });
         }
     }

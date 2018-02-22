@@ -1,20 +1,44 @@
 ﻿using g16_dotnet.Models.Domain;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace g16_dotnet.Data.Repositories
 {
     public class SessieRepository : ISessieRepository{
-        public Sessie GetSessie(int sessieCode) {
-            // vraag aan dbCOntext of deze sessie met deze code bestaat
-            // tijdelijk dit returnen
-            if (sessieCode == 1234) {
-                return new Sessie(1234, new Klas());
-            } else {
-                return null;
-            }
+
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<Sessie> _sessies;
+
+        public SessieRepository(ApplicationDbContext context)
+        {
+            _context = context;
+            _sessies = context.Sessies;
+        }
+
+        public void Add(Sessie sessie)
+        {
+            _sessies.Add(sessie);
+        }
+
+        public void Delete(Sessie sessie)
+        {
+            _sessies.Remove(sessie);
+        }
+
+        public IEnumerable<Sessie> GetAll()
+        {
+            return _sessies.ToList();
+        }
+
+        public Sessie GetById(int sessieCode)
+        {
+            return _sessies.SingleOrDefault(s => s.Code == sessieCode);
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using g16_dotnet.Models.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,14 @@ namespace g16_dotnet.Data
 {
     public class ApplicationDbContext:DbContext
     {
+        public DbSet<Sessie> Sessies { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            // no connectionstring needed atm.
+            var connectionstring = @"Server=.\SQLEXPRESS;Database=BreakoutBox;Integrated Security=True;";
+            optionsBuilder.UseSqlServer(connectionstring);
         }
+
+
         
     }
 }
