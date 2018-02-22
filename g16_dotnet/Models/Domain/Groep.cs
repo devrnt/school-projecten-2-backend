@@ -17,6 +17,10 @@ namespace g16_dotnet.Models.Domain {
             Groepsnaam = "NogGeenGroepsNaam";
             IsVergrendeld = false;
         }
+        public Groep(string naam)
+        {
+            Groepsnaam = naam; 
+        }
         #endregion
     }
 }

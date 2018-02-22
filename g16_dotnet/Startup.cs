@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using g16_dotnet.Data;
 using g16_dotnet.Data.Repositories;
 using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Builder;
@@ -25,14 +26,14 @@ namespace g16_dotnet
         {
 
             // add application services.
+            services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<ISessieRepository, SessieRepository>();
-
             services.AddMvc();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +53,7 @@ namespace g16_dotnet
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            SessieDataInitializer.InitializeData(context);
         }
     }
 }

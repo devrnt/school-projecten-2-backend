@@ -7,7 +7,9 @@ namespace g16_dotnet.Models.Domain
 {
     public interface ISessieRepository
     {
-        Sessie GetSessie(int sessieCode);
-    
+        IEnumerable<Sessie> getAll();
+        Sessie valideerCode(int inputCode);
+        Sessie getById(int inputCode);
+        Groep getByName(Sessie correcteSessie, string groepsnaam);
     }
 }

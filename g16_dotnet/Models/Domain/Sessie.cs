@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace g16_dotnet.Models.Domain {
-    public class Sessie {
+namespace g16_dotnet.Models.Domain
+{
+    public class Sessie
+    {
         #region Properties
         public int SessionId { get; set; }
-
         public string Omschrijving { get; set; }
         public int Code { get; set; }
 
@@ -17,10 +18,17 @@ namespace g16_dotnet.Models.Domain {
         #endregion
 
         #region Constructor
-        public Sessie(int code, Klas klas) {
+        public Sessie(int code, Klas klas)
+        {
             Code = code;
             Klas = klas;
             Groepen = new List<Groep>();
+        }
+        public Sessie(int code, Klas klas, ICollection<Groep> groepen)
+        {
+            Code = code;
+            Klas = klas;
+            Groepen = groepen;
         }
         #endregion
     }
