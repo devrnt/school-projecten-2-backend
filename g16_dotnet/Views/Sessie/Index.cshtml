@@ -8,13 +8,14 @@
     </form>
 </div>
 
-<h1>The code is @TempData["code"]</h1>
+<h1>De code is @TempData["code"]</h1>
 
 @if (Model != null) {
     <p>Beschikbare groepen: </p>
 
     @foreach (var item in Model) {
-        <li>@item.Groepsnaam</li>
+        <li><a asp-controller="Sessie" asp-action="Deelnemen">@item.Groepsnaam</a></li>
+      
 
     }
 }
