@@ -30,6 +30,11 @@ namespace g16_dotnet.Models.Domain
             isVoltooid = code == ToegangsCode;
             return isVoltooid;
         }
+
+        public Opdracht()
+        {
+
+        }
         #endregion
     }
 }

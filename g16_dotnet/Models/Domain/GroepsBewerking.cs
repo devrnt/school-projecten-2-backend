@@ -3,6 +3,7 @@
     public class GroepsBewerking
     {
         #region Fields and Properties
+        public int GroepsBewerkingId { get; set; }
         public string Omschrijving { get; private set; }
         #endregion
 
@@ -10,6 +11,11 @@
         public GroepsBewerking(string omschrijving)
         {
             Omschrijving = omschrijving;
+        }
+
+        public GroepsBewerking()
+        {
+
         }
         #endregion
     }

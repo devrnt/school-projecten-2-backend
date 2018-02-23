@@ -29,6 +29,7 @@ namespace g16_dotnet
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<ISessieRepository, SessieRepository>();
             services.AddMvc();
+            services.AddSession();
 
         }
 
@@ -46,7 +47,7 @@ namespace g16_dotnet
             }
 
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -54,6 +55,7 @@ namespace g16_dotnet
                     template: "{controller=Spel}/{action=Index}/{id?}");
             });
             SessieDataInitializer.InitializeData(context);
+            SpelDataInitializer.InitializeData(context);
         }
     }
 }

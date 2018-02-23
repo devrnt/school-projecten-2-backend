@@ -10,6 +10,7 @@ namespace g16_dotnet.Models.Domain
     public class Pad
     {
         #region Fields and Properties
+        public int PadId { get; set; }
         public int AantalOpdrachten { get { return Opdrachten.Count(); } }
         public int Voortgang { get { return Opdrachten.Where(o => o.isVoltooid).Count(); } }
         //[JsonProperty]
