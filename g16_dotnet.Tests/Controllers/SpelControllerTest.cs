@@ -3,9 +3,6 @@ using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace g16_dotnet.Tests.Controllers
@@ -38,6 +35,34 @@ namespace g16_dotnet.Tests.Controllers
         {
             var result = _spelController.BeantwoordVraag("abc") as ViewResult;
             Assert.Equal("Actie", result?.ViewName);
+        }
+
+        [Fact]
+        public void BeantwoordVraag_JuistAntwoord_PassesActieToViewViaModel()
+        {
+            var result = _spelController.BeantwoordVraag("abc") as ViewResult;
+            Assert.Equal("Ga naar afhaalchinees", (result?.Model as Actie).Omschrijving);
+        }
+
+        [Fact]
+        public void VoerActieUit_JuisteCode_RedirectsToIndex()
+        {
+            var result = _spelController.VoerActieUit("xyz") as RedirectToActionResult;
+            Assert.Equal("Index", result?.ActionName);
+        }
+
+        [Fact]
+        public void VoerActieUit_FouteCode_ReturnsActieView()
+        {
+            var result = _spelController.VoerActieUit("uvw") as ViewResult;
+            Assert.Equal("Actie", result?.ViewName);
+        }
+
+        [Fact]
+        public void VoerActieUit_FouteCode_PassesActieToViewViaModel()
+        {
+            var result = _spelController.VoerActieUit("uvw") as ViewResult;
+            Assert.Equal("Ga naar afhaalchinees", (result?.Model as Actie).Omschrijving);
         }
     }
 }
