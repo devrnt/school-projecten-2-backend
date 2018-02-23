@@ -1,32 +1,40 @@
-﻿using g16_dotnet.Models.Domain;
+﻿using g16_dotnet.Filters;
+using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace g16_dotnet.Controllers
 {
+    //[ServiceFilter(typeof(PadSessionFilter))]
+    // Uncomment indien je wenst gebruik te maken van deze sessionfilter als er een pad in de session storage
+    // moet opgeslaan worden. De filter is alvast aangemaakt en dan hoef je slechts enkel nog de jsonannotaties
+    // in de klasse Pad uncommenten.
     public class SpelController : Controller
     {
-        private readonly Opdracht _testOpdracht;
-        private readonly Actie _testActie;
+        private readonly Pad _pad;
 
         public SpelController()
         {
             Oefening oefening = new Oefening("Opgave 1", "abc");
             GroepsBewerking groepsBewerking = new GroepsBewerking("def");
             string toegangsCode = "xyz";
-            _testOpdracht = new Opdracht(toegangsCode, oefening, groepsBewerking);
-            _testActie = new Actie("Ga naar afhaalchinees", _testOpdracht);
+            Opdracht testOpdracht = new Opdracht(toegangsCode, oefening, groepsBewerking);
+            Actie testActie = new Actie("Ga naar afhaalchinees", testOpdracht);
+            _pad = new Pad(new List<Opdracht> { testOpdracht }, new List<Actie> { testActie });
         }
 
         public IActionResult Index()
         {
-            return View(_testOpdracht.Oefening);
+            ViewData["voortgang"] = $"{_pad.Voortgang:N0}/{_pad.AantalOpdrachten:N0}";
+            return View(_pad.Opdrachten.First().Oefening);
         }
 
         public IActionResult BeantwoordVraag(string groepsAntwoord)
         {
-            if (_testOpdracht.Oefening.ControleerAntwoord(groepsAntwoord))
+            if (_pad.Opdrachten.First().Oefening.ControleerAntwoord(groepsAntwoord))
             {
-                return View("Actie", _testActie);
+                return View("Actie", _pad.Acties.First());
             }
             TempData["error"] = $"{groepsAntwoord} is fout!";
             return RedirectToAction(nameof(Index));
@@ -34,12 +42,12 @@ namespace g16_dotnet.Controllers
 
         public IActionResult VoerActieUit(string toegangsCode)
         {
-            if (toegangsCode == _testOpdracht.ToegangsCode)
+            if (_pad.Opdrachten.First().ControleerToegangsCode(toegangsCode))
             {
                 return RedirectToAction(nameof(Index));
             }
             TempData["error"] = $"{toegangsCode} is fout!";
-            return View("Actie", _testActie);
+            return View("Actie", _pad.Acties.First());
         }
     }
 }

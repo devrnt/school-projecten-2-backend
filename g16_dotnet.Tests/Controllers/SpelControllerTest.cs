@@ -24,6 +24,13 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
+        public void Index_PassesVoortgangInViewData()
+        {
+            var result = _spelController.Index() as ViewResult;
+            Assert.Equal("0/1", result?.ViewData["voortgang"]);
+        }
+
+        [Fact]
         public void BeantwoordVraag_FoutAntwoord_RedirectsToIndex()
         {
             var result = _spelController.BeantwoordVraag("def") as RedirectToActionResult;

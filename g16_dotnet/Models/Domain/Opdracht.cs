@@ -9,7 +9,8 @@ namespace g16_dotnet.Models.Domain
     {
         #region Fields and Properties
         public int VolgNr { get; private set; }
-        public string ToegangsCode { get; set; }
+        public string ToegangsCode { get; private set; }
+        public bool isVoltooid { get; private set; }
         public Oefening Oefening { get; private set; }
         public GroepsBewerking GroepsBewerking { get; private set; }
         #endregion
@@ -26,7 +27,8 @@ namespace g16_dotnet.Models.Domain
         #region Methods
         public bool ControleerToegangsCode(string code)
         {
-            return ToegangsCode == code;
+            isVoltooid = code == ToegangsCode;
+            return isVoltooid;
         }
         #endregion
     }
