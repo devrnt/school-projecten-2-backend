@@ -1,5 +1,8 @@
-﻿namespace g16_dotnet.Models.Domain
+﻿using Newtonsoft.Json;
+
+namespace g16_dotnet.Models.Domain
 {
+    [JsonObject(MemberSerialization.OptOut)]
     public class GroepsBewerking
     {
         #region Fields and Properties

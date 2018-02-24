@@ -1,19 +1,47 @@
-﻿@model g16_dotnet.Models.Domain.Oefening
+﻿@model g16_dotnet.Models.Domain.Pad
 @{
     ViewData["Title"] = "Spel spelen";
 }
 
-<h2>@ViewData["Title"]</h2>
-<h3>Voortgang: @ViewData["voortgang"] opdrachten zijn voltooid</h3>
-<p>
-    @Model.Opgave
-</p>
-<form asp-action="BeantwoordVraag">
-    <div class="form-inline">
-        <div class="form-group">
-            <label for="groepsAntwoord"></label>
-            <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="form-control" />
+@if ((string)ViewData["fase"] == "opdracht")
+{
+    <h2>@ViewData["Title"]</h2>
+    <h3>Voortgang: @Model.Voortgang van de @Model.AantalOpdrachten opdrachten zijn voltooid</h3>
+    <p>
+        @Model.HuidigeOpdracht.Oefening.Opgave
+    </p>
+    <form asp-action="BeantwoordVraag">
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="groepsAntwoord"></label>
+                <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-    </div>
-</form>
+    </form>
+}
+
+@if ((string)ViewData["fase"] == "actie")
+{
+    <h2>Actie</h2>
+    <p>
+        @Model.HuidigeActie.Omschrijving
+    </p>
+    <form asp-action="VoerActieUit">
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="toegangsCode">Toegangscode: </label>
+                <input type="text" id="toegangsCode" name="toegangsCode" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </form>
+}
+
+@if ((string)ViewData["fase"] == "schatkist")
+{
+    <h2>Proficiat, jullie hebben de schatkist gevonden!!!</h2>
+
+}
+
+
