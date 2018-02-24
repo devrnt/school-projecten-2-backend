@@ -98,6 +98,8 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_JuisteCode_RedirectsToIndex()
         {
+            _pad.Opdrachten = _lijstMet2Opdrachten;
+            _pad.Opdrachten.First().isVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "xyz") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
@@ -105,6 +107,8 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_FouteCode_ReturnsIndexView()
         {
+            _pad.Opdrachten = _lijstMet2Opdrachten;
+            _pad.Opdrachten.First().isVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "uvw") as ViewResult;
             Assert.Equal("Index", result?.ViewName);
         }
@@ -112,6 +116,8 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_FouteCode_PassesActieFaseInViewData()
         {
+            _pad.Opdrachten = _lijstMet2Opdrachten;
+            _pad.Opdrachten.First().isVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "uvw") as ViewResult;
             Assert.Equal("actie", result?.ViewData["fase"]);
         }
@@ -119,14 +125,16 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_FouteCode_PassesPadToViewViaModel()
         {
+            _pad.Opdrachten = _lijstMet2Opdrachten;
+            _pad.Opdrachten.First().isVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "uvw") as ViewResult;
             Assert.Equal(1, (result?.Model as Pad).PadId);
         } 
 
         [Fact]
         public void VoerActieUit_OpdrachtNietOpgelost_RedirectsToActionIndex()
-        {
-            var result = _spelController.VoerActieUit(_pad, "uvw") as RedirectToActionResult;
+        {                      
+            var result = _spelController.VoerActieUit(_pad, null) as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
         #endregion

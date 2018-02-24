@@ -12,7 +12,8 @@ namespace g16_dotnet.Models.Domain
         public int PadId { get; set; }
         public int? AantalOpdrachten { get { return Opdrachten?.Count(); } }
         public int? Voortgang { get { return Opdrachten?.Where(o => o.isVoltooid).Count(); } }
-        public Opdracht huidigeOpdracht { get { return Opdrachten?.First(o => !o.isVoltooid); } }
+        public Opdracht HuidigeOpdracht { get { return Opdrachten?.First(o => !o.isVoltooid); } }
+        public Actie HuidigeActie { get { return Acties?.First(a => !a.IsUitgevoerd); } }
         [JsonProperty]
         public IEnumerable<Opdracht> Opdrachten { get; set; }
         [JsonProperty]

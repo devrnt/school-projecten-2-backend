@@ -1,7 +1,6 @@
 ﻿using g16_dotnet.Filters;
 using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace g16_dotnet.Controllers
@@ -17,7 +16,7 @@ namespace g16_dotnet.Controllers
 
         public IActionResult BeantwoordVraag(Pad pad, string groepsAntwoord)
         {
-            Opdracht huidig = pad.Opdrachten.First(o => !o.isVoltooid);
+            Opdracht huidig = pad.HuidigeOpdracht;
             if (huidig.Oefening.ControleerAntwoord(groepsAntwoord))
             {
                 huidig.isVoltooid = true;
@@ -35,8 +34,15 @@ namespace g16_dotnet.Controllers
 
         public IActionResult VoerActieUit(Pad pad, string toegangsCode)
         {
-            if (pad.huidigeOpdracht.ControleerToegangsCode(toegangsCode))
+            if (pad.Voortgang <= pad.Acties.Where(a => a.IsUitgevoerd).Count())
             {
+                TempData["error"] = "Los eerst de opdracht op!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (pad.HuidigeOpdracht.ControleerToegangsCode(toegangsCode))
+            {
+                pad.HuidigeActie.IsUitgevoerd = true;
                 return RedirectToAction(nameof(Index));
             }
             TempData["error"] = (toegangsCode == null || toegangsCode.Trim().Length == 0) ?  $"Je hebt geen toegangscode ingegeven" : $"{toegangsCode} is fout!";

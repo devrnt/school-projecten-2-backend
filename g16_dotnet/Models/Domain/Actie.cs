@@ -9,6 +9,7 @@ namespace g16_dotnet.Models.Domain
         #region Fields and Properties
         public int ActieId { get; set; }
         public string Omschrijving { get; private set; }
+        public bool IsUitgevoerd { get; set; }
         public Opdracht GelinkteOpdracht { get; private set; }
         #endregion
 
