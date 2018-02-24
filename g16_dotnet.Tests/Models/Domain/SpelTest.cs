@@ -10,8 +10,6 @@ namespace g16_dotnet.Tests.Models.Domain
 {
     public class SpelTest
     {
-        private readonly SpelController _spelController;
-        private readonly Mock<IPadRepository> _padRepostiory;
-        private readonly DummyApplicationDbContext _dummyContext;
+        
     }
 }

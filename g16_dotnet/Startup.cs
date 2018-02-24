@@ -25,6 +25,7 @@ namespace g16_dotnet
             // add application services.
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<ISessieRepository, SessieRepository>();
+            services.AddScoped<IPadRepository, PadRepository>();
             services.AddScoped<PadSessionFilter>();
             services.AddSession();
             services.AddMvc();

@@ -9,7 +9,7 @@ namespace g16_dotnet.Filters
     public class PadSessionFilter : ActionFilterAttribute
     {
         private Pad _pad;
-
+       
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             _pad = ReadPadFromSession(context.HttpContext);
