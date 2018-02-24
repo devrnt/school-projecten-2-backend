@@ -28,6 +28,7 @@ namespace g16_dotnet
             // add application services.
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<ISessieRepository, SessieRepository>();
+            services.AddScoped<IPadRepository, PadRepository>();
             services.AddMvc();
             services.AddSession();
 
@@ -54,8 +55,8 @@ namespace g16_dotnet
                     name: "default",
                     template: "{controller=Spel}/{action=Index}/{id?}");
             });
-            SessieDataInitializer.InitializeData(context);
             SpelDataInitializer.InitializeData(context);
+            SessieDataInitializer.InitializeData(context);
         }
     }
 }

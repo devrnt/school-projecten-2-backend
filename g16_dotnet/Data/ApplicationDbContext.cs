@@ -10,9 +10,9 @@ namespace g16_dotnet.Data
         public DbSet<Pad> Paden { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            //.\SQLEXPRESS
             var connectionstring = @"Server=.\SQLEXPRESS;Database=BreakoutBox;Integrated Security=True;";
             optionsBuilder.UseSqlServer(connectionstring);
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

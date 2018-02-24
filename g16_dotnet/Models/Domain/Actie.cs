@@ -14,6 +14,9 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Constructors
+        public Actie(string omschrijving) {
+            Omschrijving = omschrijving;
+        }
         public Actie(string omschrijving, Opdracht opdracht)
         {
             Omschrijving = omschrijving;

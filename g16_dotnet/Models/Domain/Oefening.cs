@@ -14,6 +14,10 @@
             Opgave = opgave;
             GroepsAntwoord = groepsAntwoord;
         }
+        // EF
+        public Oefening() {
+
+        }
         #endregion
 
         #region Methods

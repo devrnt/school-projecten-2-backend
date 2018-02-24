@@ -22,6 +22,11 @@ namespace g16_dotnet.Models.Domain
             Oefening = oefening;
             GroepsBewerking = groepsBewerking;
         }
+
+        // EF
+        public Opdracht() {
+
+        }
         #endregion
 
         #region Methods
@@ -29,11 +34,6 @@ namespace g16_dotnet.Models.Domain
         {
             isVoltooid = code == ToegangsCode;
             return isVoltooid;
-        }
-
-        public Opdracht()
-        {
-
         }
         #endregion
     }
