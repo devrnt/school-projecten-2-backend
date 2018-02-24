@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace g16_dotnet.Models.Domain
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Opdracht
     {
         #region Fields and Properties
-        public int VolgNr { get; private set; }
+        [JsonProperty]
+        public int VolgNr { get; set; }
+        [JsonProperty]
         public string ToegangsCode { get; private set; }
-        public bool isVoltooid { get; private set; }
+        [JsonProperty]
+        public bool isVoltooid { get; set; }
+        [JsonProperty]
         public Oefening Oefening { get; private set; }
+        [JsonProperty]
         public GroepsBewerking GroepsBewerking { get; private set; }
         #endregion
 
@@ -22,19 +25,19 @@ namespace g16_dotnet.Models.Domain
             Oefening = oefening;
             GroepsBewerking = groepsBewerking;
         }
-        #endregion
-
-        #region Methods
-        public bool ControleerToegangsCode(string code)
-        {
-            isVoltooid = code == ToegangsCode;
-            return isVoltooid;
-        }
 
         public Opdracht()
         {
 
         }
+        #endregion
+
+        #region Methods
+        public bool ControleerToegangsCode(string code)
+        {
+            return code == ToegangsCode;
+        }
+
         #endregion
     }
 }

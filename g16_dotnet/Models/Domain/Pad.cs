@@ -1,21 +1,21 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace g16_dotnet.Models.Domain
 {
-    //[JsonObject(MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization.OptIn)]
     public class Pad
     {
         #region Fields and Properties
+        [JsonProperty]
         public int PadId { get; set; }
-        public int AantalOpdrachten { get { return Opdrachten.Count(); } }
-        public int Voortgang { get { return Opdrachten.Where(o => o.isVoltooid).Count(); } }
-        //[JsonProperty]
+        public int? AantalOpdrachten { get { return Opdrachten?.Count(); } }
+        public int? Voortgang { get { return Opdrachten?.Where(o => o.isVoltooid).Count(); } }
+        public Opdracht huidigeOpdracht { get { return Opdrachten?.First(o => !o.isVoltooid); } }
+        [JsonProperty]
         public IEnumerable<Opdracht> Opdrachten { get; set; }
-        //[JsonProperty]
+        [JsonProperty]
         public IEnumerable<Actie> Acties { get; set; }
         #endregion
 

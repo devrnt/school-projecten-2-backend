@@ -6,48 +6,42 @@ using System.Linq;
 
 namespace g16_dotnet.Controllers
 {
-    //[ServiceFilter(typeof(PadSessionFilter))]
-    // Uncomment indien je wenst gebruik te maken van deze sessionfilter als er een pad in de session storage
-    // moet opgeslaan worden. De filter is alvast aangemaakt en dan hoef je slechts enkel nog de jsonannotaties
-    // in de klasse Pad uncommenten.
+    [ServiceFilter(typeof(PadSessionFilter))]
     public class SpelController : Controller
     {
-        private readonly Pad _pad;
-
-        public SpelController()
+        public IActionResult Index(Pad pad)
         {
-            Oefening oefening = new Oefening("Opgave 1", "abc");
-            GroepsBewerking groepsBewerking = new GroepsBewerking("def");
-            string toegangsCode = "xyz";
-            Opdracht testOpdracht = new Opdracht(toegangsCode, oefening, groepsBewerking);
-            Actie testActie = new Actie("Ga naar afhaalchinees", testOpdracht);
-            _pad = new Pad(new List<Opdracht> { testOpdracht }, new List<Actie> { testActie });
+            ViewData["fase"] = "opdracht";
+            return View(pad);
         }
 
-        public IActionResult Index()
+        public IActionResult BeantwoordVraag(Pad pad, string groepsAntwoord)
         {
-            ViewData["voortgang"] = $"{_pad.Voortgang:N0}/{_pad.AantalOpdrachten:N0}";
-            return View(_pad.Opdrachten.First().Oefening);
-        }
-
-        public IActionResult BeantwoordVraag(string groepsAntwoord)
-        {
-            if (_pad.Opdrachten.First().Oefening.ControleerAntwoord(groepsAntwoord))
+            Opdracht huidig = pad.Opdrachten.First(o => !o.isVoltooid);
+            if (huidig.Oefening.ControleerAntwoord(groepsAntwoord))
             {
-                return View("Actie", _pad.Acties.First());
+                huidig.isVoltooid = true;
+                if (pad.Voortgang == pad.AantalOpdrachten)
+                {
+                    ViewData["fase"] = "schatkist";
+                    return View("Index", pad);
+                }
+                ViewData["fase"] = "actie";
+                return View("Index", pad);
             }
-            TempData["error"] = $"{groepsAntwoord} is fout!";
+            TempData["error"] = (groepsAntwoord == null || groepsAntwoord.Trim().Length == 0) ? "Je hebt geen antwoord opgegeven" : $"{groepsAntwoord} is fout!";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult VoerActieUit(string toegangsCode)
+        public IActionResult VoerActieUit(Pad pad, string toegangsCode)
         {
-            if (_pad.Opdrachten.First().ControleerToegangsCode(toegangsCode))
+            if (pad.huidigeOpdracht.ControleerToegangsCode(toegangsCode))
             {
                 return RedirectToAction(nameof(Index));
             }
-            TempData["error"] = $"{toegangsCode} is fout!";
-            return View("Actie", _pad.Acties.First());
+            TempData["error"] = (toegangsCode == null || toegangsCode.Trim().Length == 0) ?  $"Je hebt geen toegangscode ingegeven" : $"{toegangsCode} is fout!";
+            ViewData["fase"] = "actie";
+            return View("Index", pad);
         }
     }
 }

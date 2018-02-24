@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using g16_dotnet.Data;
+﻿using g16_dotnet.Data;
 using g16_dotnet.Data.Repositories;
+using g16_dotnet.Filters;
 using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,8 +25,9 @@ namespace g16_dotnet
             // add application services.
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<ISessieRepository, SessieRepository>();
-            services.AddMvc();
+            services.AddScoped<PadSessionFilter>();
             services.AddSession();
+            services.AddMvc();
 
         }
 
@@ -54,7 +52,7 @@ namespace g16_dotnet
                     name: "default",
                     template: "{controller=Spel}/{action=Index}/{id?}");
             });
-            SessieDataInitializer.InitializeData(context);
+            //SessieDataInitializer.InitializeData(context);
             SpelDataInitializer.InitializeData(context);
         }
     }

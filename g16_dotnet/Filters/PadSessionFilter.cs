@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace g16_dotnet.Filters
 {
@@ -28,8 +25,20 @@ namespace g16_dotnet.Filters
 
         private Pad ReadPadFromSession(HttpContext context)
         {
-            Pad pad = context.Session.GetString("pad") == null ?
-                new Pad() : JsonConvert.DeserializeObject<Pad>(context.Session.GetString("pad"));
+            Pad pad = null;
+            if (context.Session.GetString("pad") == null)
+            {
+                Oefening oefening = new Oefening("Opgave 1", "abc");
+                GroepsBewerking groepsBewerking = new GroepsBewerking("def");
+                string toegangsCode = "xyz";
+                Opdracht testOpdracht = new Opdracht(toegangsCode, oefening, groepsBewerking) { VolgNr = 1 };
+                Opdracht testOpdracht2 = new Opdracht(toegangsCode, oefening, groepsBewerking) { VolgNr = 2 };
+                Actie testActie = new Actie("Ga naar afhaalchinees", testOpdracht);
+                pad = new Pad(new List<Opdracht> { testOpdracht, testOpdracht2 }, new List<Actie> { testActie }) { PadId = 1 }; 
+            } else
+            {
+                pad = JsonConvert.DeserializeObject<Pad>(context.Session.GetString("pad"));
+            }
             return pad;
         }
 

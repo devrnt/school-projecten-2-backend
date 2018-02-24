@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace g16_dotnet.Models.Domain
 {
+    [JsonObject(MemberSerialization.OptOut)]
+
     public class Actie
     {
         #region Fields and Properties
