@@ -26,6 +26,12 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Controleert of de paramter antwoord gelijk is aan het ingestelde GroepsAntwoord
+        /// </summary>
+        /// <param name="antwoord">Mag niet leeg of null zijn</param>
+        /// <returns>True indien gelijk, false indien niet gelijk</returns>
+        /// <exception>ArgumentException indien antwoord null of leeg is</exception>
         public bool ControleerAntwoord(string antwoord)
         {
             if (antwoord == null || antwoord.Trim().Length == 0)

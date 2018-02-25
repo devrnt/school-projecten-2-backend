@@ -31,6 +31,12 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Controleert of de opgegeven code gelijk is aan de ingestelde ToegangsCode
+        /// </summary>
+        /// <param name="code">Mag niet null of leeg zijn</param>
+        /// <returns>True indien gelijk, anders false</returns>
+        /// <exception>ArgumentException indien code null of leeg is</exception>
         public bool ControleerToegangsCode(string code)
         {
             if (code == null || code.Trim().Length == 0)
