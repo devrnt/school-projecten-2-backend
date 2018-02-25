@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace g16_dotnet.Models.Domain
 {
@@ -8,7 +9,7 @@ namespace g16_dotnet.Models.Domain
         public int SessieId { get; set; }
         public string Naam { get; set; }
         public string Omschrijving { get; set; }
-        public int Code { get; set; }
+        public int SessieCode { get; set; }
         public bool IsActief { get; set; }
         public IEnumerable<Groep> Groepen { get; set; }
         public Klas Klas { get; set; }
@@ -19,7 +20,7 @@ namespace g16_dotnet.Models.Domain
         {
             Naam = naam;
             Omschrijving = omschrijving;
-            Code = code;
+            SessieCode = code;
             Groepen = groepen;
             Klas = klas;
         }
@@ -27,6 +28,15 @@ namespace g16_dotnet.Models.Domain
         public Sessie()
         {
             Groepen = new List<Groep>();
+        }
+        #endregion
+
+        #region Methods
+        public bool ControleerSessieCode(int code)
+        {
+            if (code < 0)
+                throw new ArgumentException("SessieCode kan niet negatief zijn. ");
+            return code == SessieCode;
         }
         #endregion
     }

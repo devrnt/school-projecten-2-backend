@@ -6,14 +6,14 @@ namespace g16_dotnet.Models.Domain
         #region Properties
         public int GroepId { get; set; }
         public string Groepsnaam { get; set; }
-        //public List<Leerling> Leerlingen { get; set; }
+        public ICollection<Leerling> Leerlingen { get; set; }
         public bool IsVergrendeld { get; set; }
         public Pad Pad { get; set; }
         #endregion
 
         #region Constructor
         public Groep() {
-            //Leerlingen = new List<Leerling>();
+            Leerlingen = new List<Leerling>();
             IsVergrendeld = false;
         }
 

@@ -28,12 +28,18 @@ namespace g16_dotnet.Data.Repositories
 
         public IEnumerable<Sessie> GetAll()
         {
-            return _sessies.ToList();
+            return _sessies.Include(s => s.Groepen)
+                .ThenInclude(g => g.Leerlingen)
+                .Include(s => s.Klas)
+                .ToList();
         }
 
-        public Sessie GetById(int sessieCode)
+        public Sessie GetById(int id)
         {
-            return _sessies.SingleOrDefault(s => s.Code == sessieCode);
+            return _sessies.Include(s => s.Groepen)
+                .ThenInclude(g => g.Leerlingen)
+                .Include(s => s.Klas)
+                .SingleOrDefault(s => s.SessieId == id);
         }
 
         public void SaveChanges()

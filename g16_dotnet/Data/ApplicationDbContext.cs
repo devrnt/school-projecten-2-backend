@@ -32,6 +32,7 @@ namespace g16_dotnet.Data
             modelBuilder.ApplyConfiguration(new SessieConfiguration());
             modelBuilder.ApplyConfiguration(new LeerlingConfiguration());
             modelBuilder.ApplyConfiguration(new KlasConfiguration());
+            modelBuilder.ApplyConfiguration(new GroepLeerlingConfiguration());
         }
 
     }

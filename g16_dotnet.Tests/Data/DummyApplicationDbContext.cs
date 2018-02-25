@@ -21,6 +21,11 @@ namespace g16_dotnet.Tests.Data
         public Opdracht Opdracht2 { get;  }
         public Actie Actie1 { get; }
         public Actie Actie2 { get; }
+        public Sessie Sessie1 { get; set; }
+        public Groep Groep1 { get; set; }
+        public Klas Klas1 { get; set; }
+        public Leerling Leerling1 { get; set; }
+        public Leerling Leerling2 { get; set; }
 
         public Opdracht PadOpdracht1 { get; }
 
@@ -44,8 +49,13 @@ namespace g16_dotnet.Tests.Data
 
             Pad = new Pad(Opdrachten, Acties);
 
-            PadOpdracht1 = Pad.Opdrachten.FirstOrDefault();            
-        
+            PadOpdracht1 = Pad.Opdrachten.FirstOrDefault();
+
+            Groep1 = new Groep("Groep1") { Pad = Pad };
+            Leerling1 = new Leerling("McDerp", "Derp");
+            Leerling2 = new Leerling("Cena", "John");
+            Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });
+            Sessie1 = new Sessie("Sessie1", "Dit is sessie1", 123, new List<Groep> { Groep1 }, Klas1); 
         }
 
     }

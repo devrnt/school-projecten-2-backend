@@ -39,11 +39,7 @@ namespace g16_dotnet.Data
 
                 // Pad
                 var pad = new Pad(opdrachten, acties);
-                context.Paden.Add(pad);
-
-                // Groep
-                Groep groep = new Groep("Groep1") { Pad = pad };
-                context.Groepen.Add(groep);
+                context.Paden.Add(pad);               
 
                 // Klas
                 Klas klas = new Klas("Klas1");
@@ -51,6 +47,11 @@ namespace g16_dotnet.Data
                 // Leerling
                 Leerling leerling = new Leerling("Derpson", "Derp");
                 klas.Leerlingen.Add(leerling);
+
+                // Groep
+                Groep groep = new Groep("Groep1") { Pad = pad };
+                groep.Leerlingen.Add(leerling);
+                context.Groepen.Add(groep);
 
                 // Sessie
                 Sessie sessie = new Sessie("Sessie1", "Dit is sessie 1", 123, new List<Groep> { groep }, klas);
