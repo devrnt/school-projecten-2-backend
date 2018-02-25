@@ -10,6 +10,9 @@
     <p>
         @Model.HuidigeOpdracht.Oefening.Opgave
     </p>
+    <p>
+        @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
+    </p>
     if (Model.HuidigeOpdracht.AantalPogingen < 3)
 	{
 		<form asp-action="BeantwoordVraag">

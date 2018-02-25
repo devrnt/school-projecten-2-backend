@@ -10,11 +10,13 @@ namespace g16_dotnet.Filters {
         private readonly IPadRepository _padRepository;
         private readonly IOpdrachtRepository _opdrachtRepository;
         private readonly IActieRepository _actieRepository;
+        private readonly IGroepRepository _groepRepository;
 
-        public PadSessionFilter(IPadRepository padRepository, IOpdrachtRepository opdrachtRepository, IActieRepository actieRepository) {
+        public PadSessionFilter(IPadRepository padRepository, IOpdrachtRepository opdrachtRepository, IActieRepository actieRepository, IGroepRepository groepRepository) {
             _padRepository = padRepository;
             _opdrachtRepository = opdrachtRepository;
             _actieRepository = actieRepository;
+            _groepRepository = groepRepository;
 
         }
         public override void OnActionExecuting(ActionExecutingContext context) {
@@ -31,7 +33,7 @@ namespace g16_dotnet.Filters {
         private Pad ReadPadFromSession(HttpContext context) {
             Pad pad = null;
             if (context.Session.GetString("pad") == null) {
-                var padId = 1;
+                var padId = _groepRepository.GetById(1).Pad.PadId;
                 pad = _padRepository.GetById(padId);
 
                 //Oefening oefening = new Oefening("Opgave 1", "abc");

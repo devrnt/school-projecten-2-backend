@@ -10,6 +10,7 @@ namespace g16_dotnet.Data
         public DbSet<Pad> Paden { get; set; }
         public DbSet<Opdracht> Opdrachten { get; set; }
         public DbSet<Actie> Acties { get; set; }
+        public DbSet<Groep> Groepen { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //.\SQLEXPRESS
@@ -27,7 +28,7 @@ namespace g16_dotnet.Data
             modelBuilder.ApplyConfiguration(new OpdrachtConfiguration());
             modelBuilder.ApplyConfiguration(new PadOpdrachtConfiguration());
             modelBuilder.ApplyConfiguration(new ActieConfiguration());
-            modelBuilder.Ignore<Groep>();
+            modelBuilder.ApplyConfiguration(new GroepConfiguration());
             modelBuilder.Ignore<Klas>();
             modelBuilder.Ignore<Leerling>();
             modelBuilder.Ignore<Sessie>();
