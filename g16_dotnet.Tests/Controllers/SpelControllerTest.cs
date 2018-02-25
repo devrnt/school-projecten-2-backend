@@ -57,9 +57,9 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void BeantwoordVraag_JuistAntwoord_MarksOpdrachtAsComplete()
         {
-            Opdracht opdracht = _pad.Opdrachten.First(o => !o.isVoltooid);
+            Opdracht opdracht = _pad.Opdrachten.First(o => !o.IsVoltooid);
             _spelController.BeantwoordVraag(_pad, "abc");
-            Assert.True(opdracht.isVoltooid);
+            Assert.True(opdracht.IsVoltooid);
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_JuisteCode_RedirectsToIndex()
         {
             _pad.Opdrachten = _lijstMet2Opdrachten;
-            _pad.Opdrachten.First().isVoltooid = true;
+            _pad.Opdrachten.First().IsVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "xyz") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
@@ -108,7 +108,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_FouteCode_ReturnsIndexView()
         {
             _pad.Opdrachten = _lijstMet2Opdrachten;
-            _pad.Opdrachten.First().isVoltooid = true;
+            _pad.Opdrachten.First().IsVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "uvw") as ViewResult;
             Assert.Equal("Index", result?.ViewName);
         }
@@ -117,7 +117,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_FouteCode_PassesActieFaseInViewData()
         {
             _pad.Opdrachten = _lijstMet2Opdrachten;
-            _pad.Opdrachten.First().isVoltooid = true;
+            _pad.Opdrachten.First().IsVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "uvw") as ViewResult;
             Assert.Equal("actie", result?.ViewData["fase"]);
         }
@@ -126,7 +126,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_FouteCode_PassesPadToViewViaModel()
         {
             _pad.Opdrachten = _lijstMet2Opdrachten;
-            _pad.Opdrachten.First().isVoltooid = true;
+            _pad.Opdrachten.First().IsVoltooid = true;
             var result = _spelController.VoerActieUit(_pad, "uvw") as ViewResult;
             Assert.Equal(1, (result?.Model as Pad).PadId);
         } 

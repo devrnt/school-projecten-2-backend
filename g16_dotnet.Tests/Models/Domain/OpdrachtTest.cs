@@ -14,6 +14,18 @@ namespace g16_dotnet.Tests.Models.Domain
         }
 
         [Fact]
+        public void SetAantalPogingen_KleinerDanNul_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _opdracht.AantalPogingen = -1);
+        }
+
+        [Fact]
+        public void SetAantalPogingen_GroterDan3_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _opdracht.AantalPogingen = 4);
+        }
+
+        [Fact]
         public void ControleerToegangsCode_JuisteCode_ReturnsTrue()
         {
             Assert.True(_opdracht.ControleerToegangsCode("xyz"));
@@ -36,5 +48,7 @@ namespace g16_dotnet.Tests.Models.Domain
         {
             Assert.Throws<ArgumentException>(() => _opdracht.ControleerToegangsCode(String.Empty));
         }
+
+
     }
 }

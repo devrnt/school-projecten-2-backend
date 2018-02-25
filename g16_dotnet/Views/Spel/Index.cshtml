@@ -10,7 +10,9 @@
     <p>
         @Model.HuidigeOpdracht.Oefening.Opgave
     </p>
-    <form asp-action="BeantwoordVraag">
+    if (Model.HuidigeOpdracht.AantalPogingen < 3)
+	{
+		<form asp-action="BeantwoordVraag">
         <div class="form-inline">
             <div class="form-group">
                 <label for="groepsAntwoord"></label>
@@ -18,7 +20,11 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </div>
-    </form>
+    </form> 
+    } else
+    {
+        <p>Jullie hebben al te veel pogingen gedaan, wacht op instructies van je leerkracht om verder te gaan!</p>
+    }
 }
 
 @if ((string)ViewData["fase"] == "actie")

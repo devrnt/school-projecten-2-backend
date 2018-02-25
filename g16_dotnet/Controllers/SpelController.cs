@@ -38,7 +38,7 @@ namespace g16_dotnet.Controllers
             {
                 if (huidig.Oefening.ControleerAntwoord(groepsAntwoord))
                 {
-                    huidig.isVoltooid = true;
+                    huidig.IsVoltooid = true;
                     if (pad.Voortgang == pad.AantalOpdrachten)
                     {
                         ViewData["fase"] = "schatkist";
@@ -47,12 +47,13 @@ namespace g16_dotnet.Controllers
                     ViewData["fase"] = "actie";
                     return View("Index", pad);
                 }
+                huidig.AantalPogingen++;
                 TempData["error"] = $"{groepsAntwoord} is fout!";
             }
             catch (System.ArgumentException e)
             {
                 TempData["error"] = e.Message;
-            }
+            } 
             return RedirectToAction(nameof(Index));
         }
 
