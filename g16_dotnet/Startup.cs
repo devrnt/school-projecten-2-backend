@@ -57,7 +57,7 @@ namespace g16_dotnet
                     template: "{controller=Spel}/{action=Index}/{id?}");
             });
             //SessieDataInitializer.InitializeData(context);
-            SpelDataInitializer.InitializeData(context);
+            BreakoutBoxDataInitializer.InitializeData(context);
         }
     }
 }

@@ -29,9 +29,9 @@ namespace g16_dotnet.Data
             modelBuilder.ApplyConfiguration(new PadOpdrachtConfiguration());
             modelBuilder.ApplyConfiguration(new ActieConfiguration());
             modelBuilder.ApplyConfiguration(new GroepConfiguration());
-            modelBuilder.Ignore<Klas>();
-            modelBuilder.Ignore<Leerling>();
-            modelBuilder.Ignore<Sessie>();
+            modelBuilder.ApplyConfiguration(new SessieConfiguration());
+            modelBuilder.ApplyConfiguration(new LeerlingConfiguration());
+            modelBuilder.ApplyConfiguration(new KlasConfiguration());
         }
 
     }
