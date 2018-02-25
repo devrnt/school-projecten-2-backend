@@ -9,13 +9,13 @@ namespace g16_dotnet.Models.Domain
         [JsonProperty]
         public int VolgNr { get; set; }
         [JsonProperty]
-        public string ToegangsCode { get; private set; }
+        public string ToegangsCode { get; set; }
         [JsonProperty]
         public bool isVoltooid { get; set; }
         [JsonProperty]
-        public Oefening Oefening { get; private set; }
+        public Oefening Oefening { get; set; }
         [JsonProperty]
-        public GroepsBewerking GroepsBewerking { get; private set; }
+        public GroepsBewerking GroepsBewerking { get; set; }
         #endregion
 
         #region Constructors

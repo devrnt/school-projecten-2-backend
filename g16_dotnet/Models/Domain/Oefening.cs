@@ -2,13 +2,16 @@
 
 namespace g16_dotnet.Models.Domain
 {
-    [JsonObject(MemberSerialization.OptOut)]
+    [JsonObject(MemberSerialization.OptIn)]
     public class Oefening
     {
         #region Fields and Properties
+        [JsonProperty]
         public int OefeningId { get; set; }
-        public string Opgave { get; private set; }
-        public string GroepsAntwoord { get; private set; }
+        [JsonProperty]
+        public string Opgave { get; set; }
+        [JsonProperty]
+        public string GroepsAntwoord { get; set; }
         #endregion
 
         #region Constructors

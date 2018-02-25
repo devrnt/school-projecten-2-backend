@@ -19,7 +19,7 @@ namespace g16_dotnet.Filters {
         }
 
         public override void OnActionExecuted(ActionExecutedContext context) {
-            WriteCartToSession(_pad, context.HttpContext);
+            WritePadToSession(_pad, context.HttpContext);
             base.OnActionExecuted(context);
         }
 
@@ -42,7 +42,7 @@ namespace g16_dotnet.Filters {
             return pad;
         }
 
-        private void WriteCartToSession(Pad pad, HttpContext context) {
+        private void WritePadToSession(Pad pad, HttpContext context) {
             context.Session.SetString("pad", JsonConvert.SerializeObject(pad));
         }
     }
