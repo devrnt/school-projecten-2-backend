@@ -8,6 +8,8 @@ namespace g16_dotnet.Data
     {
         public DbSet<Sessie> Sessies { get; set; }
         public DbSet<Pad> Paden { get; set; }
+        public DbSet<Opdracht> Opdrachten { get; set; }
+        public DbSet<Actie> Acties { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //.\SQLEXPRESS

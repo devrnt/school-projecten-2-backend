@@ -17,18 +17,25 @@ namespace g16_dotnet.Controllers
         public IActionResult BeantwoordVraag(Pad pad, string groepsAntwoord)
         {
             Opdracht huidig = pad.HuidigeOpdracht;
-            if (huidig.Oefening.ControleerAntwoord(groepsAntwoord))
+            try
             {
-                huidig.isVoltooid = true;
-                if (pad.Voortgang == pad.AantalOpdrachten)
+                if (huidig.Oefening.ControleerAntwoord(groepsAntwoord))
                 {
-                    ViewData["fase"] = "schatkist";
+                    huidig.isVoltooid = true;
+                    if (pad.Voortgang == pad.AantalOpdrachten)
+                    {
+                        ViewData["fase"] = "schatkist";
+                        return View("Index", pad);
+                    }
+                    ViewData["fase"] = "actie";
                     return View("Index", pad);
                 }
-                ViewData["fase"] = "actie";
-                return View("Index", pad);
+                TempData["error"] = $"{groepsAntwoord} is fout!";
             }
-            TempData["error"] = (groepsAntwoord == null || groepsAntwoord.Trim().Length == 0) ? "Je hebt geen antwoord opgegeven" : $"{groepsAntwoord} is fout!";
+            catch (System.ArgumentException e)
+            {
+                TempData["error"] = e.Message;
+            }
             return RedirectToAction(nameof(Index));
         }
 
@@ -40,12 +47,19 @@ namespace g16_dotnet.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            if (pad.HuidigeOpdracht.ControleerToegangsCode(toegangsCode))
+            try
             {
-                pad.HuidigeActie.IsUitgevoerd = true;
-                return RedirectToAction(nameof(Index));
+                if (pad.HuidigeOpdracht.ControleerToegangsCode(toegangsCode))
+                {
+                    pad.HuidigeActie.IsUitgevoerd = true;
+                    return RedirectToAction(nameof(Index));
+                }
+                TempData["error"] = $"{toegangsCode} is fout!";
             }
-            TempData["error"] = (toegangsCode == null || toegangsCode.Trim().Length == 0) ?  $"Je hebt geen toegangscode ingegeven" : $"{toegangsCode} is fout!";
+            catch (System.ArgumentException e)
+            {
+                TempData["error"] = e.Message;
+            }
             ViewData["fase"] = "actie";
             return View("Index", pad);
         }

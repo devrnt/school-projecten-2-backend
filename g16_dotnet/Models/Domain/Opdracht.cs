@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace g16_dotnet.Models.Domain
 {
@@ -8,13 +9,10 @@ namespace g16_dotnet.Models.Domain
         #region Fields and Properties
         [JsonProperty]
         public int VolgNr { get; set; }
-        [JsonProperty]
         public string ToegangsCode { get; set; }
         [JsonProperty]
         public bool isVoltooid { get; set; }
-        [JsonProperty]
         public Oefening Oefening { get; set; }
-        [JsonProperty]
         public GroepsBewerking GroepsBewerking { get; set; }
         #endregion
 
@@ -35,6 +33,8 @@ namespace g16_dotnet.Models.Domain
         #region Methods
         public bool ControleerToegangsCode(string code)
         {
+            if (code == null || code.Trim().Length == 0)
+                throw new ArgumentException("Je hebt geen toegangscode opgegeven. ");
             return code == ToegangsCode;
         }
 

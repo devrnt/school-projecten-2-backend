@@ -7,10 +7,15 @@ using System.Collections.Generic;
 namespace g16_dotnet.Filters {
     public class PadSessionFilter : ActionFilterAttribute {
         private Pad _pad;
-        private IPadRepository _padRepository;
+        private readonly IPadRepository _padRepository;
+        private readonly IOpdrachtRepository _opdrachtRepository;
+        private readonly IActieRepository _actieRepository;
 
-        public PadSessionFilter(IPadRepository padRepository) {
+        public PadSessionFilter(IPadRepository padRepository, IOpdrachtRepository opdrachtRepository, IActieRepository actieRepository) {
             _padRepository = padRepository;
+            _opdrachtRepository = opdrachtRepository;
+            _actieRepository = actieRepository;
+
         }
         public override void OnActionExecuting(ActionExecutingContext context) {
             _pad = ReadPadFromSession(context.HttpContext);
@@ -38,12 +43,28 @@ namespace g16_dotnet.Filters {
                 //pad = new Pad(new List<Opdracht> { testOpdracht, testOpdracht2 }, new List<Actie> { testActie }) { PadId = 1 };
             } else {
                 pad = JsonConvert.DeserializeObject<Pad>(context.Session.GetString("pad"));
+                foreach(var opdracht in pad.Opdrachten)
+                {
+                    Opdracht o = _opdrachtRepository.GetById(opdracht.VolgNr);
+                    opdracht.Oefening = o.Oefening;
+                    opdracht.GroepsBewerking = o.GroepsBewerking;
+                    opdracht.ToegangsCode = o.ToegangsCode;
+                }
+                foreach(var actie in pad.Acties)
+                {
+                    Actie a = _actieRepository.GetById(actie.ActieId);
+                    actie.GelinkteOpdracht = a.GelinkteOpdracht;
+                    actie.Omschrijving = a.Omschrijving;
+                }
             }
             return pad;
         }
 
         private void WritePadToSession(Pad pad, HttpContext context) {
             context.Session.SetString("pad", JsonConvert.SerializeObject(pad));
+            _actieRepository.SaveChanges();
+            _opdrachtRepository.SaveChanges();
+            _padRepository.SaveChanges();
         }
     }
 }

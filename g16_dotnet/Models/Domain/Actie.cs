@@ -2,15 +2,17 @@
 
 namespace g16_dotnet.Models.Domain
 {
-    [JsonObject(MemberSerialization.OptOut)]
+    [JsonObject(MemberSerialization.OptIn)]
 
     public class Actie
     {
         #region Fields and Properties
+        [JsonProperty]
         public int ActieId { get; set; }
-        public string Omschrijving { get; private set; }
+        public string Omschrijving { get; set; }
+        [JsonProperty]
         public bool IsUitgevoerd { get; set; }
-        public Opdracht GelinkteOpdracht { get; private set; }
+        public Opdracht GelinkteOpdracht { get; set; }
         #endregion
 
         #region Constructors

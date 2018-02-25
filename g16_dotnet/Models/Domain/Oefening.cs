@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace g16_dotnet.Models.Domain
 {
@@ -8,9 +9,7 @@ namespace g16_dotnet.Models.Domain
         #region Fields and Properties
         [JsonProperty]
         public int OefeningId { get; set; }
-        [JsonProperty]
         public string Opgave { get; set; }
-        [JsonProperty]
         public string GroepsAntwoord { get; set; }
         #endregion
 
@@ -29,6 +28,8 @@ namespace g16_dotnet.Models.Domain
         #region Methods
         public bool ControleerAntwoord(string antwoord)
         {
+            if (antwoord == null || antwoord.Trim().Length == 0)
+                throw new ArgumentException("Je hebt geen antwoord opgegeven. ");
             return antwoord == GroepsAntwoord;
         } 
         #endregion

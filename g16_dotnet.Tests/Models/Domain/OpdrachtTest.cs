@@ -1,7 +1,5 @@
 ﻿using g16_dotnet.Models.Domain;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace g16_dotnet.Tests.Models.Domain
@@ -25,6 +23,18 @@ namespace g16_dotnet.Tests.Models.Domain
         public void ControleerToegangsCode_FouteCode_ReturnsFalse()
         {
             Assert.False(_opdracht.ControleerToegangsCode("abc"));
+        }
+
+        [Fact]
+        public void ControleerToegangsCode_CodeIsNull_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _opdracht.ControleerToegangsCode(null));
+        }
+
+        [Fact]
+        public void ControleerToegangsCode_CodeIsEmptyString_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _opdracht.ControleerToegangsCode(String.Empty));
         }
     }
 }
