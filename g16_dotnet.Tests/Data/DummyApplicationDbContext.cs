@@ -28,6 +28,7 @@ namespace g16_dotnet.Tests.Data
         public Leerling Leerling2 { get; set; }
 
         public Opdracht PadOpdracht1 { get; }
+        public Leerkracht Leerkracht1 { get; set; }
 
         public DummyApplicationDbContext() {
             Oef1 = new Oefening("Opgave oefening 1", "antwoord oefening 1");
@@ -55,7 +56,8 @@ namespace g16_dotnet.Tests.Data
             Leerling1 = new Leerling("McDerp", "Derp");
             Leerling2 = new Leerling("Cena", "John");
             Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });
-            Sessie1 = new Sessie("Sessie1", "Dit is sessie1", 123, new List<Groep> { Groep1 }, Klas1); 
+            Sessie1 = new Sessie("Sessie1", "Dit is sessie1", 123, new List<Groep> { Groep1 }, Klas1);
+            Leerkracht1 = new Leerkracht("Van Damme", "Alain") { Sessies = new List<Sessie> { Sessie1 } };
         }
 
     }

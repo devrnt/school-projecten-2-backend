@@ -5,6 +5,10 @@
 
 <h2>@ViewData["Title"]</h2>
 
+<div>
+    <a asp-action="BeheerSessies" class="btn btn-default">Beheer sessies</a>
+</div>
+
 @if ((bool)(ViewData["codeIngegeven"]))
 {
     foreach(var groep in Model)

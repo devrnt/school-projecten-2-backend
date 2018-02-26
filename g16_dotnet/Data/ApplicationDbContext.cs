@@ -1,5 +1,6 @@
 ﻿using g16_dotnet.Data.Mappers;
 using g16_dotnet.Models.Domain;
+using g16_dotnet.Models.SessieViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace g16_dotnet.Data
@@ -11,6 +12,7 @@ namespace g16_dotnet.Data
         public DbSet<Opdracht> Opdrachten { get; set; }
         public DbSet<Actie> Acties { get; set; }
         public DbSet<Groep> Groepen { get; set; }
+        public DbSet<Leerkracht> Leerkrachten { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //.\SQLEXPRESS
@@ -33,6 +35,9 @@ namespace g16_dotnet.Data
             modelBuilder.ApplyConfiguration(new LeerlingConfiguration());
             modelBuilder.ApplyConfiguration(new KlasConfiguration());
             modelBuilder.ApplyConfiguration(new GroepLeerlingConfiguration());
+            modelBuilder.ApplyConfiguration(new LeerkrachtConfiguration());
+            modelBuilder.Ignore<SessieLijstViewModel>();
+            modelBuilder.Ignore<SessieDetailViewModel>();
         }
 
     }

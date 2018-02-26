@@ -42,21 +42,24 @@ namespace g16_dotnet.Data
                 context.Paden.Add(pad);               
 
                 // Klas
-                Klas klas = new Klas("Klas1");
+                var klas = new Klas("Klas1");
 
                 // Leerling
-                Leerling leerling = new Leerling("Derpson", "Derp");
+                var leerling = new Leerling("Derpson", "Derp");
                 klas.Leerlingen.Add(leerling);
 
                 // Groep
-                Groep groep = new Groep("Groep1") { Pad = pad };
+                var groep = new Groep("Groep1") { Pad = pad };
                 groep.Leerlingen.Add(leerling);
                 context.Groepen.Add(groep);
 
                 // Sessie
-                Sessie sessie = new Sessie("Sessie1", "Dit is sessie 1", 123, new List<Groep> { groep }, klas);
+                var sessie = new Sessie("Sessie1", "Dit is sessie 1", 123, new List<Groep> { groep }, klas);
                 context.Sessies.Add(sessie);
 
+                // Leerkracht
+                var leerkracht = new Leerkracht("Ipsum", "Lorem") { Sessies = new List<Sessie> { sessie } };
+                context.Leerkrachten.Add(leerkracht);
                 context.SaveChanges();
             }
         }

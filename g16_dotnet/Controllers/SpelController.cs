@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace g16_dotnet.Controllers
 {
-    [ServiceFilter(typeof(PadSessionFilter))]
+    [ServiceFilter(typeof(PadFilter))]
     public class SpelController : Controller
     {
         /// <summary>
