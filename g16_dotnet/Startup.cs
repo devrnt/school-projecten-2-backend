@@ -32,6 +32,7 @@ namespace g16_dotnet
             services.AddScoped<ILeerkrachtRepository, LeerkrachtRepository>();
             services.AddScoped<PadFilter>();
             services.AddScoped<LeerkrachtFilter>();
+            services.AddScoped<SessieFilter>();
             services.AddSession();
             services.AddMvc();
 

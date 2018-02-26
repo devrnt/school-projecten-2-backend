@@ -1,0 +1,35 @@
+﻿@model g16_dotnet.Models.Domain.Groep;
+@{
+    ViewData["Title"] = "GroepOverzicht";
+}
+
+<p class="alert alert-success">U heeft succesvol deelgenomen aan de sessie</p>
+<p class="alert alert-info">Op dit moment moet u wachten op het startsignaal van uw leerkracht.</p>
+<h2>Uw groep</h2>
+@TempData["error"]
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Groepsnaam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Leerlingen)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Groepsnaam</td>
+            <td>
+                <ul>
+                    @foreach (var leerling in Model.Leerlingen) {
+                        <li>@leerling.Voornaam @leerling.Naam</li>
+                    }
+                </ul>
+
+            </td>
+        </tr>
+    </tbody>
+
+</table>

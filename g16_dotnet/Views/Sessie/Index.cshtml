@@ -17,6 +17,7 @@
             <h4>
                 @groep.Groepsnaam
             </h4>
+            <a asp-controller="Groep" asp-action="KiesGroep" asp-route-groepsId="@groep.GroepId" class="btn btn-success">Selecteer</a>
             <ul>
                 @foreach(var leerling in groep.Leerlingen)
                 {

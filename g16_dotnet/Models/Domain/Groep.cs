@@ -16,6 +16,7 @@ namespace g16_dotnet.Models.Domain
         public Groep() {
             Leerlingen = new List<Leerling>();
             IsVergrendeld = false;
+            DeelnameBevestigd = false;
         }
 
         public Groep(string naam) : this()
