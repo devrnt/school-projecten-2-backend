@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace g16_dotnet.Models.Domain
 {
@@ -37,6 +38,13 @@ namespace g16_dotnet.Models.Domain
             if (code < 0)
                 throw new ArgumentException("SessieCode kan niet negatief zijn. ");
             return code == SessieCode;
+        }
+
+        public void ActiveerSessie()
+        {
+            if (Groepen.Any(g => !g.DeelnameBevestigd))
+                throw new InvalidOperationException("Alle groepen moeten eerst hun deelname bevestigd hebben!");
+            IsActief = true;
         }
         #endregion
     }

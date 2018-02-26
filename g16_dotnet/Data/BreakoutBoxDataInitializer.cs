@@ -46,19 +46,28 @@ namespace g16_dotnet.Data
 
                 // Leerling
                 var leerling = new Leerling("Derpson", "Derp");
+                var leerling2 = new Leerling("McDerp", "Derpie");
+                var leerling3 = new Leerling("Derp", "Herpie");
+                var leerling4 = new Leerling("Peeters", "Peter");
                 klas.Leerlingen.Add(leerling);
 
                 // Groep
-                var groep = new Groep("Groep1") { Pad = pad };
+                var groep = new Groep("Groep1") { Pad = pad, DeelnameBevestigd = true };
+                var groep2 = new Groep("Groep2") { Pad = pad, DeelnameBevestigd = false };
                 groep.Leerlingen.Add(leerling);
+                groep.Leerlingen.Add(leerling2);
+                groep2.Leerlingen.Add(leerling3);
+                groep2.Leerlingen.Add(leerling4);
+
                 context.Groepen.Add(groep);
 
                 // Sessie
                 var sessie = new Sessie("Sessie1", "Dit is sessie 1", 123, new List<Groep> { groep }, klas);
+                var sessie2 = new Sessie("Sessie2", "Dit is sessie 2", 321, new List<Groep> { groep2 }, klas);
                 context.Sessies.Add(sessie);
 
                 // Leerkracht
-                var leerkracht = new Leerkracht("Ipsum", "Lorem") { Sessies = new List<Sessie> { sessie } };
+                var leerkracht = new Leerkracht("Ipsum", "Lorem") { Sessies = new List<Sessie> { sessie, sessie2 } };
                 context.Leerkrachten.Add(leerkracht);
                 context.SaveChanges();
             }

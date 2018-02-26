@@ -21,8 +21,10 @@ namespace g16_dotnet.Tests.Data
         public Opdracht Opdracht2 { get;  }
         public Actie Actie1 { get; }
         public Actie Actie2 { get; }
-        public Sessie Sessie1 { get; set; }
+        public Sessie SessieAlleDeelnamesBevestigd { get; set; }
+        public Sessie SessieNogDeelnamesTeBevestigen { get; set; }
         public Groep Groep1 { get; set; }
+        public Groep Groep2 { get; set; }
         public Klas Klas1 { get; set; }
         public Leerling Leerling1 { get; set; }
         public Leerling Leerling2 { get; set; }
@@ -52,12 +54,14 @@ namespace g16_dotnet.Tests.Data
 
             PadOpdracht1 = Pad.Opdrachten.FirstOrDefault();
 
-            Groep1 = new Groep("Groep1") { Pad = Pad };
+            Groep1 = new Groep("Groep1") { Pad = Pad, DeelnameBevestigd = true };
+            Groep2 = new Groep("Groep2") { Pad = Pad, DeelnameBevestigd = false };
             Leerling1 = new Leerling("McDerp", "Derp");
             Leerling2 = new Leerling("Cena", "John");
             Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });
-            Sessie1 = new Sessie("Sessie1", "Dit is sessie1", 123, new List<Groep> { Groep1 }, Klas1);
-            Leerkracht1 = new Leerkracht("Van Damme", "Alain") { Sessies = new List<Sessie> { Sessie1 } };
+            SessieAlleDeelnamesBevestigd = new Sessie("Sessie1", "Dit is sessie1", 123, new List<Groep> { Groep1 }, Klas1);
+            SessieNogDeelnamesTeBevestigen = new Sessie("Sessie2", "Dit is sessie2", 321, new List<Groep> { Groep2 }, Klas1);
+            Leerkracht1 = new Leerkracht("Van Damme", "Alain") { Sessies = new List<Sessie> { SessieAlleDeelnamesBevestigd } };
         }
 
     }

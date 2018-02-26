@@ -62,10 +62,18 @@ namespace g16_dotnet.Controllers
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
-            sessie.IsActief = true;
-            _sessieRepository.SaveChanges();
-            TempData["message"] = "Sessie is succesvol geactiveerd.";
-            return RedirectToAction(nameof(BeheerSessies));
+            try
+            {
+                sessie.ActiveerSessie();
+                _sessieRepository.SaveChanges();
+                TempData["message"] = "Sessie is succesvol geactiveerd.";
+                return RedirectToAction(nameof(BeheerSessies));
+            }
+            catch (InvalidOperationException e)
+            {
+                TempData["error"] = e.Message;
+            }
+            return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
     }
 }

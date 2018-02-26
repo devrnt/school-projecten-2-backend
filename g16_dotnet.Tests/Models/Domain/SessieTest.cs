@@ -7,29 +7,50 @@ namespace g16_dotnet.Tests.Models.Domain
 {
     public class SessieTest
     {
-        private Sessie _sessie;
+        private Sessie _sessieAlleDeelnamesBevestigd;
+        private Sessie _sessieNogDeelnamesTeBevestigen;
 
         public SessieTest()
         {
-            _sessie = new Sessie("Test", "testen", 123, new List<Groep>(), new Klas());
+            _sessieAlleDeelnamesBevestigd = new Sessie("Test", "testen", 123, new List<Groep> { new Groep() { DeelnameBevestigd = true } }, new Klas());
+            _sessieNogDeelnamesTeBevestigen = new Sessie("Test2", "testen2", 321, new List<Groep> { new Groep() { DeelnameBevestigd = false } }, new Klas());
         }
 
+        #region === ControleerSessie ===
         [Fact]
         public void ControleerSessieCode_JuisteCode_ReturnsTrue()
         {
-            Assert.True(_sessie.ControleerSessieCode(123));
+            Assert.True(_sessieAlleDeelnamesBevestigd.ControleerSessieCode(123));
         }
 
         [Fact]
         public void ControleerSessieCode_FouteCode_ReturnsFalse()
         {
-            Assert.False(_sessie.ControleerSessieCode(321));
+            Assert.False(_sessieAlleDeelnamesBevestigd.ControleerSessieCode(321));
         }
 
         [Fact]
         public void ControleerSessieCode_CodeIsNegatief_ThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => _sessie.ControleerSessieCode(-123));
+            Assert.Throws<ArgumentException>(() => _sessieAlleDeelnamesBevestigd.ControleerSessieCode(-123));
         }
+        #endregion
+
+        #region === ActiveerSessie ===
+        [Fact]
+        public void ActiveerSessie_AlleGroepenDeelgenomen_SetsIsActiefTrue()
+        {
+            _sessieAlleDeelnamesBevestigd.ActiveerSessie();
+            Assert.True(_sessieAlleDeelnamesBevestigd.IsActief);
+        }
+
+        [Fact]
+        public void ActiveerSessie_NogGroepenTeBevestigen_ThrowsInvalidOperationException()
+        {
+            Assert.Throws<InvalidOperationException>(() => _sessieNogDeelnamesTeBevestigen.ActiveerSessie());
+        }
+        #endregion
+
+
     }
 }

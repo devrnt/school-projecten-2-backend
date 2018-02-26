@@ -7,6 +7,7 @@ namespace g16_dotnet.Models.Domain
         public int GroepId { get; set; }
         public string Groepsnaam { get; set; }
         public ICollection<Leerling> Leerlingen { get; set; }
+        public bool DeelnameBevestigd { get; set; }
         public bool IsVergrendeld { get; set; }
         public Pad Pad { get; set; }
         #endregion
