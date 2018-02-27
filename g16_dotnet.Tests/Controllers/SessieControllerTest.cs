@@ -23,9 +23,9 @@ namespace g16_dotnet.Tests.Controllers
             _context = new DummyApplicationDbContext();
             _leerkracht = _context.Leerkracht1;
             _mockSessieRepository = new Mock<ISessieRepository>();
-            _mockSessieRepository.Setup(m => m.GetById(1)).Returns(_context.SessieAlleDeelnamesBevestigd);
-            _mockSessieRepository.Setup(m => m.GetById(2)).Returns(null as Sessie);
-            _mockSessieRepository.Setup(m => m.GetById(3)).Returns(_context.SessieNogDeelnamesTeBevestigen);
+            _mockSessieRepository.Setup(m => m.GetById(123)).Returns(_context.SessieAlleDeelnamesBevestigd);
+            _mockSessieRepository.Setup(m => m.GetById(321)).Returns(null as Sessie);
+            _mockSessieRepository.Setup(m => m.GetById(456)).Returns(_context.SessieNogDeelnamesTeBevestigen);
             _mockSessieRepository.Setup(m => m.GetAll()).Returns(new List<Sessie> { _context.SessieAlleDeelnamesBevestigd });
             _controller = new SessieController(_mockSessieRepository.Object) { TempData = new Mock<ITempDataDictionary>().Object };
         }
@@ -83,7 +83,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void SelecteerSessie_PassesSessieViewModelToViewViaModel()
         {
-            var result = _controller.SelecteerSessie(_leerkracht, 1) as ViewResult;
+            var result = _controller.SelecteerSessie(_leerkracht, 123) as ViewResult;
             var svm = new SessieDetailViewModel(_context.SessieAlleDeelnamesBevestigd);
             Assert.Equal(svm.SessieNaam, (result?.Model as SessieDetailViewModel).SessieNaam);
         }
@@ -99,7 +99,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void SelecteerSessie_ReturnsSessieDetailView()
         {
-            var result = _controller.SelecteerSessie(_leerkracht, 1) as ViewResult;
+            var result = _controller.SelecteerSessie(_leerkracht, 123) as ViewResult;
             Assert.Equal("SessieDetail", result?.ViewName);
         }
         #endregion
@@ -108,7 +108,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void ActiveerSessie_AlleDeelnamesBevestigd_RedirectsToBeheerSessies()
         {
-            var result = _controller.ActiveerSessie(_leerkracht, 1) as RedirectToActionResult;
+            var result = _controller.ActiveerSessie(_leerkracht, 123) as RedirectToActionResult;
             Assert.Equal("BeheerSessies", result?.ActionName);
         }
 
@@ -122,14 +122,14 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void ActiveerSessie_NogDeelnamesTeBevestigen_ReturnsSessieDetailView()
         {
-            var result = _controller.ActiveerSessie(_leerkracht, 3) as ViewResult;
+            var result = _controller.ActiveerSessie(_leerkracht, 456) as ViewResult;
             Assert.Equal("SessieDetail", result?.ViewName);
         }
 
         [Fact]
         public void ActiveerSessie_NogDeelnamesTeBevestigen_PassesSessieViewModelToViewViaModel()
         {
-            var result = _controller.ActiveerSessie(_leerkracht, 3) as ViewResult;
+            var result = _controller.ActiveerSessie(_leerkracht, 456) as ViewResult;
             var svm = new SessieDetailViewModel(_context.SessieNogDeelnamesTeBevestigen);
             Assert.Equal(svm.SessieNaam, (result?.Model as SessieDetailViewModel).SessieNaam);
         }

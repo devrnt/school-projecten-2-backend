@@ -39,7 +39,7 @@ namespace g16_dotnet.Data.Repositories
             return _sessies.Include(s => s.Groepen)
                 .ThenInclude(g => g.Leerlingen)
                 .Include(s => s.Klas)
-                .SingleOrDefault(s => s.SessieId == id);
+                .SingleOrDefault(s => s.SessieCode == id);
         }
 
         public void SaveChanges()

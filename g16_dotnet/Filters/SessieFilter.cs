@@ -16,7 +16,7 @@ namespace g16_dotnet.Filters
         }
 
         public override void OnActionExecuting(ActionExecutingContext context) {
-            _sessie = _sessieRepository.GetById(1);
+            _sessie = _sessieRepository.GetById(123);
             context.ActionArguments["sessie"] = _sessie;
             base.OnActionExecuting(context);
         }

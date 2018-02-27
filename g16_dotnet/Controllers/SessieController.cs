@@ -36,21 +36,14 @@ namespace g16_dotnet.Controllers
         /// </returns>
         public IActionResult ValideerSessiecode(int code)
         {
-            Sessie sessie = _sessieRepository.GetById(1);
-            try
+            Sessie sessie = _sessieRepository.GetById(code);
+            if (sessie != null)
             {
-                if (sessie.ControleerSessieCode(code))
-                {
-                    ViewData["codeIngegeven"] = true;
-                    return View("Index", sessie.Groepen);
-                } else
-                {
-                    TempData["error"] = $"{code} is niet juist!";
-                }
-            }
-            catch (ArgumentException e)
+                ViewData["codeIngegeven"] = true;
+                return View("Index", sessie.Groepen);
+            } else
             {
-                TempData["error"] = e.Message;
+                TempData["error"] = $"{code} hoort niet bij een bestaande sessie";
             }
             return RedirectToAction(nameof(Index));
         }

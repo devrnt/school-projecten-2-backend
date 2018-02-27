@@ -59,8 +59,8 @@ namespace g16_dotnet.Tests.Data
             Leerling1 = new Leerling("McDerp", "Derp");
             Leerling2 = new Leerling("Cena", "John");
             Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });
-            SessieAlleDeelnamesBevestigd = new Sessie("Sessie1", "Dit is sessie1", 123, new List<Groep> { Groep1 }, Klas1);
-            SessieNogDeelnamesTeBevestigen = new Sessie("Sessie2", "Dit is sessie2", 321, new List<Groep> { Groep2 }, Klas1);
+            SessieAlleDeelnamesBevestigd = new Sessie(123, "Sessie1", "Dit is sessie1", new List<Groep> { Groep1 }, Klas1);
+            SessieNogDeelnamesTeBevestigen = new Sessie(321, "Sessie2", "Dit is sessie2", new List<Groep> { Groep2 }, Klas1);
             Leerkracht1 = new Leerkracht("Van Damme", "Alain") { Sessies = new List<Sessie> { SessieAlleDeelnamesBevestigd } };
         }
 

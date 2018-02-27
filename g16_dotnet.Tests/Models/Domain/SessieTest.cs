@@ -12,28 +12,28 @@ namespace g16_dotnet.Tests.Models.Domain
 
         public SessieTest()
         {
-            _sessieAlleDeelnamesBevestigd = new Sessie("Test", "testen", 123, new List<Groep> { new Groep() { DeelnameBevestigd = true } }, new Klas());
-            _sessieNogDeelnamesTeBevestigen = new Sessie("Test2", "testen2", 321, new List<Groep> { new Groep() { DeelnameBevestigd = false } }, new Klas());
+            _sessieAlleDeelnamesBevestigd = new Sessie(123, "Test", "testen", new List<Groep> { new Groep() { DeelnameBevestigd = true } }, new Klas());
+            _sessieNogDeelnamesTeBevestigen = new Sessie(321, "Test2", "testen2", new List<Groep> { new Groep() { DeelnameBevestigd = false } }, new Klas());
         }
 
         #region === ControleerSessie ===
-        [Fact]
-        public void ControleerSessieCode_JuisteCode_ReturnsTrue()
-        {
-            Assert.True(_sessieAlleDeelnamesBevestigd.ControleerSessieCode(123));
-        }
+        //[Fact]
+        //public void ControleerSessieCode_JuisteCode_ReturnsTrue()
+        //{
+        //    Assert.True(_sessieAlleDeelnamesBevestigd.ControleerSessieCode(123));
+        //}
 
-        [Fact]
-        public void ControleerSessieCode_FouteCode_ReturnsFalse()
-        {
-            Assert.False(_sessieAlleDeelnamesBevestigd.ControleerSessieCode(321));
-        }
+        //[Fact]
+        //public void ControleerSessieCode_FouteCode_ReturnsFalse()
+        //{
+        //    Assert.False(_sessieAlleDeelnamesBevestigd.ControleerSessieCode(321));
+        //}
 
-        [Fact]
-        public void ControleerSessieCode_CodeIsNegatief_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() => _sessieAlleDeelnamesBevestigd.ControleerSessieCode(-123));
-        }
+        //[Fact]
+        //public void ControleerSessieCode_CodeIsNegatief_ThrowsArgumentException()
+        //{
+        //    Assert.Throws<ArgumentException>(() => _sessieAlleDeelnamesBevestigd.ControleerSessieCode(-123));
+        //}
         #endregion
 
         #region === ActiveerSessie ===

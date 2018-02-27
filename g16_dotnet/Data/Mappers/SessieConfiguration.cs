@@ -10,6 +10,8 @@ namespace g16_dotnet.Data.Mappers
         {
             builder.ToTable("Sessie");
 
+            builder.HasKey(s => s.SessieCode);
+
             builder.Property(s => s.Naam)
                 .IsRequired()
                 .HasMaxLength(100);

@@ -26,8 +26,9 @@ namespace g16_dotnet.Data
                 var opdracht2 = new Opdracht("code2", oefening2, groepsBewerking2);
                 var opdracht3 = new Opdracht("code3", oefening3, groepsBewerking3);
 
-                Opdracht[] opdrachten = { opdracht1, opdracht2, opdracht3};
+                Opdracht[] opdrachten = { opdracht1, opdracht2, opdracht3 };
                 context.Opdrachten.AddRange(opdrachten);
+                context.SaveChanges();
 
                 // Acties
                 var actie1 = new Actie("Ga naar de mcDonalds en koop chicken nuggets");
@@ -36,10 +37,12 @@ namespace g16_dotnet.Data
 
                 Actie[] acties = { actie1, actie2, actie3 };
                 context.Acties.AddRange(acties);
+                context.SaveChanges();
 
                 // Pad
                 var pad = new Pad(opdrachten, acties);
-                context.Paden.Add(pad);               
+                context.Paden.Add(pad);
+                context.SaveChanges();
 
                 // Klas
                 var klas = new Klas("Klas1");
@@ -50,23 +53,32 @@ namespace g16_dotnet.Data
                 var leerling3 = new Leerling("Derp", "Herpie");
                 var leerling4 = new Leerling("Peeters", "Peter");
                 klas.Leerlingen.Add(leerling);
+                klas.Leerlingen.Add(leerling2);
+                klas.Leerlingen.Add(leerling3);
+                klas.Leerlingen.Add(leerling4);
 
                 // Groep
                 var groep = new Groep("Groep1") { Pad = pad, DeelnameBevestigd = true };
                 var groep2 = new Groep("Groep2") { Pad = pad, DeelnameBevestigd = false };
+                Groep[] groepen = { groep, groep2 };
                 groep.Leerlingen.Add(leerling);
                 groep.Leerlingen.Add(leerling2);
                 groep2.Leerlingen.Add(leerling3);
                 groep2.Leerlingen.Add(leerling4);
 
-                context.Groepen.Add(groep);
+                context.Groepen.AddRange(groepen);
+                context.SaveChanges();
+
 
                 // Sessie
-                var sessie = new Sessie("Sessie1", "Dit is sessie 1", 123, new List<Groep> { groep }, klas);
-                var sessie2 = new Sessie("Sessie2", "Dit is sessie 2", 321, new List<Groep> { groep2 }, klas);
-                context.Sessies.Add(sessie);
+                var sessie = new Sessie(123, "Sessie1", "Dit is sessie 1", new List<Groep> { groep }, klas);
+                var sessie2 = new Sessie(321, "Sessie2", "Dit is sessie 2", new List<Groep> { groep2 }, klas);
+                Sessie[] sessies = { sessie, sessie2 };
 
-                // Leerkracht
+                context.Sessies.AddRange(sessies);
+                context.SaveChanges();
+
+                //// Leerkracht
                 var leerkracht = new Leerkracht("Ipsum", "Lorem") { Sessies = new List<Sessie> { sessie, sessie2 } };
                 context.Leerkrachten.Add(leerkracht);
                 context.SaveChanges();

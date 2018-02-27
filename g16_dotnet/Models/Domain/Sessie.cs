@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace g16_dotnet.Models.Domain
@@ -7,21 +8,21 @@ namespace g16_dotnet.Models.Domain
     public class Sessie
     {
         #region Properties
-        public int SessieId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int SessieCode { get; set; }
         public string Naam { get; set; }
         public string Omschrijving { get; set; }
-        public int SessieCode { get; set; }
         public bool IsActief { get; set; }
         public IEnumerable<Groep> Groepen { get; set; }
         public Klas Klas { get; set; }
         #endregion
 
         #region Constructor
-        public Sessie(string naam, string omschrijving, int code, IEnumerable<Groep> groepen, Klas klas)
+        public Sessie(int code, string naam, string omschrijving, IEnumerable<Groep> groepen, Klas klas)
         {
+            SessieCode = code;
             Naam = naam;
             Omschrijving = omschrijving;
-            SessieCode = code;
             Groepen = groepen;
             Klas = klas;
         }
@@ -33,12 +34,12 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Methods
-        public bool ControleerSessieCode(int code)
-        {
-            if (code < 0)
-                throw new ArgumentException("SessieCode kan niet negatief zijn. ");
-            return code == SessieCode;
-        }
+        //public bool ControleerSessieCode(int code)
+        //{
+        //    if (code < 0)
+        //        throw new ArgumentException("SessieCode kan niet negatief zijn. ");
+        //    return code == SessieCode;
+        //}
 
         public void ActiveerSessie()
         {
