@@ -3,10 +3,7 @@
     ViewData["Title"] = "GroepOverzicht";
 }
 
-<p class="alert alert-success">U heeft succesvol deelgenomen aan de sessie</p>
-<p class="alert alert-info">Op dit moment moet u wachten op het startsignaal van uw leerkracht.</p>
 <h2>Uw groep</h2>
-@TempData["error"]
 <table class="table table-striped">
     <thead>
         <tr>
@@ -33,3 +30,5 @@
     </tbody>
 
 </table>
+<a asp-action="StartSpel" asp-route-groepId="@Model.GroepId" class="btn btn-success">Start Spel</a>
+    
