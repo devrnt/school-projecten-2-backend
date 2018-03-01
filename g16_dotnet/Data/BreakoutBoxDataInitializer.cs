@@ -10,7 +10,6 @@ namespace g16_dotnet.Data
         {
             context.Database.EnsureDeleted();
             if (context.Database.EnsureCreated()) {
-                // Paden toevoegen aan de DbSet<Pad>
                 // Oefeningen
                 var oefening1 = new Oefening("Opgave 1", "antwoord1");
                 var oefening2 = new Oefening("Opgave 2", "antwoord2");
@@ -31,7 +30,7 @@ namespace g16_dotnet.Data
                 context.SaveChanges();
 
                 // Acties
-                var actie1 = new Actie("Ga naar de mcDonalds en koop chicken nuggets");
+                var actie1 = new Actie("Ga naar de McDonalds en koop chicken nuggets");
                 var actie2 = new Actie("Ga naar gebouw B");
                 var actie3 = new Actie("Neem de groene ballon");
 
@@ -45,13 +44,13 @@ namespace g16_dotnet.Data
                 context.SaveChanges();
 
                 // Klas
-                var klas = new Klas("Klas1");
+                var klas = new Klas("Het Eiland");
 
                 // Leerling
-                var leerling = new Leerling("Derpson", "Derp");
-                var leerling2 = new Leerling("McDerp", "Derpie");
-                var leerling3 = new Leerling("Derp", "Herpie");
-                var leerling4 = new Leerling("Peeters", "Peter");
+                var leerling = new Leerling("Vandam", "Alain");
+                var leerling2 = new Leerling("Pallemans", "Guido");
+                var leerling3 = new Leerling("Drets", "Michel");
+                var leerling4 = new Leerling("Loosveld", "Franky");
                 klas.Leerlingen.Add(leerling);
                 klas.Leerlingen.Add(leerling2);
                 klas.Leerlingen.Add(leerling3);
@@ -71,7 +70,7 @@ namespace g16_dotnet.Data
 
 
                 // Sessie
-                var sessie = new Sessie(123, "Sessie1", "Dit is sessie 1", new List<Groep> { groep }, klas);
+                var sessie = new Sessie(123, "Sessie1", "Dit is sessie 1", new List<Groep> { groep, groep2 }, klas);
                 var sessie2 = new Sessie(321, "Sessie2", "Dit is sessie 2", new List<Groep> { groep2 }, klas);
                 Sessie[] sessies = { sessie, sessie2 };
 
@@ -79,7 +78,7 @@ namespace g16_dotnet.Data
                 context.SaveChanges();
 
                 //// Leerkracht
-                var leerkracht = new Leerkracht("Ipsum", "Lorem") { Sessies = new List<Sessie> { sessie, sessie2 } };
+                var leerkracht = new Leerkracht("Protut", "Lydia") { Sessies = new List<Sessie> { sessie, sessie2 } };
                 context.Leerkrachten.Add(leerkracht);
                 context.SaveChanges();
             }

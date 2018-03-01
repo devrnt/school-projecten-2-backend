@@ -19,11 +19,11 @@
         <tr>
             <td>@Model.Groepsnaam</td>
             <td>
-                <ul>
                     @foreach (var leerling in Model.Leerlingen) {
-                        <li>@leerling.Voornaam @leerling.Naam</li>
+                        @($"{leerling.Voornaam} {leerling.Naam}");
+                        <br />
                     }
-                </ul>
+             
 
             </td>
         </tr>

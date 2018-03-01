@@ -2,41 +2,55 @@
 @{
     ViewData["Title"] = "Deelnemen sessie";
 }
-
-<h2>@ViewData["Title"]</h2>
-
-<div>
+<div style="margin:5px">
     <a asp-action="BeheerSessies" class="btn btn-default">Beheer sessies</a>
 </div>
+<h2 class="text-center">@ViewData["Title"]</h2>
+<br />
 
 @if ((bool)(ViewData["codeIngegeven"]))
 {
-    foreach(var groep in Model)
+<table class="table table-striped">
+    <tr>
+        <th>Groepsnaam</th>
+        <th>Groepsleden</th>
+        <th></th>
+    </tr>
+    @foreach(var groep in Model)
     {
-        <div>
-            <h4>
-                @groep.Groepsnaam
-            </h4>
+    <tr>
+        <td>
+            @groep.Groepsnaam
+        </td>
+        <td>
+            @foreach (var leerling in groep.Leerlingen)
+            {
+                @($"{leerling.Voornaam} {leerling.Naam}")
+                <br />
+            }
+        </td>
+        <td>
             <a asp-controller="Groep" asp-action="KiesGroep" asp-route-groepsId="@groep.GroepId" class="btn btn-success">Selecteer</a>
-            <ul>
-                @foreach(var leerling in groep.Leerlingen)
-                {
-                    <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
-                }
-            </ul>
-        </div>
+        </td>
+        
+    </tr>
     }
+</table>
 }
 else
 {
-    <form asp-action="ValideerSessieCode">
-        <div class="form-inline">
-            <div class="form-group">
-                <label for="code">Geef sessiecode in: </label>
-                <input type="text" id="code" name="code" class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+        <div class="container-fluid text-center">
+            <form asp-action="ValideerSessieCode">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="code"></label>
+                        <input type="text" id="code" name="code" class="form-control text-center" placeholder="Geef sessiecode in" />
+                    </div>
+                    <br />
+                    <br />
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </form>
         </div>
-    </form>
 }
 

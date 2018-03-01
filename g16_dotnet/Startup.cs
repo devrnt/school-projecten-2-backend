@@ -57,7 +57,7 @@ namespace g16_dotnet
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Spel}/{action=Index}/{id?}");
+                    template: "{controller=Sessie}/{action=Index}/{id?}");
             });
             //SessieDataInitializer.InitializeData(context);
             BreakoutBoxDataInitializer.InitializeData(context);
