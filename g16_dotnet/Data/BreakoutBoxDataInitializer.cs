@@ -11,9 +11,9 @@ namespace g16_dotnet.Data
             context.Database.EnsureDeleted();
             if (context.Database.EnsureCreated()) {
                 // Oefeningen
-                var oefening1 = new Oefening("Opgave 1", 100);
-                var oefening2 = new Oefening("Opgave 2", 200);
-                var oefening3 = new Oefening("Opgave 3", 300);
+                var oefening1 = new Oefening("Organisatie", 100);
+                var oefening2 = new Oefening("Organisatie", 200);
+                var oefening3 = new Oefening("Organisatie", 300);
 
                 // GroepsBewerkingen
                 var groepsBewerking1 = new GroepsBewerking("Groepsbewerking 1 - vb. Vermenigvuldig bovenstaande met 3", 3, Operator.vermeningvuldigen);

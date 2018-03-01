@@ -7,9 +7,9 @@
 {
     <h2>@ViewData["Title"]</h2>
     <h3>Voortgang: @Model.Voortgang van de @Model.AantalOpdrachten opdrachten zijn voltooid</h3>
-    <p>
-        @Model.HuidigeOpdracht.Oefening.Opgave
-    </p>
+    <div >
+        <embed src="~/docs/@(Model.HuidigeOpdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="800">
+    </div>
     <p>
         @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
     </p>
