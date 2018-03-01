@@ -8,6 +8,13 @@ namespace g16_dotnet.Controllers
     [ServiceFilter(typeof(PadFilter))]
     public class SpelController : Controller
     {
+        private readonly IPadRepository _padRepository;
+
+        public SpelController(IPadRepository padRepository)
+        {
+            _padRepository = padRepository;
+        }
+
         /// <summary>
         /// Geeft de Index pagina weer
         /// </summary>
@@ -31,12 +38,15 @@ namespace g16_dotnet.Controllers
         ///     Bij een juist antwoord maar nog opdrachten over de Index view met als fase actie
         ///     Bij een juist antwoord en geen opdracht meer over de Index view met als fase schatkist
         /// </returns>
-        public IActionResult BeantwoordVraag(Pad pad, string groepsAntwoord)
+        public IActionResult BeantwoordVraag(int padId, string groepsAntwoord)
         {
-            Opdracht huidig = pad.HuidigeOpdracht;
+            Pad pad = _padRepository.GetById(padId);
+            if (pad == null)
+                return NotFound();
             try
             {
-                if (huidig.Oefening.ControleerAntwoord(groepsAntwoord))
+                Opdracht huidig = pad.HuidigeOpdracht;
+                if (huidig.ControleerAntwoord(int.Parse(groepsAntwoord)))
                 {
                     huidig.IsVoltooid = true;
                     if (pad.Voortgang == pad.AantalOpdrachten)
@@ -53,7 +63,11 @@ namespace g16_dotnet.Controllers
             catch (System.ArgumentException e)
             {
                 TempData["error"] = e.Message;
-            } 
+            }
+            catch (System.FormatException)
+            {
+                TempData["error"] = "Je moet een getal invullen!";
+            }
             return RedirectToAction(nameof(Index));
         }
 

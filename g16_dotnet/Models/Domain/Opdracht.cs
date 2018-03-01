@@ -3,27 +3,13 @@ using System;
 
 namespace g16_dotnet.Models.Domain
 {
-    [JsonObject(MemberSerialization.OptIn)]
     public class Opdracht
     {
         #region Fields and Properties
-        [JsonProperty]
-        private int _aantalPogingen;
-        [JsonProperty]
         public int VolgNr { get; set; }
         public string ToegangsCode { get; set; }
-        [JsonProperty]
         public bool IsVoltooid { get; set; }
-        public int AantalPogingen //{ get; set; }
-        {
-            get { return _aantalPogingen; }
-            set
-            {
-                if (value < 0 || value > 3)
-                    throw new ArgumentException("Aantal pogingen moet tussen 0 en 3 liggen.");
-                _aantalPogingen = value;
-            }
-        }
+        public int AantalPogingen { get; set; }
         public Oefening Oefening { get; set; }
         public GroepsBewerking GroepsBewerking { get; set; }
         #endregion
@@ -55,6 +41,33 @@ namespace g16_dotnet.Models.Domain
             if (code == null || code.Trim().Length == 0)
                 throw new ArgumentException("Je hebt geen toegangscode opgegeven. ");
             return code == ToegangsCode;
+        }
+
+        /// <summary>
+        ///  Controleert of het opgegeven antwoord gelijk is aan het GroepsAntwoord
+        ///  uit Oefening na toepassing van de GroepsBewerking
+        /// </summary>
+        /// <param name="antwoord">GroepsAntwoord gewijzigd door het toepassen van de GroepsBewerkingen</param>
+        /// <returns>True indien het antwoord juist is, anders false</returns>
+        public bool ControleerAntwoord(int antwoord)
+        {
+            int antwoordNaGroepsBewerking = Oefening.GroepsAntwoord;
+            switch (GroepsBewerking.Operator)
+            {
+                case Operator.optellen:
+                    antwoordNaGroepsBewerking += GroepsBewerking.Factor;
+                    break;
+                case Operator.aftrekken:
+                    antwoordNaGroepsBewerking -= GroepsBewerking.Factor;
+                    break;
+                case Operator.vermeningvuldigen:
+                    antwoordNaGroepsBewerking *= GroepsBewerking.Factor;
+                    break;
+                case Operator.delen:
+                    antwoordNaGroepsBewerking /= GroepsBewerking.Factor;
+                    break;               
+            }
+            return antwoord == antwoordNaGroepsBewerking;
         }
 
         #endregion

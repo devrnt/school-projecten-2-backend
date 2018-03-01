@@ -15,7 +15,7 @@
     </p>
     if (Model.HuidigeOpdracht.AantalPogingen < 3)
 	{
-		<form asp-action="BeantwoordVraag">
+		<form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
         <div class="form-inline">
             <div class="form-group">
                 <label for="groepsAntwoord"></label>

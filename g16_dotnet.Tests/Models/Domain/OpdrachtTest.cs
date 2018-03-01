@@ -10,21 +10,10 @@ namespace g16_dotnet.Tests.Models.Domain
 
         public OpdrachtTest()
         {
-            _opdracht = new Opdracht("xyz", null, null);
+            _opdracht = new Opdracht("xyz", new Oefening("Opgave 1", 50), new GroepsBewerking("Vermeningvuldig met 2", 2, Operator.vermeningvuldigen));
         }
 
-        [Fact]
-        public void SetAantalPogingen_KleinerDanNul_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() => _opdracht.AantalPogingen = -1);
-        }
-
-        [Fact]
-        public void SetAantalPogingen_GroterDan3_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() => _opdracht.AantalPogingen = 4);
-        }
-
+        #region == ControleerToegangsCode ===
         [Fact]
         public void ControleerToegangsCode_JuisteCode_ReturnsTrue()
         {
@@ -48,6 +37,21 @@ namespace g16_dotnet.Tests.Models.Domain
         {
             Assert.Throws<ArgumentException>(() => _opdracht.ControleerToegangsCode(String.Empty));
         }
+        #endregion
+
+        #region === ControleerAntwoord ===
+        [Fact]
+        public void ControleerAntwoord_AntwoordJuist_ReturnsTrue()
+        {
+            Assert.True(_opdracht.ControleerAntwoord(100));
+        }
+
+        [Fact]
+        public void ControleerAntwoord_AntwoordFout_ReturnsFalse()
+        {
+            Assert.False(_opdracht.ControleerAntwoord(90));
+        }
+        #endregion
 
 
     }

@@ -13,6 +13,7 @@ namespace g16_dotnet.Data.Mappers
             builder.Property(gb => gb.Omschrijving)
                 .IsRequired()
                 .HasMaxLength(100);
+            
         }
     }
 }

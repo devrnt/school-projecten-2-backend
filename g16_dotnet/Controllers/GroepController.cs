@@ -53,12 +53,13 @@ namespace g16_dotnet.Controllers
         /// </returns>
         public IActionResult StartSpel(Sessie sessie, int groepId)
         {
-            if (sessie.IsActief)
-                return RedirectToAction("Index", "Spel");
-            TempData["error"] = "Wacht op signaal van je leerkracht om verder te gaan!";
             Groep huidigeGroep = _groepsRepository.GetById(groepId);
             if (huidigeGroep == null)
                 return NotFound();
+            if (sessie.IsActief)
+                return RedirectToAction("Index", "Spel", new { pad = huidigeGroep.Pad });
+            TempData["error"] = "Wacht op signaal van je leerkracht om verder te gaan!";
+            
             return View("GroepOverzicht", huidigeGroep);
         }
     }

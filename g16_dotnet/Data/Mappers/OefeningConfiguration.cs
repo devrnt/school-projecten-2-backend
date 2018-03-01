@@ -13,10 +13,7 @@ namespace g16_dotnet.Data.Mappers
             builder.Property(o => o.Opgave)
                 .IsRequired()
                 .HasMaxLength(100);
-
-            builder.Property(o => o.GroepsAntwoord)
-                .IsRequired()
-                .HasMaxLength(100);
+            
         }
     }
 }

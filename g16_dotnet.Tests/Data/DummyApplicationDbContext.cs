@@ -33,14 +33,14 @@ namespace g16_dotnet.Tests.Data
         public Leerkracht Leerkracht1 { get; set; }
 
         public DummyApplicationDbContext() {
-            Oef1 = new Oefening("Opgave oefening 1", "antwoord oefening 1");
-            GroepsBewerking1 = new GroepsBewerking("Doe de groepsbewerking1");
+            Oef1 = new Oefening("Opgave oefening 1", 100);
+            GroepsBewerking1 = new GroepsBewerking("Doe de groepsbewerking1", 2, Operator.aftrekken);
 
             Opdracht1 = new Opdracht("toegangsCode123", Oef1, GroepsBewerking1);
 
 
-            Oef2 = new Oefening("Opgave oefening 2", "antwoord oefening 2");
-            GroepsBewerking2 = new GroepsBewerking("Doe de groepsbewerking2");
+            Oef2 = new Oefening("Opgave oefening 2", 210);
+            GroepsBewerking2 = new GroepsBewerking("Doe de groepsbewerking2", 3, Operator.delen);
 
             Opdracht2 = new Opdracht("toegangsCode678", Oef2, GroepsBewerking2);
 
@@ -50,7 +50,7 @@ namespace g16_dotnet.Tests.Data
             Actie2 = new Actie("Actie2");
             Acties = new[] { Actie1, Actie2 };
 
-            Pad = new Pad(Opdrachten, Acties);
+            Pad = new Pad(Opdrachten, Acties) { PadId = 1 };
 
             PadOpdracht1 = Pad.Opdrachten.FirstOrDefault();
 

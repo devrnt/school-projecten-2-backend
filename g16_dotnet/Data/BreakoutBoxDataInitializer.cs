@@ -11,14 +11,14 @@ namespace g16_dotnet.Data
             context.Database.EnsureDeleted();
             if (context.Database.EnsureCreated()) {
                 // Oefeningen
-                var oefening1 = new Oefening("Opgave 1", "antwoord1");
-                var oefening2 = new Oefening("Opgave 2", "antwoord2");
-                var oefening3 = new Oefening("Opgave 3", "antwoord3");
+                var oefening1 = new Oefening("Opgave 1", 100);
+                var oefening2 = new Oefening("Opgave 2", 200);
+                var oefening3 = new Oefening("Opgave 3", 300);
 
                 // GroepsBewerkingen
-                var groepsBewerking1 = new GroepsBewerking("Groepsbewerking 1 - vb. Vermenigvuldig bovenstaande met 3");
-                var groepsBewerking2 = new GroepsBewerking("Groepsbewerking 2 - vb. Trek hier 4 van af.");
-                var groepsBewerking3 = new GroepsBewerking("Groepsbewerking 3 - vb. Deel door 3");
+                var groepsBewerking1 = new GroepsBewerking("Groepsbewerking 1 - vb. Vermenigvuldig bovenstaande met 3", 3, Operator.vermeningvuldigen);
+                var groepsBewerking2 = new GroepsBewerking("Groepsbewerking 2 - vb. Trek hier 4 van af.", 4, Operator.aftrekken);
+                var groepsBewerking3 = new GroepsBewerking("Groepsbewerking 3 - vb. Deel door 3", 3, Operator.delen);
 
                 // Opdrachten
                 var opdracht1 = new Opdracht("code1", oefening1, groepsBewerking1);
@@ -57,8 +57,8 @@ namespace g16_dotnet.Data
                 klas.Leerlingen.Add(leerling4);
 
                 // Groep
-                var groep = new Groep("Groep1") { Pad = pad, DeelnameBevestigd = true };
-                var groep2 = new Groep("Groep2") { Pad = pad, DeelnameBevestigd = false };
+                var groep = new Groep("Groep1") { Pad = pad };
+                var groep2 = new Groep("Groep2") { Pad = pad };
                 Groep[] groepen = { groep, groep2 };
                 groep.Leerlingen.Add(leerling);
                 groep.Leerlingen.Add(leerling2);
