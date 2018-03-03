@@ -24,15 +24,5 @@ namespace g16_dotnet.Models.Domain
             Groepsnaam = naam;
         }
         #endregion
-
-        #region Methods
-        public void BlokkeerPad() {
-            Pad.IsGeblokkeerd = true;
-        }
-        public void DeblokkeerPad()
-        {
-            Pad.IsGeblokkeerd = false;
-        }
-        #endregion
     }
 }

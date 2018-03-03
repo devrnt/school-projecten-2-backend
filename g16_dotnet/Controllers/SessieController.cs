@@ -8,12 +8,10 @@ using System.Collections.Generic;
 namespace g16_dotnet.Controllers
 {
     [ServiceFilter(typeof(LeerkrachtFilter))]
-    public class SessieController : Controller
-    {
+    public class SessieController : Controller {
         private readonly ISessieRepository _sessieRepository;
 
-        public SessieController(ISessieRepository sessieRepository)
-        {
+        public SessieController(ISessieRepository sessieRepository) {
             _sessieRepository = sessieRepository;
         }
 
@@ -22,8 +20,7 @@ namespace g16_dotnet.Controllers
         ///     Leerkrachten kunnen van hieruit naar sessiebeheer 
         /// </summary>
         /// <returns>Index View</returns>
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
             ViewData["codeIngegeven"] = false;
             return View();
         }
@@ -44,8 +41,7 @@ namespace g16_dotnet.Controllers
             {
                 ViewData["codeIngegeven"] = true;
                 return View("Index", sessie.Groepen);
-            }
-            else
+            } else
             {
                 TempData["error"] = $"{code} hoort niet bij een bestaande sessie";
             }
@@ -81,7 +77,6 @@ namespace g16_dotnet.Controllers
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
-         
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
 
@@ -103,12 +98,12 @@ namespace g16_dotnet.Controllers
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
-        
             try
             {
                 sessie.ActiveerSessie();
                 _sessieRepository.SaveChanges();
                 TempData["message"] = "Sessie is succesvol geactiveerd.";
+                return RedirectToAction(nameof(BeheerSessies));
             }
             catch (InvalidOperationException e)
             {
@@ -116,44 +111,6 @@ namespace g16_dotnet.Controllers
             }
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
-        public IActionResult BlokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
-        {
-            Sessie sessie = _sessieRepository.GetById(sessieId);
-            Groep groep = null;
-            foreach (Groep g in sessie.Groepen)
-            {
-                if (g.GroepId == groepId)
-                {
-                    groep = g;
-                }
 
-            }
-            if (groep != null)
-            {
-                groep.BlokkeerPad();
-                _sessieRepository.SaveChanges();
-                TempData["message"] = "Groep is succesvol geblokkeerd.";
-            }
-            return View("SessieDetail", new SessieDetailViewModel(sessie));
-        }
-        public IActionResult DeblokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
-        {
-            Sessie sessie = _sessieRepository.GetById(sessieId);
-            Groep groep = null;
-            foreach (Groep g in sessie.Groepen)
-            {
-                if (g.GroepId == groepId)
-                {
-                    groep = g;
-                }
-            }
-            if (groep != null)
-            {
-                groep.DeblokkeerPad();
-                _sessieRepository.SaveChanges();
-                TempData["message"] = "Groep is succesvol gedeblokkeerd.";
-            }
-            return View("SessieDetail", new SessieDetailViewModel(sessie));
-        }
     }
 }
