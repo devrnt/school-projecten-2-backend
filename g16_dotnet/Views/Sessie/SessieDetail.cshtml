@@ -46,7 +46,13 @@
             </tbody>
         </table>
         <div class="box-button-group">
-            <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="box-button">Activeer deze sessie</a>
+            @if (!Model.IsActief)
+            {
+                <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="box-button">Activeer deze sessie</a>
+            } else
+            {
+                <span>Deze sessie is al geactiveerd</span>            
+            }
             <a asp-action="BeheerSessies" class="box-button-default">Terug naar lijst sessies</a>
         </div>
     </div>

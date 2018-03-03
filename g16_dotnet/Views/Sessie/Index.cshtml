@@ -36,7 +36,13 @@
                                 </ul>
                             </td>
                             <td class="table-align-right">
-                                <a asp-controller="Groep" asp-action="KiesGroep" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
+                                @if (!groep.DeelnameBevestigd)
+                                {
+                                    <a asp-controller="Groep" asp-action="KiesGroep" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
+                                } else
+                                {
+                                    <span>Deze groep is al gekozen!</span>
+                                }
                             </td>
                         </tr>
 

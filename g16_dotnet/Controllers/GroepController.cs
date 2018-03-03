@@ -26,14 +26,17 @@ namespace g16_dotnet.Controllers
         /// </returns>
         public IActionResult KiesGroep(Sessie sessie, int groepsId) {
             Groep gekozenGroep = _groepsRepository.GetById(groepsId);
+            if (gekozenGroep == null)
+                return NotFound();
+            if (gekozenGroep.DeelnameBevestigd)
+            {
+                return RedirectToAction(nameof(Index), "Sessie");
+            }
+
             try {
-                if (gekozenGroep != null) {
                     gekozenGroep.DeelnameBevestigd = true;
                     _groepsRepository.SaveChanges();
                     TempData["message"] = "U heeft succesvol deelgenomen aan de sessie. Op dit moment moet u wachten op het startsignaal van uw leerkracht.";
-                } else {
-                    return NotFound();
-                }
             } catch {
                 TempData["error"] = "Er is iets fout gelopen bij het kiezen van uw groep.";
             }

@@ -18,8 +18,9 @@ namespace g16_dotnet.Tests.Controllers {
         public GroepControllerTest() {
             _context = new DummyApplicationDbContext();
             _mockGroepRepository = new Mock<IGroepRepository>();
-            _mockGroepRepository.Setup(m => m.GetById(1)).Returns(_context.Groep1);
+            _mockGroepRepository.Setup(m => m.GetById(1)).Returns(_context.Groep1);        
             _mockGroepRepository.Setup(m => m.GetById(2)).Returns(null as Groep);
+            _mockGroepRepository.Setup(m => m.GetById(3)).Returns(_context.Groep2);
             _groepController = new GroepController(_mockGroepRepository.Object) { TempData = new Mock<ITempDataDictionary>().Object };
         }
 
@@ -27,14 +28,14 @@ namespace g16_dotnet.Tests.Controllers {
         [Fact]
         public void KiesGroep_GeldigeGroep_ReturnsGroepOverzichtView() {
             var session = _context.SessieNogDeelnamesTeBevestigen;
-            var result = _groepController.KiesGroep(session, 1) as ViewResult;
+            var result = _groepController.KiesGroep(session, 3) as ViewResult;
             Assert.Equal("GroepOverzicht", result?.ViewName);
         }
 
         [Fact]
         public void KiesGroep_GeldigeGroep_CallsSaveChanges() {
             var session = _context.SessieNogDeelnamesTeBevestigen;
-            var result = _groepController.KiesGroep(session, 1) as ViewResult;
+            var result = _groepController.KiesGroep(session, 3) as ViewResult;
             _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Once());
         }
 
@@ -50,6 +51,14 @@ namespace g16_dotnet.Tests.Controllers {
             var session = _context.SessieNogDeelnamesTeBevestigen;
             var result = _groepController.KiesGroep(session, 1222);
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void KiesGroep_GroepIsAlGekozen_RedirectsToIndexInSessieController()
+        {
+            var result = _groepController.KiesGroep(_context.SessieNogDeelnamesTeBevestigen, 1) as RedirectToActionResult;
+            Assert.Equal("Index", result?.ActionName);
+            Assert.Equal("Sessie", result?.ControllerName);
         }
 
         #endregion
