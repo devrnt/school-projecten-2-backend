@@ -2,33 +2,33 @@
 @{
     ViewData["Title"] = "GroepOverzicht";
 }
+<div class="box">
+    <h2 class="box-title box-title-display">Uw Groep</h2>
+    <div class="box-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Groepsnaam)</th>
+                    <th>@Html.DisplayNameFor(model => model.Leerlingen)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Groepsnaam</td>
+                    <td>
+                        <ul class="table-ul">
 
-<h2>Uw groep</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Groepsnaam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Leerlingen)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.Groepsnaam</td>
-            <td>
-                    @foreach (var leerling in Model.Leerlingen) {
-                        @($"{leerling.Voornaam} {leerling.Naam}");
-                        <br />
+                            @foreach (var leerling in Model.Leerlingen) {
+                            <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
                     }
-             
-
-            </td>
-        </tr>
-    </tbody>
-
-</table>
-<a asp-action="StartSpel" asp-route-groepId="@Model.GroepId" class="btn btn-success">Start Spel</a>
-    
+                        </ul>
+                    </td>
+                    <td class="table-align-right">
+                        <a asp-action="StartSpel" asp-route-groepId="@Model.GroepId" class="table-button table-button-large">Start Spel</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

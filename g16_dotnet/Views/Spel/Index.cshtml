@@ -3,54 +3,69 @@
     ViewData["Title"] = "Spel spelen";
 }
 
-@if ((string)ViewData["fase"] == "opdracht")
-{
-    <h2>@ViewData["Title"]</h2>
-    <h3>Voortgang: @Model.Voortgang van de @Model.AantalOpdrachten opdrachten zijn voltooid</h3>
-    <div >
-        <embed src="~/docs/@(Model.HuidigeOpdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="800">
+@if ((string)ViewData["fase"] == "opdracht") {
+    <div class="options-container">
+        <div class="option" id="v">
+            <h4>@Model.Voortgang/@Model.AantalOpdrachten</h4>
+        </div>
     </div>
-    <p>
-        @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
-    </p>
-    if (Model.HuidigeOpdracht.AantalPogingen < 3)
-	{
-		<form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
-        <div class="form-inline">
-            <div class="form-group">
-                <label for="groepsAntwoord"></label>
-                <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-default">Bevestigen</button>
+    <div class="box" id="no-overflow">
+        <h2 class="box-title box-title-display">Opgave</h2>
+
+        <div class="box-container">
+            <embed src="~/docs/@(Model.HuidigeOpdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="800">
+
+            <h3 class="groepsBewerking">
+                @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
+            </h3>
+            @if (Model.HuidigeOpdracht.AantalPogingen < 3) {
+                <form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
+                    <div class="form-inline">
+                        <div class="">
+                            <label for="groepsAntwoord"></label>
+                            <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="box-input" placeholder="Antwoord" />
+                        </div>
+                        <button type="submit" class="box-button">Bevestigen</button>
+                    </div>
+                </form>
+            } else {
+                <p>Jullie hebben al te veel pogingen gedaan, wacht op instructies van je leerkracht om verder te gaan!</p>
+            }
         </div>
-    </form> 
-    } else
-    {
-        <p>Jullie hebben al te veel pogingen gedaan, wacht op instructies van je leerkracht om verder te gaan!</p>
-    }
+    </div>
 }
 
-@if ((string)ViewData["fase"] == "actie")
-{
-    <h2>Actie</h2>
-    <p>
-        @Model.HuidigeActie.Omschrijving
-    </p>
-    <form asp-action="VoerActieUit">
-        <div class="form-inline">
-            <div class="form-group">
-                <label for="toegangsCode">Toegangscode: </label>
-                <input type="text" id="toegangsCode" name="toegangsCode" class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+
+
+@if ((string)ViewData["fase"] == "actie") {
+    <div class="box">
+        <h2 class="box-title box-title-display">Actie</h2>
+        <div class="box-container">
+            <p class="action-description">
+                @Model.HuidigeActie.Omschrijving
+            </p>
+            <form asp-action="VoerActieUit">
+
+                <div>
+                    <label for="toegangsCode" class="box-label"><b>Toegangscode: </b></label>
+                    <input type="text" id="toegangsCode" name="toegangsCode" class="box-input" placeholder="Code" />
+                </div>
+                <button type="submit" class="box-button">Bevestig</button>
+            </form>
         </div>
-    </form>
+    </div>
 }
 
-@if ((string)ViewData["fase"] == "schatkist")
-{
-    <h2>Proficiat, jullie hebben de schatkist gevonden!!!</h2>
+@if ((string)ViewData["fase"] == "schatkist") {
+    <div class="box">
+        <h2 class="box-title box-title-display">HOERA!!!</h2>
+        <div class="box-container">
+            <h2>Proficiat, jullie hebben de schatkist gevonden!!!</h2>
+        </div>
+    </div>
+    <img src="~/images/balloon.png" alt="balloon" class="balloon" />
 
+    <img src="~/images/treasure.png" alt="treasure" class="treasure" />
 }
 
 

@@ -1,0 +1,359 @@
+@import url("https://fonts.googleapis.com/css?family=Muli:300,400,700");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Muli', 'Helvetica', sans-serif;
+  background: linear-gradient(120deg, #00C48A, #00AA77);
+}
+
+/*#region Header */
+.header {
+  height: 70px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+}
+
+.header nav {
+  display: flex;
+  margin: 0 20px;
+}
+
+.header nav > ul > li {
+  display: inline;
+}
+
+.header h4 {
+  margin: 0 40px 0 5px;
+  color: #00C48A;
+}
+
+.header li {
+  margin: 0 15px;
+}
+
+.header li > a {
+  text-decoration: none;
+  color: #1d1d1d;
+  transition: 0.35s all ease-in;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+
+.header li > a:hover {
+  border-bottom: 1px solid #424242;
+}
+
+/*#endregion */
+/*#region Container */
+.container {
+  width: 90%;
+  /* 70px height header */
+  height: calc(100vh - 70px);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/*#endregion */
+/*#region Box */
+.box {
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.box .box-container {
+  padding: 30px 45px;
+}
+
+.box .box-title {
+  text-align: center;
+  padding: 10px 0 10px 0;
+  background-color: #651FFF;
+  color: white;
+  font-weight: normal;
+  display: none;
+}
+
+.box .box-title-display {
+  display: inherit;
+}
+
+.box .box-label {
+  display: block;
+  margin-bottom: 20px;
+  color: #3b3b3b;
+  text-align: center;
+}
+
+.box .box-input {
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 15px 0px;
+  background-color: transparent;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  text-align: center;
+  border: 1px solid #e4e4ef;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+}
+
+.box-button {
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  padding: 16px 20px;
+  color: white;
+  background-color: #00C48A;
+  text-transform: uppercase;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+  margin: 1px 0;
+  text-decoration: none;
+}
+
+.box-button-secundary {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  padding: 14px 18px;
+  color: white;
+  text-transform: uppercase;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+  background-color: #651FFF;
+  text-decoration: none;
+  position: absolute;
+  top: 15vh;
+  right: 2vw;
+  text-decoration: none;
+}
+
+.box-button-default {
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  padding: 16px 20px;
+  color: black;
+  background-color: white;
+  text-transform: uppercase;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+  margin: 1px 0;
+  margin-left: 10px;
+  text-decoration: none;
+  border: 1px solid #BDBDBD;
+}
+
+.box-button-group {
+  text-align: center;
+  margin: 20px 0 15px 0;
+}
+
+.box-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 2px 0px #00AA77;
+}
+
+.box-button-secundary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 2px 0px #4527A0;
+}
+
+.box-button-default:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 1px 0px #BDBDBD;
+}
+
+/* In case there are more groups and the box has an overflow */
+.box {
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+/*#endregion */
+/*#region Alerts */
+.alert {
+  color: #eeeded;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  border-radius: 3px;
+  text-align: center;
+  position: relative;
+}
+
+.alert-danger {
+  background-color: #E53935;
+}
+
+.alert-success {
+  background-color: #FFC107;
+  color: white;
+}
+
+.alert .alert-text {
+  padding: 10px 30px;
+}
+
+span.close {
+  font-weight: bold;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: scaleX(1.25) translateY(-50%);
+  color: black;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+/*#endregion */
+/*#region Table */
+.table {
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px 6px;
+  text-align: left;
+}
+
+td {
+  padding: 12px 6px;
+}
+
+td.table-align-right,
+th.table-align-right {
+  text-align: right;
+}
+
+tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+
+.table-ul > li {
+  margin: 0;
+  padding: 10px 0 10px 30px;
+  list-style: none;
+  background-image: url("/images/icons/user-icon.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 15px;
+}
+
+li#groep {
+  background-image: none;
+  padding: 0;
+}
+
+.table-button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  padding: 16px 20px;
+  color: white;
+  background-color: #00C48A;
+  text-transform: uppercase;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+  margin: 1px 0;
+  text-decoration: none;
+}
+
+.table-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 2px 0px #00AA77;
+}
+
+.table-button-large {
+  width: 100%;
+  /* background-color: #FFC107; */
+}
+
+/*#endregion */
+/*#region Option Container */
+.options-container {
+  height: 55px;
+  width: 100%;
+  max-width: 80%;
+  margin: 10px 0;
+  border-radius: 2px;
+}
+
+.option {
+  width: 100px;
+  height: 100%;
+  background-color: #651FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: right;
+  color: white;
+  position: relative;
+  margin-left: 200px;
+}
+
+.option::before {
+  content: ' ';
+  position: absolute;
+  top: 50%;
+  left: -60%;
+  transform: translateY(-50%);
+  background-image: url(/images/icons/question-sign.svg);
+  background-position: center;
+  background-size: 59%;
+  background-repeat: no-repeat;
+  height: 100%;
+  background-color: white;
+  width: 60%;
+}
+
+/*#endregion */
+.groepsBewerking {
+  margin: 50px 0;
+}
+
+.action-description {
+  margin-bottom: 20px;
+}
+
+.balloon {
+  position: absolute;
+  top: 50%;
+  right: 40vw;
+  z-index: -1;
+}
+
+.treasure {
+  position: absolute;
+  bottom: 2vh;
+  left: 15vw;
+  height: 35vh;
+  z-index: -1;
+}
+
+.table-ul#scroll {
+  overflow-y: auto;
+}
