@@ -4,8 +4,57 @@
     ViewData["Title"] = "SessieDetail";
 }
 
-<h2>Details van de sessie</h2>
 
+<div class="box">
+    <h2 class="box-title box-title-display">Details van de sessie</h2>
+    <div class="box-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SessieNaam)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SessieCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Groepen)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="vertical-align: text-top">
+                    <td>
+                        @Html.DisplayFor(model => model.SessieNaam)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.SessieCode)
+                    </td>
+                    <td>
+                        <ul class="table-ul" id="scroll">
+                            @foreach (var groep in Model.Groepen) {
+                            <li id="groep"><b>@groep.Groepsnaam</b></li>
+
+                            @foreach (var leerling in groep.Leerlingen) {
+                            <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
+
+                    }
+                    }
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="box-button-group">
+            <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="box-button">Activeer deze sessie</a>
+            <a asp-action="BeheerSessies" class="box-button-default">Terug naar lijst sessies</a>
+        </div>
+    </div>
+
+</div>
+
+
+<!--
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -25,27 +74,19 @@
             Groepen
         </dt>
         <dd>
-            @foreach (var groep in Model.Groepen)
-            {
-                @($"- {groep.Groepsnaam} -")
+            @foreach (var groep in Model.Groepen) {
+                @groep.Groepsnaam
                 <br />
-                @foreach (var leerling in groep.Leerlingen)
-                {   
-                <em>@($"{leerling.Voornaam} {leerling.Naam}")</em>
-                <br />
+                @foreach (var leerling in groep.Leerlingen) {
+                    <em>@($"{leerling.Voornaam} {leerling.Naam}")</em>
+                    <br />
                 }
             }
         </dd>
     </dl>
 </div>
-    
+
 <div>
-    @if (!Model.IsActief)
-    {
-        <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="btn btn-success">Activeer deze sessie</a>
-    } else
-    {
-        <span>Deze sessie is al actief</span>
-    }
-    <a asp-action="BeheerSessies" class="btn btn-default">Terug naar lijst sessies</a>
+
 </div>
+    -->
