@@ -5,7 +5,8 @@ using System.Linq;
 
 namespace g16_dotnet.Data.Repositories
 {
-    public class SessieRepository : ISessieRepository{
+    public class SessieRepository : ISessieRepository
+    {
 
         private readonly ApplicationDbContext _context;
         private readonly DbSet<Sessie> _sessies;
@@ -36,9 +37,10 @@ namespace g16_dotnet.Data.Repositories
 
         public Sessie GetById(int id)
         {
-            return _sessies.Include(s => s.Groepen)
-                .ThenInclude(g => g.Leerlingen)
+            return _sessies
                 .Include(s => s.Klas)
+                .Include(s => s.Groepen)
+                .ThenInclude(g => g.Pad)
                 .SingleOrDefault(s => s.SessieCode == id);
         }
 

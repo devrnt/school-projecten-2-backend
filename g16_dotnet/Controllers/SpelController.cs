@@ -28,7 +28,8 @@ namespace g16_dotnet.Controllers
             {
                 TempData["error"] = "Voer eerst de actie uit!";
                 ViewData["fase"] = "actie";
-            } else
+            }
+            else
             {
                 ViewData["fase"] = "opdracht";
             }
@@ -50,30 +51,37 @@ namespace g16_dotnet.Controllers
             Pad pad = _padRepository.GetById(padId);
             if (pad == null)
                 return NotFound();
-            try
+            if (pad.IsGeblokkeerd)
             {
-                Opdracht huidig = pad.HuidigeOpdracht;
-                if (huidig.ControleerAntwoord(int.Parse(groepsAntwoord)))
+                TempData["error"] = "Je groep is geblokkeerd, wacht op een signaal van de leerkracht.";
+            }
+            else
+            {
+                try
                 {
-                    huidig.IsVoltooid = true;
-                    if (pad.Voortgang == pad.AantalOpdrachten)
+                    Opdracht huidig = pad.HuidigeOpdracht;
+                    if (huidig.ControleerAntwoord(int.Parse(groepsAntwoord)))
                     {
-                        ViewData["fase"] = "schatkist";
+                        huidig.IsVoltooid = true;
+                        if (pad.Voortgang == pad.AantalOpdrachten)
+                        {
+                            ViewData["fase"] = "schatkist";
+                            return View("Index", pad);
+                        }
+                        ViewData["fase"] = "actie";
                         return View("Index", pad);
                     }
-                    ViewData["fase"] = "actie";
-                    return View("Index", pad);
+                    huidig.AantalPogingen++;
+                    TempData["error"] = $"{groepsAntwoord} is fout!";
                 }
-                huidig.AantalPogingen++;
-                TempData["error"] = $"{groepsAntwoord} is fout!";
-            }
-            catch (System.ArgumentException e)
-            {
-                TempData["error"] = e.Message;
-            }
-            catch (System.FormatException)
-            {
-                TempData["error"] = "Je moet een getal invullen!";
+                catch (System.ArgumentException e)
+                {
+                    TempData["error"] = e.Message;
+                }
+                catch (System.FormatException)
+                {
+                    TempData["error"] = "Je moet een getal invullen!";
+                }
             }
             return RedirectToAction(nameof(Index));
         }
@@ -89,26 +97,33 @@ namespace g16_dotnet.Controllers
         /// </returns>
         public IActionResult VoerActieUit(Pad pad, string toegangsCode)
         {
-            if (pad.Voortgang <= pad.Acties.Where(pa => pa.Actie.IsUitgevoerd).Count())
+            if (pad.IsGeblokkeerd)
             {
-                TempData["error"] = "Los eerst de opdracht op!";
-                return RedirectToAction(nameof(Index));
+                TempData["error"] = "Je groep is geblokkeerd, wacht op een signaal van de leerkracht.";
             }
-
-            try
+            else
             {
-                if (pad.HuidigeOpdracht.ControleerToegangsCode(toegangsCode))
+                if (pad.Voortgang <= pad.Acties.Where(pa => pa.Actie.IsUitgevoerd).Count())
                 {
-                    pad.HuidigeActie.IsUitgevoerd = true;
+                    TempData["error"] = "Los eerst de opdracht op!";
                     return RedirectToAction(nameof(Index));
                 }
-                TempData["error"] = $"{toegangsCode} is fout!";
+
+                try
+                {
+                    if (pad.HuidigeOpdracht.ControleerToegangsCode(toegangsCode))
+                    {
+                        pad.HuidigeActie.IsUitgevoerd = true;
+                        return RedirectToAction(nameof(Index));
+                    }
+                    TempData["error"] = $"{toegangsCode} is fout!";
+                }
+                catch (System.ArgumentException e)
+                {
+                    TempData["error"] = e.Message;
+                }
+                ViewData["fase"] = "actie";
             }
-            catch (System.ArgumentException e)
-            {
-                TempData["error"] = e.Message;
-            }
-            ViewData["fase"] = "actie";
             return View("Index", pad);
         }
     }

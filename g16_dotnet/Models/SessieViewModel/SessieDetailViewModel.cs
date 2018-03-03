@@ -14,6 +14,7 @@ namespace g16_dotnet.Models.SessieViewModel
         public IEnumerable<Groep> Groepen { get; set; }
         [HiddenInput]
         public bool IsActief { get; set; }
+        public bool IsGeblokkeerd { get; set; }
 
         public SessieDetailViewModel(Sessie sessie)
         {
@@ -21,7 +22,6 @@ namespace g16_dotnet.Models.SessieViewModel
             SessieCode = sessie.SessieCode;
             Groepen = sessie.Groepen;
             IsActief = sessie.IsActief;
-
         }
     }
 }
