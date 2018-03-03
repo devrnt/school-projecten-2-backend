@@ -17,6 +17,11 @@
             PadId = pad.PadId;
             ActieId = actie.ActieId;
         }
+
+        public PadActie()
+        {
+
+        }
         #endregion
     }
 }

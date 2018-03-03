@@ -12,12 +12,16 @@ namespace g16_dotnet.Models.SessieViewModel
         [Display(Name = "Sessie naam")]
         public string SessieNaam { get; set; }
         public IEnumerable<Groep> Groepen { get; set; }
+        [HiddenInput]
+        public bool IsActief { get; set; }
 
         public SessieDetailViewModel(Sessie sessie)
         {
             SessieNaam = sessie.Naam;
             SessieCode = sessie.SessieCode;
             Groepen = sessie.Groepen;
+            IsActief = sessie.IsActief;
+
         }
     }
 }

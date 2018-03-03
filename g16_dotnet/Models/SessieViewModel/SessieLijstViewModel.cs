@@ -11,6 +11,7 @@ namespace g16_dotnet.Models.SessieViewModel
         [Display(Name = "Sessie naam")]
         public string SessieNaam { get; set; }
         public string Omschrijving { get; set; }
+        
 
         public SessieLijstViewModel(Sessie sessie)
         {

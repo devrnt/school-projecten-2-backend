@@ -37,6 +37,14 @@ namespace g16_dotnet.Tests.Controllers
             var result = _spelController.Index(_context.Pad) as ViewResult;
             Assert.Equal("opdracht", result?.ViewData["fase"]);
         }
+
+        [Fact]
+        public void Index_OpdrachtOpgelostMaarActieNogNiet_PassesActieFaseInViewData()
+        {
+            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
+            var result = _spelController.Index(_context.Pad) as ViewResult;
+            Assert.Equal("actie", result?.ViewData["fase"]);
+        }
         #endregion
 
         #region === BeantwoordVraag ===
@@ -57,7 +65,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void BeantwoordVraag_JuistAntwoord_MarksOpdrachtAsComplete()
         {
-            Opdracht opdracht = _context.Pad.Opdrachten.First(o => !o.IsVoltooid);
+            Opdracht opdracht = _context.Pad.Opdrachten.First(po => !po.Opdracht.IsVoltooid).Opdracht;
             _spelController.BeantwoordVraag(1, "98");
             Assert.True(opdracht.IsVoltooid);
         }
@@ -97,7 +105,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_JuisteCode_RedirectsToIndex()
         {
-            _context.Pad.Opdrachten.First().IsVoltooid = true;
+            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
             var result = _spelController.VoerActieUit(_context.Pad, "toegangsCode678") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
@@ -105,7 +113,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_FouteCode_ReturnsIndexView()
         {
-            _context.Pad.Opdrachten.First().IsVoltooid = true;
+            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
             var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
             Assert.Equal("Index", result?.ViewName);
         }
@@ -113,7 +121,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_FouteCode_PassesActieFaseInViewData()
         {
-            _context.Pad.Opdrachten.First().IsVoltooid = true;
+            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
             var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
             Assert.Equal("actie", result?.ViewData["fase"]);
         }
@@ -121,7 +129,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_FouteCode_PassesPadToViewViaModel()
         {
-            _context.Pad.Opdrachten.First().IsVoltooid = true;
+            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
             var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
             Assert.Equal(1, (result?.Model as Pad).PadId);
         } 

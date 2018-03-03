@@ -17,6 +17,11 @@
             PadId = pad.PadId;
             OpdrachtId = opdracht.VolgNr;
         }
+
+        public PadOpdracht()
+        {
+
+        }
         #endregion
     }
 }

@@ -27,7 +27,7 @@
         <dd>
             @foreach (var groep in Model.Groepen)
             {
-                @groep.Groepsnaam
+                @($"- {groep.Groepsnaam} -")
                 <br />
                 @foreach (var leerling in groep.Leerlingen)
                 {   
@@ -40,6 +40,12 @@
 </div>
     
 <div>
-    <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="btn btn-success">Activeer deze sessie</a>
+    @if (!Model.IsActief)
+    {
+        <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="btn btn-success">Activeer deze sessie</a>
+    } else
+    {
+        <span>Deze sessie is al actief</span>
+    }
     <a asp-action="BeheerSessies" class="btn btn-default">Terug naar lijst sessies</a>
 </div>

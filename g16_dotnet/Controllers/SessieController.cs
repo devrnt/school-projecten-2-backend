@@ -57,7 +57,7 @@ namespace g16_dotnet.Controllers
         public IActionResult BeheerSessies(Leerkracht leerkracht)
         {
             ICollection<SessieLijstViewModel> sessieLijst = new List<SessieLijstViewModel>();
-            foreach (var sessie in leerkracht.InactieveSessies)
+            foreach (var sessie in leerkracht.Sessies)
                 sessieLijst.Add(new SessieLijstViewModel(sessie));
             return View(sessieLijst);
         }

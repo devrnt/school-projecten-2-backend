@@ -50,9 +50,12 @@ namespace g16_dotnet.Tests.Data
             Actie2 = new Actie("Actie2");
             Acties = new[] { Actie1, Actie2 };
 
-            Pad = new Pad(Opdrachten, Acties) { PadId = 1 };
+            Pad = new Pad() { PadId = 1 };
+            Pad.AddOpdracht(Opdracht1);
+            Pad.AddOpdracht(Opdracht2);
+            Pad.AddActie(Actie1);
+            Pad.AddActie(Actie2);
 
-            PadOpdracht1 = Pad.Opdrachten.FirstOrDefault();
 
             Groep1 = new Groep("Groep1") { Pad = Pad, DeelnameBevestigd = true };
             Groep2 = new Groep("Groep2") { Pad = Pad, DeelnameBevestigd = false };

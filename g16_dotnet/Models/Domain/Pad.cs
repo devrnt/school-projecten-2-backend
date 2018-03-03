@@ -4,24 +4,20 @@ using System.Linq;
 
 namespace g16_dotnet.Models.Domain
 {
-    [JsonObject(MemberSerialization.OptIn)]
     public class Pad
     {
         #region Fields and Properties
-        [JsonProperty]
         public int PadId { get; set; }
         public int? AantalOpdrachten { get { return Opdrachten?.Count(); } }
-        public int? Voortgang { get { return Opdrachten?.Where(o => o.IsVoltooid).Count(); } }
-        public Opdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(o => !o.IsVoltooid); } }
-        public Actie HuidigeActie { get { return Acties?.FirstOrDefault(a => !a.IsUitgevoerd); } }
-        [JsonProperty]
-        public IEnumerable<Opdracht> Opdrachten { get; set; }
-        [JsonProperty]
-        public IEnumerable<Actie> Acties { get; set; }
+        public int? Voortgang { get { return Opdrachten?.Where(po => po.Opdracht.IsVoltooid).Count(); } }
+        public Opdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(po => !po.Opdracht.IsVoltooid)?.Opdracht; } }
+        public Actie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.Actie.IsUitgevoerd)?.Actie; } }
+        public ICollection<PadOpdracht> Opdrachten { get; set; }
+        public ICollection<PadActie> Acties { get; set; }
         #endregion
 
         #region Constructors
-        public Pad(IEnumerable<Opdracht> opdrachten, IEnumerable<Actie> acties)
+        public Pad(ICollection<PadOpdracht> opdrachten, ICollection<PadActie> acties)
         {
             Opdrachten = opdrachten;
             Acties = acties;
@@ -29,8 +25,20 @@ namespace g16_dotnet.Models.Domain
 
         public Pad()
         {
-            Opdrachten = new List<Opdracht>();
-            Acties = new List<Actie>();
+            Opdrachten = new List<PadOpdracht>();
+            Acties = new List<PadActie>();
+        }
+        #endregion
+
+        #region Methods
+        public void AddOpdracht(Opdracht opdracht)
+        {
+            Opdrachten.Add(new PadOpdracht(this, opdracht));
+        }
+
+        public void AddActie(Actie actie)
+        {
+            Acties.Add(new PadActie(this, actie));
         }
         #endregion
     }

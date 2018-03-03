@@ -24,7 +24,14 @@ namespace g16_dotnet.Controllers
         /// </returns>
         public IActionResult Index(Pad pad)
         {
-            ViewData["fase"] = "opdracht";
+            if (pad.Voortgang != pad.Acties.Count(pa => pa.Actie.IsUitgevoerd))
+            {
+                TempData["error"] = "Voer eerst de actie uit!";
+                ViewData["fase"] = "actie";
+            } else
+            {
+                ViewData["fase"] = "opdracht";
+            }
             return View(pad);
         }
 
@@ -82,7 +89,7 @@ namespace g16_dotnet.Controllers
         /// </returns>
         public IActionResult VoerActieUit(Pad pad, string toegangsCode)
         {
-            if (pad.Voortgang <= pad.Acties.Where(a => a.IsUitgevoerd).Count())
+            if (pad.Voortgang <= pad.Acties.Where(pa => pa.Actie.IsUitgevoerd).Count())
             {
                 TempData["error"] = "Los eerst de opdracht op!";
                 return RedirectToAction(nameof(Index));
