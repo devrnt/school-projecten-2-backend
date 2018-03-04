@@ -1,13 +1,25 @@
-﻿$main-color-green: #00C48A;
-$main-color-darker-green: #00AA77;
+﻿$main-color: #00C48A;
+$main-color-dark: #00AA77;
 $light-purple: #651FFF;
 $dark-purple: #4527A0;
 $red: #E53935;
+$dark-red: #b71c1c;
 $yellow: #FFC107;
+$dark-yellow: #F9A825;
+
+// Example Theme 2
+/*$main-color: #ff1744;
+$main-color-dark: #c62828;
+$light-purple: #FFC400;
+$dark-purple: #FF8F00;
+$red: #E53935;
+$dark-red: #b71c1c;
+$yellow: #FFC107;
+$dark-yellow: #F9A825;*/
 
 body {
     font-family: 'Muli', 'Helvetica', sans-serif;
-    background: linear-gradient(120deg,$main-color-green, $main-color-darker-green);
+    background: linear-gradient(120deg,$main-color, $main-color-dark);
 }
 
 /*#region Header */
@@ -29,7 +41,7 @@ body {
 
     h4 {
         margin: 0 40px 0 5px;
-        color: $main-color-green
+        color: $main-color
     }
 
     li {
@@ -116,7 +128,7 @@ body {
     border: none;
     padding: 16px 20px;
     color: white;
-    background-color: $main-color-green;
+    background-color: $main-color;
     text-transform: uppercase;
     font-family: 'Muli', sans-serif;
     border-radius: 2px;
@@ -142,7 +154,7 @@ body {
     background-color: $light-purple;
     text-decoration: none;
     position: absolute;
-    top: 15vh;
+    top: calc(70px + 4vh);
     right: 2vw;
     text-decoration: none;
 }
@@ -168,14 +180,51 @@ body {
     
 }
 
+.box-button-danger {
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    padding: 16px 20px;
+    color: white;
+    background-color: $red;
+    text-transform: uppercase;
+    font-family: 'Muli', sans-serif;
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: all 0.15s ease-in-out;
+    margin: 1px 0;
+    margin-left: 10px;
+    text-decoration: none;
+}
+.box-button-yellow {
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    padding: 16px 20px;
+    color: white;
+    background-color: $yellow;
+    text-transform: uppercase;
+    font-family: 'Muli', sans-serif;
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: all 0.15s ease-in-out;
+    margin: 1px 0;
+    text-decoration: none;
+}
+
+
 .box-button-group {
     text-align: center;
-    margin: 20px 0 15px 0;
+    margin: 35px 0 0;
 }
 
 .box-button:hover {
     transform: translateY(-1px);
-    box-shadow: 0px 2px 0px $main-color-darker-green;
+    box-shadow: 0px 2px 0px $main-color-dark;
 }
 
 .box-button-secundary:hover {
@@ -186,6 +235,16 @@ body {
 .box-button-default:hover {
     transform: translateY(-1px);
     box-shadow: 0px 1px 0px #BDBDBD;
+}
+
+.box-button-yellow:hover {
+        transform: translateY(-1px);
+        box-shadow: 0px 2px 0px $dark-yellow;
+}
+
+.box-button-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0px 2px 0px $dark-red;
 }
 
 
@@ -276,9 +335,9 @@ li#groep {
     cursor: pointer;
     outline: none;
     border: none;
-    padding: 16px 20px;
+    padding: 14px 18px;
     color: white;
-    background-color: $main-color-green;
+    background-color: $main-color;
     text-transform: uppercase;
     font-family: 'Muli', sans-serif;
     border-radius: 2px;
@@ -287,18 +346,15 @@ li#groep {
     transition: all 0.15s ease-in-out;
     margin: 1px 0;
     text-decoration: none;
+    display:inline-block;
 }
 
 
 .table-button:hover {
     transform: translateY(-1px);
-    box-shadow: 0px 2px 0px $main-color-darker-green;
+    box-shadow: 0px 2px 0px $main-color-dark;
 }
 
-.table-button-large {
-    width: 100%;
-    /* background-color: #FFC107; */
-}
 
 /*#endregion */
 
@@ -357,8 +413,8 @@ li#groep {
 
 .balloon {
     position: absolute;
-    top: 50%;
-    right: 40vw;
+    top: 10vh;
+    right: 6vw;
     z-index: -1;
 }
 
@@ -372,4 +428,8 @@ li#groep {
 
 .table-ul#scroll {
     overflow-y: auto;
+}
+
+td#vertical-align {
+    vertical-align: middle;
 }

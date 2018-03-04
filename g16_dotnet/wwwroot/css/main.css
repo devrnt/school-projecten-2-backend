@@ -4,6 +4,14 @@
   padding: 0;
 }
 
+/*$main-color: #ff1744;
+$main-color-dark: #c62828;
+$light-purple: #FFC400;
+$dark-purple: #FF8F00;
+$red: #E53935;
+$dark-red: #b71c1c;
+$yellow: #FFC107;
+$dark-yellow: #F9A825;*/
 body {
   font-family: 'Muli', 'Helvetica', sans-serif;
   background: linear-gradient(120deg, #00C48A, #00AA77);
@@ -139,7 +147,7 @@ body {
   background-color: #651FFF;
   text-decoration: none;
   position: absolute;
-  top: 15vh;
+  top: calc(70px + 4vh);
   right: 2vw;
   text-decoration: none;
 }
@@ -164,9 +172,46 @@ body {
   border: 1px solid #BDBDBD;
 }
 
+.box-button-danger {
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  padding: 16px 20px;
+  color: white;
+  background-color: #E53935;
+  text-transform: uppercase;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+  margin: 1px 0;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.box-button-yellow {
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  padding: 16px 20px;
+  color: white;
+  background-color: #FFC107;
+  text-transform: uppercase;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+  margin: 1px 0;
+  text-decoration: none;
+}
+
 .box-button-group {
   text-align: center;
-  margin: 20px 0 15px 0;
+  margin: 35px 0 0;
 }
 
 .box-button:hover {
@@ -182,6 +227,16 @@ body {
 .box-button-default:hover {
   transform: translateY(-1px);
   box-shadow: 0px 1px 0px #BDBDBD;
+}
+
+.box-button-yellow:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 2px 0px #F9A825;
+}
+
+.box-button-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 2px 0px #b71c1c;
 }
 
 /* In case there are more groups and the box has an overflow */
@@ -269,7 +324,7 @@ li#groep {
   cursor: pointer;
   outline: none;
   border: none;
-  padding: 16px 20px;
+  padding: 14px 18px;
   color: white;
   background-color: #00C48A;
   text-transform: uppercase;
@@ -280,16 +335,12 @@ li#groep {
   transition: all 0.15s ease-in-out;
   margin: 1px 0;
   text-decoration: none;
+  display: inline-block;
 }
 
 .table-button:hover {
   transform: translateY(-1px);
   box-shadow: 0px 2px 0px #00AA77;
-}
-
-.table-button-large {
-  width: 100%;
-  /* background-color: #FFC107; */
 }
 
 /*#endregion */
@@ -341,8 +392,8 @@ li#groep {
 
 .balloon {
   position: absolute;
-  top: 50%;
-  right: 40vw;
+  top: 10vh;
+  right: 6vw;
   z-index: -1;
 }
 
@@ -356,4 +407,8 @@ li#groep {
 
 .table-ul#scroll {
   overflow-y: auto;
+}
+
+td#vertical-align {
+  vertical-align: middle;
 }

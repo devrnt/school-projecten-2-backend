@@ -27,7 +27,7 @@
                             @Html.DisplayFor(modelItem => sessie.Omschrijving)
                         </td>
                         <td>
-                            <a asp-action="SelecteerSessie" asp-route-sessieId="@sessie.SessieCode">Details</a>
+                            <a asp-action="SelecteerSessie" asp-route-sessieId="@sessie.SessieCode" class="box-button" style="display:inherit;">Details</a>
                         </td>
                     </tr>
                 }
