@@ -14,6 +14,11 @@
     <h3>
         @Html.DisplayNameFor(model => model.SessieCode) : @Html.DisplayFor(model => model.SessieCode)
     </h3>
+    <h3>
+        <a asp-action="BlokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="btn">Blokkeer Alle Groepen</a>
+        <a asp-action="DeblokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="btn">Deblokkeer Alle Groepen</a>
+
+    </h3>
     <div class="box-container">
         <table class="table">
             <thead>
