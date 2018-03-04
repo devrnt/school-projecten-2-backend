@@ -116,6 +116,15 @@ namespace g16_dotnet.Controllers
             }
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
+
+        /// <summary>
+        /// Blokkeer een groep op basis van groepId + sessieId
+        /// </summary>
+        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
+        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
+        /// <param name="groepId">Id van de corresponderende groep</param>
+        /// <returns>
+        /// geeft huidige view geupdate terug</returns>
         public IActionResult BlokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
         {
             Sessie sessie = _sessieRepository.GetById(sessieId);
@@ -132,10 +141,19 @@ namespace g16_dotnet.Controllers
             {
                 groep.BlokkeerPad();
                 _sessieRepository.SaveChanges();
-                TempData["message"] = "Groep is succesvol geblokkeerd.";
+                TempData["message"] = "Groep werd succesvol geblokkeerd.";
             }
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
+
+        /// <summary>
+        /// Delokkeer een groep op basis van groepId + sessieId
+        /// </summary>
+        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
+        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
+        /// <param name="groepId">Id van de corresponderende groep</param>
+        /// <returns>
+        /// geeft huidige view geupdate terug</returns>
         public IActionResult DeblokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
         {
             Sessie sessie = _sessieRepository.GetById(sessieId);
@@ -151,9 +169,51 @@ namespace g16_dotnet.Controllers
             {
                 groep.DeblokkeerPad();
                 _sessieRepository.SaveChanges();
-                TempData["message"] = "Groep is succesvol gedeblokkeerd.";
+                TempData["message"] = "Groep werd succesvol gedeblokkeerd.";
             }
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
+
+        /// <summary>
+        /// Blokkeer alle groepen op basis van sessieId
+        /// </summary>
+        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
+        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
+        /// <returns>
+        /// geeft huidige view geupdate terug</returns>
+        public IActionResult BlokkeerAlleGroepen(Leerkracht leerkracht, int sessieId)
+        {
+            Sessie sessie = _sessieRepository.GetById(sessieId);
+            foreach (Groep g in sessie.Groepen)
+            {
+                g.BlokkeerPad();
+
+            }
+            _sessieRepository.SaveChanges();
+            TempData["message"] = "Alle groepen werden succesvol geblokkeerd.";
+            return View("SessieDetail", new SessieDetailViewModel(sessie));
+        }
+
+        /// <summary>
+        /// Deblokkeer alle groepen op basis van sessieId
+        /// </summary>
+        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
+        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
+        /// <returns>
+        /// geeft huidige view geupdate terug</returns>
+        public IActionResult DeblokkeerAlleGroepen(Leerkracht leerkracht, int sessieId)
+        {
+            Sessie sessie = _sessieRepository.GetById(sessieId);
+            foreach (Groep g in sessie.Groepen)
+            {
+                g.DeblokkeerPad();
+
+            }
+            _sessieRepository.SaveChanges();
+            TempData["message"] = "Alle groepen werden succesvol gedeblokkeerd.";
+            return View("SessieDetail", new SessieDetailViewModel(sessie));
+        }
     }
+
+
 }
