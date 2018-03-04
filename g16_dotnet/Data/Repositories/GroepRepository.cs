@@ -35,7 +35,7 @@ namespace g16_dotnet.Data.Repositories
 
         public Groep GetById(int id)
         {
-            return _groepen.Include(g => g.Pad).SingleOrDefault(g => g.GroepId == id);
+            return _groepen.Include(g => g.Pad).Include(p => p.Leerlingen).SingleOrDefault(g => g.GroepId == id);
         }
 
         public void SaveChanges()
