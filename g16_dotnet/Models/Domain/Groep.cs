@@ -2,7 +2,8 @@
 
 namespace g16_dotnet.Models.Domain
 {
-    public class Groep {
+    public class Groep
+    {
         #region Properties
         public int GroepId { get; set; }
         public string Groepsnaam { get; set; }
@@ -13,7 +14,8 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Constructor
-        public Groep() {
+        public Groep()
+        {
             Leerlingen = new List<Leerling>();
             IsVergrendeld = false;
             DeelnameBevestigd = false;
@@ -22,6 +24,17 @@ namespace g16_dotnet.Models.Domain
         public Groep(string naam) : this()
         {
             Groepsnaam = naam;
+        }
+        #endregion
+
+        #region Methods
+        public void BlokkeerPad()
+        {
+            Pad.IsGeblokkeerd = true;
+        }
+        public void DeblokkeerPad()
+        {
+            Pad.IsGeblokkeerd = false;
         }
         #endregion
     }

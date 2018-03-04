@@ -14,6 +14,7 @@ namespace g16_dotnet.Models.Domain
         public Actie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.Actie.IsUitgevoerd)?.Actie; } }
         public ICollection<PadOpdracht> Opdrachten { get; set; }
         public ICollection<PadActie> Acties { get; set; }
+        public bool IsGeblokkeerd { get; set; }
         #endregion
 
         #region Constructors
@@ -21,12 +22,14 @@ namespace g16_dotnet.Models.Domain
         {
             Opdrachten = opdrachten;
             Acties = acties;
+            IsGeblokkeerd = false;
         }
 
         public Pad()
         {
             Opdrachten = new List<PadOpdracht>();
             Acties = new List<PadActie>();
+            IsGeblokkeerd = false;
         }
         #endregion
 
