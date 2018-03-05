@@ -1,15 +1,27 @@
-﻿using g16_dotnet.Models.Domain;
+﻿using g16_dotnet.Models;
+using g16_dotnet.Models.Domain;
+using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace g16_dotnet.Data
 {
-    public static class BreakoutBoxDataInitializer
+    public class BreakoutBoxDataInitializer
     {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public static void InitializeData(ApplicationDbContext context)
+        public BreakoutBoxDataInitializer(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager)
         {
-            context.Database.EnsureDeleted();
-            if (context.Database.EnsureCreated()) {
+            _context = applicationDbContext;
+            _userManager = userManager;
+        }
+
+        public async Task InitializeData()
+        {
+            _context.Database.EnsureDeleted();
+            if (_context.Database.EnsureCreated()) {
                 // Oefeningen
                 var oefening1 = new Oefening("opgave1", 100);
                 var oefening2 = new Oefening("opgave2", 200);
@@ -26,7 +38,7 @@ namespace g16_dotnet.Data
                 var opdracht3 = new Opdracht("code3", oefening3, groepsBewerking3);
 
                 var opdrachten = new List<Opdracht>{ opdracht1, opdracht2, opdracht3 };
-                context.Opdrachten.AddRange(opdrachten);
+                _context.Opdrachten.AddRange(opdrachten);
 
                 // Acties
                 var actie1 = new Actie("Ga naar McDonalds en koop chicken nuggets");
@@ -34,7 +46,7 @@ namespace g16_dotnet.Data
                 var actie3 = new Actie("Neem de groene ballon");
 
                 var acties = new List<Actie>{ actie1, actie2, actie3 };
-                context.Acties.AddRange(acties);
+                _context.Acties.AddRange(acties);
 
                 // Pad
                 var pad = new Pad();               
@@ -66,7 +78,7 @@ namespace g16_dotnet.Data
                 pad4.AddActie(actie2);
                 pad4.AddActie(actie1);
                 var paden = new List<Pad>{ pad, pad2, pad3, pad4 };
-                context.Paden.AddRange(paden);
+                _context.Paden.AddRange(paden);
 
                 // Klas
                 var klas = new Klas("Het Eiland");
@@ -109,11 +121,11 @@ namespace g16_dotnet.Data
                 for (int i = 2; i < 4; i++)
                     groep4.Leerlingen.Add(leerlingen2[i]);
 
-                context.Groepen.AddRange(groepen1);
-                context.SaveChanges();
+                _context.Groepen.AddRange(groepen1);
+                _context.SaveChanges();
 
-                context.Groepen.AddRange(groepen2);
-                context.SaveChanges();
+                _context.Groepen.AddRange(groepen2);
+                _context.SaveChanges();
 
 
                 // Sessie
@@ -121,14 +133,18 @@ namespace g16_dotnet.Data
                 var sessie2 = new Sessie(321, "Sessie2", "Dit is sessie 2", groepen2, klas2);
                 Sessie[] sessies = { sessie, sessie2 };
 
-                context.Sessies.AddRange(sessies);
-                context.SaveChanges();
+                _context.Sessies.AddRange(sessies);
+                _context.SaveChanges();
 
-                //// Leerkracht
+                // Leerkracht
                 var leerkracht = new Leerkracht("Protut", "Lydia") { Sessies = new List<Sessie> { sessie, sessie2 } };
-                context.Leerkrachten.Add(leerkracht);
-                context.SaveChanges();
+                _context.Leerkrachten.Add(leerkracht);
+                ApplicationUser user = new ApplicationUser { UserName = "lydia.protut@synalco.be", Email = "lydia.protut@synalco.be" };
+                await _userManager.CreateAsync(user, "P@ssword1");
+                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerkracht"));
+                _context.SaveChanges();
             }
+            _context.SaveChanges();
         }
     }
 }

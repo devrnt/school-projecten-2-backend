@@ -1,11 +1,17 @@
-﻿using g16_dotnet.Data.Mappers;
-using g16_dotnet.Models.Domain;
-using g16_dotnet.Models.SessieViewModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using g16_dotnet.Models;
+using g16_dotnet.Data.Mappers;
+using g16_dotnet.Models.SessieViewModel;
+using g16_dotnet.Models.Domain;
 
 namespace g16_dotnet.Data
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext : IdentityDbContext<Models.ApplicationUser>
     {
         public DbSet<Sessie> Sessies { get; set; }
         public DbSet<Pad> Paden { get; set; }
@@ -13,6 +19,11 @@ namespace g16_dotnet.Data
         public DbSet<Actie> Acties { get; set; }
         public DbSet<Groep> Groepen { get; set; }
         public DbSet<Leerkracht> Leerkrachten { get; set; }
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //.\SQLEXPRESS
@@ -39,6 +50,5 @@ namespace g16_dotnet.Data
             modelBuilder.Ignore<SessieLijstViewModel>();
             modelBuilder.Ignore<SessieDetailViewModel>();
         }
-
     }
 }

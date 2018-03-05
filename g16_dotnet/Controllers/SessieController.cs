@@ -1,6 +1,7 @@
 ﻿using g16_dotnet.Filters;
 using g16_dotnet.Models.Domain;
 using g16_dotnet.Models.SessieViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 
 namespace g16_dotnet.Controllers
 {
+    [Authorize(Policy = "Leerkracht")]
     [ServiceFilter(typeof(LeerkrachtFilter))]
     public class SessieController : Controller
     {
@@ -23,6 +25,7 @@ namespace g16_dotnet.Controllers
         ///     Leerkrachten kunnen van hieruit naar sessiebeheer 
         /// </summary>
         /// <returns>Index View</returns>
+        [AllowAnonymous]
         public IActionResult Index()
         {
             ViewData["codeIngegeven"] = false;

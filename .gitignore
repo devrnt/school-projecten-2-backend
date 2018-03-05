@@ -262,3 +262,11 @@ __pycache__/
 
 # Visual Paradigm
 *.bak_*
+/g16_dotnet/Data/.DS_Store
+/g16_dotnet/Data/._.DS_Store
+/g16_dotnet/.DS_Store
+/g16_dotnet/._.DS_Store
+/.DS_Store
+/._.DS_Store
+/g16_dotnet/Controllers/.DS_Store
+/g16_dotnet/Controllers/._.DS_Store
