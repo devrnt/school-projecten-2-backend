@@ -115,6 +115,7 @@ namespace g16_dotnet.Controllers
                     if (pad.HuidigeOpdracht.ControleerToegangsCode(toegangsCode))
                     {
                         pad.HuidigeActie.IsUitgevoerd = true;
+                        TempData["message"] = "De code is juist, de zoektocht gaat verder!";
                         return RedirectToAction(nameof(Index));
                     }
                     TempData["error"] = $"{toegangsCode} is fout!";

@@ -9,11 +9,16 @@
     <h2 class="box-title box-title-display">Details van de sessie</h2>
     <div class="box-container">
         <div style="display: flex; flex-direction:row;margin-bottom: 30px; align-items:center;">
-            <span><h4>Naam:</h4><p>@Model.SessieNaam</p></span><hr style="margin: 0 15px;" />
-            <span><h4>Code:</h4><p>@Model.SessieCode</p></span>
+            <p><strong>Naam</strong>@($"\t{Model.SessieNaam}")</p>
+            <p><strong>Code</strong>@($"\t{Model.SessieCode}")</p>
+
             <div style="margin: 30px 0; width:100%; text-align:right">
-                <a asp-action="BlokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-danger">Blokkeer Alle Groepen</a>
-                <a asp-action="DeblokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-default">Deblokkeer Alle Groepen</a>
+                @if (Model.IsActief)
+                {
+                    <a asp-action="BlokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-danger">Blokkeer Alle Groepen</a>
+                    <a asp-action="DeblokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-default">Deblokkeer Alle Groepen</a>
+
+                }
             </div>
         </div>
 
