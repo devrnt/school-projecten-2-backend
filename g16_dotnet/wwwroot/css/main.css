@@ -242,7 +242,7 @@ body {
 /* In case there are more groups and the box has an overflow */
 .box {
   max-height: 80%;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 /*#endregion */

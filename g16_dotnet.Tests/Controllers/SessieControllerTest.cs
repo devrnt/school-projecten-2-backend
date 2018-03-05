@@ -135,5 +135,129 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         #endregion
+
+        #region === BlokkeerGroep ===
+        [Fact]
+        public void BlokkeerGroep_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _controller.BlokkeerGroep(_leerkracht, 321, 1);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void BlokkeerGroep_GeenGroepMetId_DoesNotChangeOrPersist()
+        {
+            var result = _controller.BlokkeerGroep(_leerkracht, 123, 99) as ViewResult;
+            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
+
+        [Fact]
+        public void BlokkeerGroep_SessieValid_ReturnsSessieDetailView()
+        {
+            var result = _controller.BlokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            Assert.Equal("SessieDetail", result?.ViewName);
+        }
+
+        [Fact]
+        public void BlokkeerGroep_SessieValid_PassesSessieDetailViewModelToViewViaModel()
+        {
+            var result = _controller.BlokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
+        }
+
+        [Fact]
+        public void BlokkeerGroep_GroepValid_ChangesAndPersistsGroep()
+        {
+            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
+            var result = _controller.BlokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            Assert.True(groep.Pad.IsGeblokkeerd);
+            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
+        }
+        #endregion
+
+        #region === DeblokkeerGroep ===
+        [Fact]
+        public void DeblokkeerGroep_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _controller.DeblokkeerGroep(_leerkracht, 321, 1);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void DeblokkeerGroep_GeenGroepMetId_DoesNotChangeOrPersist()
+        {
+            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 99) as ViewResult;
+            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
+
+        [Fact]
+        public void DeblokkeerGroep_SessieValid_ReturnsSessieDetailView()
+        {
+            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            Assert.Equal("SessieDetail", result?.ViewName);
+        }
+
+        [Fact]
+        public void DeblokkeerGroep_SessieValid_PassesSessieDetailViewModelToViewViaModel()
+        {
+            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
+        }
+
+        [Fact]
+        public void DeblokkeerGroep_GroepValid_ChangesAndPersistsGroep()
+        {
+            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
+            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            Assert.False(groep.Pad.IsGeblokkeerd);
+            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once); 
+        }
+        #endregion
+
+        #region BlokkeerAlleGroepen
+        [Fact]
+        public void BlokkeerAlleGroepen_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _controller.BlokkeerAlleGroepen(_leerkracht, 321);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void BlokkeerAlleGroepen_SessieValid_ReturnsSessieDetailView()
+        {
+            var result = _controller.BlokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
+            Assert.Equal("SessieDetail", result?.ViewName);
+        }
+
+        [Fact]
+        public void BlokkeerAlleGroepen_SessieValid_PassesSessieDetailViewModelToViewViaModel()
+        {
+            var result = _controller.BlokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
+            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
+        }
+        #endregion
+
+        #region DeblokkeerAlleGroepen
+        [Fact]
+        public void DeblokkeerAlleGroepen_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _controller.DeblokkeerAlleGroepen(_leerkracht, 321);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void DeblokkeerAlleGroepen_SessieValid_ReturnsSessieDetailView()
+        {
+            var result = _controller.DeblokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
+            Assert.Equal("SessieDetail", result?.ViewName);
+        }
+
+        [Fact]
+        public void DeblokkeerAlleGroepen_SessieValid_PassesSessieDetailViewModelToViewViaModel()
+        {
+            var result = _controller.DeblokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
+            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
+        }
+        #endregion
     }
 }

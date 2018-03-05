@@ -57,7 +57,7 @@ namespace g16_dotnet.Tests.Data
             Pad.AddActie(Actie2);
 
 
-            Groep1 = new Groep("Groep1") { Pad = Pad, DeelnameBevestigd = true };
+            Groep1 = new Groep("Groep1") { GroepId = 1, Pad = Pad, DeelnameBevestigd = true };
             Groep2 = new Groep("Groep2") { Pad = Pad, DeelnameBevestigd = false };
             Leerling1 = new Leerling("McDerp", "Derp");
             Leerling2 = new Leerling("Cena", "John");

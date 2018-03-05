@@ -10,15 +10,28 @@
         </div>
     </div>
     <div class="box" id="no-overflow">
-        <h2 class="box-title box-title-display">Opgave</h2>
-
+        @if (Model.IsGeblokkeerd)
+        {
         <div class="box-container">
-            <embed src="~/docs/@(Model.HuidigeOpdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="800">
+            <h2 class="box-title box-title-display">Groep geblokkeerd</h2>
+            <br />
+            <p>
+                Jullie groep is eventjes geblokkeerd zodat je kan pauzeren, wacht op je leerkracht om verder te gaan!
+            </p>
+            <a asp-action="Index" class="box-button">Verder gaan met de zoektocht!</a>
+        </div>
+        } else
+        {
+            <h2 class="box-title box-title-display">Opgave</h2>
 
-            <h3 class="groepsBewerking">
-                @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
-            </h3>
-            @if (Model.HuidigeOpdracht.AantalPogingen < 3) {
+            <div class="box-container">
+                <embed src="~/docs/@(Model.HuidigeOpdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="600">
+
+                <h3 class="groepsBewerking">
+                    @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
+                </h3>
+            @if (Model.HuidigeOpdracht.AantalPogingen < 3)
+            {
                 <form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
                     <div class="form-inline">
                         <div class="">
@@ -28,12 +41,16 @@
                         <button type="submit" class="box-button">Bevestigen</button>
                     </div>
                 </form>
-            } else {
-                <p>Jullie hebben al te veel pogingen gedaan, wacht op instructies van je leerkracht om verder te gaan!</p>
+            } else
+            {
+                <p>
+                    Jullie hebben al te veel pogingen gedaan, wacht op instructies van je leerkracht om verder te gaan!
+                </p>
             }
+            </div>
+        }
         </div>
-    </div>
-}
+ }
 
 
 

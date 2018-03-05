@@ -16,6 +16,8 @@ namespace g16_dotnet.Data.Mappers
 
             builder.HasOne(g => g.Pad)
                 .WithOne();
+
+            
         }
     }
 }

@@ -4,6 +4,7 @@ using g16_dotnet.Models.SessieViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace g16_dotnet.Controllers
 {
@@ -47,7 +48,7 @@ namespace g16_dotnet.Controllers
             }
             else
             {
-                TempData["error"] = $"{code} hoort niet bij een bestaande sessie";
+                TempData["error"] = code == 0 ? "Geef een code in" : $"{code} hoort niet bij een sessie, vraag hulp aan je leerkracht";
             }
             return RedirectToAction(nameof(Index));
         }
@@ -109,6 +110,7 @@ namespace g16_dotnet.Controllers
                 sessie.ActiveerSessie();
                 _sessieRepository.SaveChanges();
                 TempData["message"] = "Sessie is succesvol geactiveerd.";
+                return RedirectToAction(nameof(BeheerSessies));
             }
             catch (InvalidOperationException e)
             {
@@ -128,21 +130,27 @@ namespace g16_dotnet.Controllers
         public IActionResult BlokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
         {
             Sessie sessie = _sessieRepository.GetById(sessieId);
-            Groep groep = null;
-            foreach (Groep g in sessie.Groepen)
-            {
-                if (g.GroepId == groepId)
-                {
-                    groep = g;
-                }
+            if (sessie == null)
+                return NotFound();
+            Groep groep = sessie.Groepen.FirstOrDefault(g => g.GroepId == groepId); // gebruik linq
+            //foreach (Groep g in sessie.Groepen)
+            //{
+            //    if (g.GroepId == groepId)
+            //    {
+            //        groep = g;
+            //    }
 
-            }
-            if (groep != null)
+            //}
+            if (groep == null)
+            {
+                TempData["error"] = "Groep niet gevonden";
+            } else
             {
                 groep.BlokkeerPad();
                 _sessieRepository.SaveChanges();
                 TempData["message"] = "Groep werd succesvol geblokkeerd.";
             }
+
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
 
@@ -157,19 +165,17 @@ namespace g16_dotnet.Controllers
         public IActionResult DeblokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
         {
             Sessie sessie = _sessieRepository.GetById(sessieId);
-            Groep groep = null;
-            foreach (Groep g in sessie.Groepen)
-            {
-                if (g.GroepId == groepId)
-                {
-                    groep = g;
-                }
-            }
+            if (sessie == null)
+                return NotFound();
+            Groep groep = sessie.Groepen.FirstOrDefault(g => g.GroepId == groepId);
             if (groep != null)
             {
                 groep.DeblokkeerPad();
                 _sessieRepository.SaveChanges();
                 TempData["message"] = "Groep werd succesvol gedeblokkeerd.";
+            } else
+            {
+                TempData["error"] = "Groep niet gevonden.";
             }
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
@@ -184,11 +190,14 @@ namespace g16_dotnet.Controllers
         public IActionResult BlokkeerAlleGroepen(Leerkracht leerkracht, int sessieId)
         {
             Sessie sessie = _sessieRepository.GetById(sessieId);
-            foreach (Groep g in sessie.Groepen)
-            {
-                g.BlokkeerPad();
+            if (sessie == null)
+                return NotFound();
+            sessie.Groepen.All(g => { g.Pad.IsGeblokkeerd = true; return true; });
+            //foreach (Groep g in sessie.Groepen)
+            //{
+            //    g.BlokkeerPad();
 
-            }
+            //}
             _sessieRepository.SaveChanges();
             TempData["message"] = "Alle groepen werden succesvol geblokkeerd.";
             return View("SessieDetail", new SessieDetailViewModel(sessie));
@@ -203,12 +212,12 @@ namespace g16_dotnet.Controllers
         /// geeft huidige view geupdate terug</returns>
         public IActionResult DeblokkeerAlleGroepen(Leerkracht leerkracht, int sessieId)
         {
+            
             Sessie sessie = _sessieRepository.GetById(sessieId);
-            foreach (Groep g in sessie.Groepen)
-            {
-                g.DeblokkeerPad();
+            if (sessie == null)
+                return NotFound();
+            sessie.Groepen.All(g => { g.Pad.IsGeblokkeerd = false; return false; });
 
-            }
             _sessieRepository.SaveChanges();
             TempData["message"] = "Alle groepen werden succesvol gedeblokkeerd.";
             return View("SessieDetail", new SessieDetailViewModel(sessie));

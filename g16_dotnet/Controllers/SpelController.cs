@@ -69,6 +69,7 @@ namespace g16_dotnet.Controllers
                             return View("Index", pad);
                         }
                         ViewData["fase"] = "actie";
+                        TempData["message"] = "Juist antwoord, goed zo!";
                         return View("Index", pad);
                     }
                     huidig.AantalPogingen++;
