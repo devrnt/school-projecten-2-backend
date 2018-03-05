@@ -8,15 +8,16 @@ namespace g16_dotnet.Models.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Het email adres moet ingevuld zijn")]
+        [Display]
+        [EmailAddress(ErrorMessage ="Geen geldig email adres")]
         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Het wachtwoord moet ingevuld zijn")]
+        [DataType(DataType.Password, ErrorMessage ="Geen geldig wachtwoord")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Ingelogd blijven")]
         public bool RememberMe { get; set; }
     }
 }

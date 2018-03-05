@@ -8,8 +8,8 @@ namespace g16_dotnet.Models.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Het email adres moet ingevuld zijn")]
+        [EmailAddress(ErrorMessage = "Geen geldig email adres")]
         public string Email { get; set; }
     }
 }

@@ -60,7 +60,7 @@ body {
 .container {
   width: 90%;
   /* 70px height header */
-  height: calc(100vh - 70px);
+  height: calc(100vh);
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -82,7 +82,7 @@ body {
 
 .box .box-title {
   text-align: center;
-  padding: 10px 0 10px 0;
+  padding: 10px;
   background-color: #651FFF;
   color: white;
   font-weight: normal;
@@ -147,8 +147,8 @@ body {
   background-color: #651FFF;
   text-decoration: none;
   position: absolute;
-  top: calc(70px + 4vh);
-  right: 2vw;
+  top: calc(8vh);
+  right: 4vw;
   text-decoration: none;
 }
 
@@ -242,7 +242,7 @@ body {
 /* In case there are more groups and the box has an overflow */
 .box {
   max-height: 80%;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 /*#endregion */
@@ -412,3 +412,44 @@ li#groep {
 td#vertical-align {
   vertical-align: middle;
 }
+
+/*#region Account Validation */
+.text-danger {
+  color: #E53935;
+  display: block;
+  margin: 5px 0 10px 0;
+  font-size: 14px;
+}
+
+.validation-input {
+  outline: none;
+  border: none;
+  padding: 10px 10px;
+  background-color: transparent;
+  box-sizing: border-box;
+  margin-bottom: 0px;
+  border: 1px solid #e4e4ef;
+  font-family: 'Muli', sans-serif;
+  border-radius: 2px;
+  width: 100%;
+  min-width: 23vw;
+}
+
+.box-button-small {
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px;
+}
+
+.validation-label {
+  display: block;
+  margin: 10px 0 5px 0;
+  font-size: 0.9rem;
+  color: #3b3b3b;
+}
+
+.validation-link {
+  font-size: 0.9rem;
+}
+
+/*#endregion */
