@@ -137,7 +137,7 @@ namespace g16_dotnet.Data
                 _context.SaveChanges();
 
                 // Leerkracht
-                var leerkracht = new Leerkracht("Protut", "Lydia") { Sessies = new List<Sessie> { sessie, sessie2 } };
+                var leerkracht = new Leerkracht("Protut", "Lydia", "lydia.protut@synalco.be") { Sessies = new List<Sessie> { sessie, sessie2 } };
                 _context.Leerkrachten.Add(leerkracht);
                 ApplicationUser user = new ApplicationUser { UserName = "lydia.protut@synalco.be", Email = "lydia.protut@synalco.be" };
                 await _userManager.CreateAsync(user, "P@ssword1");

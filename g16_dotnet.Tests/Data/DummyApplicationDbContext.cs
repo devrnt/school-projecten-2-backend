@@ -64,7 +64,7 @@ namespace g16_dotnet.Tests.Data
             Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });
             SessieAlleDeelnamesBevestigd = new Sessie(123, "Sessie1", "Dit is sessie1", new List<Groep> { Groep1 }, Klas1);
             SessieNogDeelnamesTeBevestigen = new Sessie(321, "Sessie2", "Dit is sessie2", new List<Groep> { Groep2 }, Klas1);
-            Leerkracht1 = new Leerkracht("Van Damme", "Alain") { Sessies = new List<Sessie> { SessieAlleDeelnamesBevestigd } };
+            Leerkracht1 = new Leerkracht("VanDam", "Alain", "alain.vandam@synalco.be") { Sessies = new List<Sessie> { SessieAlleDeelnamesBevestigd } };
         }
 
     }

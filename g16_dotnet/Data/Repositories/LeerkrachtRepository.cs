@@ -33,6 +33,14 @@ namespace g16_dotnet.Data.Repositories
             return _leerkrachten.ToList();
         }
 
+        public Leerkracht GetByEmail(string email)
+        {
+            return _leerkrachten.Include(l => l.Sessies)
+                .ThenInclude(s => s.Groepen)
+                .ThenInclude(g => g.Leerlingen)
+                .SingleOrDefault(l => l.Email == email);
+        }
+
         public Leerkracht GetById(int id)
         {
             return _leerkrachten.Include(l => l.Sessies)

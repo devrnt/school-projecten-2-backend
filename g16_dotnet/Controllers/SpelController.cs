@@ -104,7 +104,7 @@ namespace g16_dotnet.Controllers
             }
             else
             {
-                if (pad.Voortgang <= pad.Acties.Where(pa => pa.Actie.IsUitgevoerd).Count())
+                if (pad.Voortgang <= pad.Acties.Count(pa => pa.Actie.IsUitgevoerd))
                 {
                     TempData["error"] = "Los eerst de opdracht op!";
                     return RedirectToAction(nameof(Index));

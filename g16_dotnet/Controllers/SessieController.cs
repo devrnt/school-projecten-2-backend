@@ -29,6 +29,7 @@ namespace g16_dotnet.Controllers
         public IActionResult Index()
         {
             ViewData["codeIngegeven"] = false;
+            
             return View();
         }
 
@@ -195,7 +196,7 @@ namespace g16_dotnet.Controllers
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
-            sessie.Groepen.All(g => { g.Pad.IsGeblokkeerd = true; return true; });
+            sessie.BlokkeerAlleGroepen();
             //foreach (Groep g in sessie.Groepen)
             //{
             //    g.BlokkeerPad();
@@ -219,8 +220,7 @@ namespace g16_dotnet.Controllers
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
-            sessie.Groepen.All(g => { g.Pad.IsGeblokkeerd = false; return false; });
-
+            sessie.DeblokkeerAlleGroepen();
             _sessieRepository.SaveChanges();
             TempData["message"] = "Alle groepen werden succesvol gedeblokkeerd.";
             return View("SessieDetail", new SessieDetailViewModel(sessie));

@@ -8,6 +8,7 @@ namespace g16_dotnet.Models.Domain
     public interface ILeerkrachtRepository
     {
         Leerkracht GetById(int id);
+        Leerkracht GetByEmail(string email);
         IEnumerable<Leerkracht> GetAll();
         void Add(Leerkracht leerkracht);
         void Delete(Leerkracht leerkracht);

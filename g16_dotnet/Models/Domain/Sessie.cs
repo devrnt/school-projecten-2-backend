@@ -34,18 +34,21 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Methods
-        //public bool ControleerSessieCode(int code)
-        //{
-        //    if (code < 0)
-        //        throw new ArgumentException("SessieCode kan niet negatief zijn. ");
-        //    return code == SessieCode;
-        //}
-
         public void ActiveerSessie()
         {
             if (Groepen.Any(g => !g.DeelnameBevestigd))
                 throw new InvalidOperationException("Alle groepen moeten eerst hun deelname bevestigd hebben!");
             IsActief = true;
+        }
+
+        public void BlokkeerAlleGroepen()
+        {
+            Groepen.All(g => { g.Pad.IsGeblokkeerd = true; return true; });
+        }
+
+        public void DeblokkeerAlleGroepen()
+        {
+            Groepen.All(g => { g.Pad.IsGeblokkeerd = false; return true; });
         }
         #endregion
     }

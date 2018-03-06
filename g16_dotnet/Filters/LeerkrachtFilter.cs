@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace g16_dotnet.Filters
 {
+    [System.AttributeUsageAttribute(System.AttributeTargets.All, AllowMultiple = false)]
     public class LeerkrachtFilter : ActionFilterAttribute
     {
         private Leerkracht _leerkracht;
@@ -15,8 +16,7 @@ namespace g16_dotnet.Filters
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            // Bij implementatie van users en accounts zal de ingelogde Leerkracht worden meegegeven
-            _leerkracht = _leerkrachtRepository.GetById(1);
+            _leerkracht = _leerkrachtRepository.GetByEmail(context.HttpContext.User.Identity.Name);
             context.ActionArguments["leerkracht"] = _leerkracht;
             base.OnActionExecuting(context);
         }
