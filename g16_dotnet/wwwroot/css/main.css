@@ -345,25 +345,17 @@ li#groep {
 
 /*#endregion */
 /*#region Option Container */
-.options-container {
-  height: 55px;
-  width: 100%;
-  max-width: 80%;
-  margin: 10px 0;
-  border-radius: 2px;
-}
-
 .option {
   width: 100px;
-  height: 100%;
+  height: 50px;
   background-color: #651FFF;
   display: flex;
   justify-content: center;
   align-items: center;
-  float: right;
   color: white;
-  position: relative;
-  margin-left: 200px;
+  position: absolute;
+  right: 1vw;
+  top: 30px;
 }
 
 .option::before {
