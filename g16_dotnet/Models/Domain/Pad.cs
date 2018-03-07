@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,8 @@ namespace g16_dotnet.Models.Domain
         public int? AantalOpdrachten { get { return Opdrachten?.Count(); } }
         public int? Voortgang { get { return Opdrachten?.Where(po => po.Opdracht.IsVoltooid).Count(); } }
         public Opdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(po => !po.Opdracht.IsVoltooid)?.Opdracht; } }
+        public PadState PadState { get; set; }
+
         public Actie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.Actie.IsUitgevoerd)?.Actie; } }
         public ICollection<PadOpdracht> Opdrachten { get; set; }
         public ICollection<PadActie> Acties { get; set; }
@@ -22,14 +25,12 @@ namespace g16_dotnet.Models.Domain
         {
             Opdrachten = opdrachten;
             Acties = acties;
-            IsGeblokkeerd = false;
         }
 
         public Pad()
         {
             Opdrachten = new List<PadOpdracht>();
             Acties = new List<PadActie>();
-            IsGeblokkeerd = false;
         }
         #endregion
 
@@ -42,6 +43,16 @@ namespace g16_dotnet.Models.Domain
         public void AddActie(Actie actie)
         {
             Acties.Add(new PadActie(this, actie));
+        }
+
+        public bool ControleerAntwoord(int antwoord)
+        {
+            return PadState.ControleerAntwoord(this, antwoord);
+        }
+
+        public bool ControleerToegangsCode(string code)
+        {           
+            return PadState.ControleerToegangsCode(this, code);
         }
         #endregion
     }

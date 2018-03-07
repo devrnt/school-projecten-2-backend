@@ -1,0 +1,37 @@
+﻿@model g16_dotnet.Models.Domain.Pad
+
+<div class="options-container">
+    <div class="option" id="v">
+        <h4>@Model.Voortgang/@Model.AantalOpdrachten</h4>
+    </div>
+</div>
+
+<div class="box">
+    <h2 class="box-title box-title-display">Opgave</h2>
+
+    <div class="box-container">
+        <embed src="~/docs/@(Model.HuidigeOpdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="600">
+
+        <h3 class="groepsBewerking">
+            @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
+        </h3>
+        @if (Model.HuidigeOpdracht.AantalPogingen < 3)
+        {
+            <form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
+                <div class="form-inline">
+                    <div class="">
+                        <label for="groepsAntwoord"></label>
+                        <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="box-input" placeholder="Antwoord" />
+                    </div>
+                    <button type="submit" class="box-button">Bevestigen</button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <p>
+                Jullie hebben al te veel pogingen gedaan, wacht op instructies van je leerkracht om verder te gaan!
+            </p>
+        }
+    </div>
+</div>

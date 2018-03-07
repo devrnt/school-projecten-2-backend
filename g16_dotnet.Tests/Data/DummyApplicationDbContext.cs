@@ -12,6 +12,7 @@ namespace g16_dotnet.Tests.Data
         public IEnumerable<Actie> Acties { get;  }
 
         public Pad Pad { get; }
+        public Pad PadMet1Opdracht { get; set; }
 
         public Oefening Oef1 { get; }
         public Oefening Oef2 { get; }
@@ -55,6 +56,11 @@ namespace g16_dotnet.Tests.Data
             Pad.AddOpdracht(Opdracht2);
             Pad.AddActie(Actie1);
             Pad.AddActie(Actie2);
+            Pad.PadState = new OpdrachtPadState("Opdracht");
+            PadMet1Opdracht = new Pad() { PadId = 5 };
+            PadMet1Opdracht.AddOpdracht(Opdracht1);
+            PadMet1Opdracht.AddActie(Actie1);
+            PadMet1Opdracht.PadState = new OpdrachtPadState("Opdracht");
 
 
             Groep1 = new Groep("Groep1") { GroepId = 1, Pad = Pad, DeelnameBevestigd = true };

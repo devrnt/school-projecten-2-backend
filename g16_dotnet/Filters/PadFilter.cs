@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace g16_dotnet.Filters {
     public class PadFilter : ActionFilterAttribute {
@@ -15,6 +16,14 @@ namespace g16_dotnet.Filters {
         public override void OnActionExecuting(ActionExecutingContext context) {
             // na implementeren van users zal dit pad gehaald worden adhv de ingelogde groep
             _pad = _padRepository.GetById(1);
+            if (_pad.IsGeblokkeerd)
+                _pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+            else if (_pad.Voortgang == _pad.AantalOpdrachten)
+                _pad.PadState = new SchatkistPadState("Schatkist");
+            else if (_pad.Voortgang <= _pad.Acties.Count(a => a.Actie.IsUitgevoerd))
+                _pad.PadState = new OpdrachtPadState("Opdracht");
+            else
+                _pad.PadState = new ActiePadState("Actie");
             context.ActionArguments["pad"] = _pad;
             base.OnActionExecuting(context);
         }

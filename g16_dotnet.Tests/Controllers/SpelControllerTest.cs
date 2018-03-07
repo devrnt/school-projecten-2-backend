@@ -20,6 +20,7 @@ namespace g16_dotnet.Tests.Controllers
             _context = new DummyApplicationDbContext();
             _padRepository = new Mock<IPadRepository>();
             _padRepository.Setup(m => m.GetById(1)).Returns(_context.Pad);
+            _padRepository.Setup(m => m.GetById(5)).Returns(_context.PadMet1Opdracht);
             _spelController = new SpelController(_padRepository.Object) { TempData = new Mock<ITempDataDictionary>().Object};
         }
 
@@ -31,20 +32,6 @@ namespace g16_dotnet.Tests.Controllers
             Assert.Equal(1, (result?.Model as Pad).PadId);
         }
 
-        [Fact]
-        public void Index_PassesOpdrachtFaseInViewData()
-        {
-            var result = _spelController.Index(_context.Pad) as ViewResult;
-            Assert.Equal("opdracht", result?.ViewData["fase"]);
-        }
-
-        [Fact]
-        public void Index_OpdrachtOpgelostMaarActieNogNiet_PassesActieFaseInViewData()
-        {
-            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
-            var result = _spelController.Index(_context.Pad) as ViewResult;
-            Assert.Equal("actie", result?.ViewData["fase"]);
-        }
         #endregion
 
         #region === BeantwoordVraag ===
@@ -81,22 +68,21 @@ namespace g16_dotnet.Tests.Controllers
         public void BeantwoordVraag_JuistAntwoordNogOpdrachtenOver_PassesPadToViewViaModel()
         {
             var result = _spelController.BeantwoordVraag(1, "98") as ViewResult;
-            Assert.Equal(1, (result?.Model as Pad).PadId);
+            Assert.Equal(1, (result?.Model as Pad)?.PadId);
         }
 
         [Fact]
-        public void BeantwoordVraag_JuistAntwoordNogOpdrachtenOver_PassesActieFaseInViewData()
+        public void BeantwoordVraag_JuistAntwoordNogOpdrachtenOver_PadHeeftActiePadState()
         {
             var result = _spelController.BeantwoordVraag(1, "98") as ViewResult;
-            Assert.Equal("actie", result?.ViewData["fase"]);
+            Assert.Equal("Actie", (result?.Model as Pad)?.PadState.StateName);
         }
 
         [Fact]
-        public void BeantwoordVraag_JuistAntwoordGeenOpdrachtenOver_PassesSchatkistFaseInViewData()
+        public void BeantwoordVraag_JuistAntwoordGeenOpdrachtenOver_PadHeeftSchatkistPadState()
         {
-            _spelController.BeantwoordVraag(1, "98");
-            var result = _spelController.BeantwoordVraag(1, "70") as ViewResult;
-            Assert.Equal("schatkist", result?.ViewData["fase"]);
+            var result = _spelController.BeantwoordVraag(5, "98") as ViewResult;
+            Assert.Equal("Schatkist", (result?.Model as Pad)?.PadState.StateName);
         }
 
         #endregion
@@ -105,7 +91,8 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_JuisteCode_RedirectsToIndex()
         {
-            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
+            _context.Pad.HuidigeOpdracht.IsVoltooid = true;
+            _context.Pad.PadState = new ActiePadState("Actie");
             var result = _spelController.VoerActieUit(_context.Pad, "toegangsCode678") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
@@ -113,33 +100,16 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_FouteCode_ReturnsIndexView()
         {
-            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
             var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
             Assert.Equal("Index", result?.ViewName);
         }
 
         [Fact]
-        public void VoerActieUit_FouteCode_PassesActieFaseInViewData()
-        {
-            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
-            var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
-            Assert.Equal("actie", result?.ViewData["fase"]);
-        }
-
-        [Fact]
         public void VoerActieUit_FouteCode_PassesPadToViewViaModel()
         {
-            _context.Pad.Opdrachten.First().Opdracht.IsVoltooid = true;
             var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
             Assert.Equal(1, (result?.Model as Pad).PadId);
         } 
-
-        [Fact]
-        public void VoerActieUit_OpdrachtNietOpgelost_RedirectsToActionIndex()
-        {                      
-            var result = _spelController.VoerActieUit(_context.Pad, null) as RedirectToActionResult;
-            Assert.Equal("Index", result?.ActionName);
-        }
         #endregion
     }
 }

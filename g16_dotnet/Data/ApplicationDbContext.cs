@@ -48,6 +48,11 @@ namespace g16_dotnet.Data
             modelBuilder.ApplyConfiguration(new GroepLeerlingConfiguration());
             modelBuilder.ApplyConfiguration(new LeerkrachtConfiguration());
             modelBuilder.Ignore<SessieLijstViewModel>();
+            modelBuilder.Ignore<PadState>();
+            modelBuilder.Ignore<ActiePadState>();
+            modelBuilder.Ignore<GeblokkeerdPadState>();
+            modelBuilder.Ignore<SchatkistPadState>();
+            modelBuilder.Ignore<OpdrachtPadState>();
             modelBuilder.Ignore<SessieDetailViewModel>();
         }
     }
