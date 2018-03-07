@@ -42,6 +42,7 @@ namespace g16_dotnet.Controllers
         ///
         /// Foute code: RedirectToAction Index
         /// </returns>
+        [AllowAnonymous]
         public IActionResult ValideerSessiecode(int code)
         {
             Sessie sessie = _sessieRepository.GetById(code);

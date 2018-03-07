@@ -30,6 +30,7 @@ namespace g16_dotnet.Controllers
                 return NotFound();
             if (gekozenGroep.DeelnameBevestigd)
             {
+                TempData["error"] = "Groep is al gekozen!";
                 return RedirectToAction(nameof(Index), "Sessie");
             }
 

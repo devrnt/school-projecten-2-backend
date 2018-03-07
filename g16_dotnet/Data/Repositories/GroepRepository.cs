@@ -30,7 +30,9 @@ namespace g16_dotnet.Data.Repositories
 
         public IEnumerable<Groep> GetAll()
         {
-            return _groepen.Include(g => g.Pad).ToList();
+            return _groepen.Include(g => g.Pad)
+                .Include(g => g.Leerlingen)
+                .ToList();
         }
 
         public Groep GetById(int id)
