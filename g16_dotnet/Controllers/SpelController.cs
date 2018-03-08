@@ -1,6 +1,7 @@
 ﻿using g16_dotnet.Filters;
 using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 
 namespace g16_dotnet.Controllers
@@ -42,25 +43,30 @@ namespace g16_dotnet.Controllers
             Pad pad = _padRepository.GetById(padId);
             if (pad == null)
                 return NotFound();
-            try
+            if (groepsAntwoord == null || groepsAntwoord.Trim().Length == 0)
+                TempData["error"] = "Geef een antwoord in!";
+            else
             {
-                Opdracht huidig = pad.HuidigeOpdracht;
-                if (pad.ControleerAntwoord(int.Parse(groepsAntwoord)))
+                try
                 {
-                    TempData["message"] = "Juist antwoord, goed zo!";
-                    return View("Index", pad);
+                    Opdracht huidig = pad.HuidigeOpdracht;
+                    if (pad.ControleerAntwoord(int.Parse(groepsAntwoord)))
+                    {
+                        TempData["message"] = "Juist antwoord, goed zo!";
+                        return View("Index", pad);
+                    }
+                    huidig.AantalPogingen++;
+                    TempData["error"] = $"{groepsAntwoord} is fout!";
                 }
-                huidig.AantalPogingen++;
-                TempData["error"] = $"{groepsAntwoord} is fout!";
-            }
-            catch (System.InvalidOperationException e)
-            {
-                TempData["error"] = e.Message;
-            }
-            catch (System.FormatException)
-            {
-                TempData["error"] = "Je moet een getal invullen!";
+                catch (System.InvalidOperationException e)
+                {
+                    TempData["error"] = e.Message;
                 }
+                catch (System.FormatException)
+                {
+                    TempData["error"] = "Je moet een getal invullen!";
+                } 
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -87,7 +93,10 @@ namespace g16_dotnet.Controllers
                 }
                 TempData["error"] = $"{toegangsCode} is fout!";
             }
-            catch (System.InvalidOperationException e)
+            catch (InvalidOperationException e)
+            {
+                TempData["error"] = e.Message;
+            } catch (ArgumentException e)
             {
                 TempData["error"] = e.Message;
             }
