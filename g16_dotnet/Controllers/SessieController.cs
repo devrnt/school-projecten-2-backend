@@ -29,7 +29,7 @@ namespace g16_dotnet.Controllers
         public IActionResult Index()
         {
             ViewData["codeIngegeven"] = false;
-            
+
             return View();
         }
 
@@ -43,17 +43,30 @@ namespace g16_dotnet.Controllers
         /// Foute code: RedirectToAction Index
         /// </returns>
         [AllowAnonymous]
-        public IActionResult ValideerSessiecode(int code)
+        public IActionResult ValideerSessiecode(string code)
         {
-            Sessie sessie = _sessieRepository.GetById(code);
-            if (sessie != null)
-            {
-                ViewData["codeIngegeven"] = true;
-                return View("Index", sessie.Groepen);
-            }
+            if (code == null || code.Trim().Length == 0)
+                TempData["error"] = "Geef een code in: ";
             else
             {
-                TempData["error"] = code == 0 ? "Geef een code in" : $"{code} hoort niet bij een sessie, vraag hulp aan je leerkracht";
+                try
+                {
+                    int sessieCode = int.Parse(code);
+                    Sessie sessie = _sessieRepository.GetById(sessieCode);
+                    if (sessie != null)
+                    {
+                        ViewData["codeIngegeven"] = true;
+                        return View("Index", sessie.Groepen);
+                    }
+                    else
+                    {
+                        TempData["error"] = $"{code} hoort niet bij een sessie, vraag hulp aan je leerkracht";
+                    }
+                }
+                catch (FormatException)
+                {
+                    TempData["error"] = "De sessiecode moet een getal zijn!";
+                }
             }
             return RedirectToAction(nameof(Index));
         }
@@ -149,7 +162,8 @@ namespace g16_dotnet.Controllers
             if (groep == null)
             {
                 TempData["error"] = "Groep niet gevonden";
-            } else
+            }
+            else
             {
                 groep.BlokkeerPad();
                 _sessieRepository.SaveChanges();
@@ -178,7 +192,8 @@ namespace g16_dotnet.Controllers
                 groep.DeblokkeerPad();
                 _sessieRepository.SaveChanges();
                 TempData["message"] = "Groep werd succesvol gedeblokkeerd.";
-            } else
+            }
+            else
             {
                 TempData["error"] = "Groep niet gevonden.";
             }
@@ -217,7 +232,7 @@ namespace g16_dotnet.Controllers
         /// geeft huidige view geupdate terug</returns>
         public IActionResult DeblokkeerAlleGroepen(Leerkracht leerkracht, int sessieId)
         {
-            
+
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();

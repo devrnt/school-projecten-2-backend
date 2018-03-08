@@ -43,28 +43,28 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void ValideerSessieCode_JuisteCode_ReturnsIndexView()
         {
-            var result = _controller.ValideerSessiecode(123) as ViewResult;
+            var result = _controller.ValideerSessiecode("123") as ViewResult;
             Assert.Equal("Index", result?.ViewName);
         }
 
         [Fact]
         public void ValideerSessieCode_JuisteCode_PassesCodeIngegevenTrueViaViewData()
         {
-            var result = _controller.ValideerSessiecode(123) as ViewResult;
+            var result = _controller.ValideerSessiecode("123") as ViewResult;
             Assert.True((bool)result?.ViewData["codeIngegeven"]);
         }
 
         [Fact]
         public void ValideerSessieCode_JuisteCode_PassesGroepenToViewViaModel()
         {
-            var result = _controller.ValideerSessiecode(123) as ViewResult;
+            var result = _controller.ValideerSessiecode("123") as ViewResult;
             Assert.Single(result?.Model as IEnumerable<Groep>);
         }
 
         [Fact]
         public void ValideerSessieCode_FouteCode_RedirectsToActionIndex()
         {
-            var result = _controller.ValideerSessiecode(321) as RedirectToActionResult;
+            var result = _controller.ValideerSessiecode("321") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
         #endregion
