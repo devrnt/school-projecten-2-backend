@@ -66,5 +66,11 @@ namespace g16_dotnet.Controllers
             
             return View("GroepOverzicht", huidigeGroep);
         }
+
+        [HttpGet]
+        public JsonResult IsSessieActief(Sessie sessie)
+        {
+            return Json(new { sessie.IsActief });
+        }
     }
 }

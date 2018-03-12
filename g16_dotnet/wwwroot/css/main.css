@@ -17,6 +17,8 @@ body {
   background: linear-gradient(120deg, #00C48A, #00AA77);
 }
 
+
+
 /*#region Header */
 .header {
   height: 70px;
@@ -445,3 +447,9 @@ td#vertical-align {
 }
 
 /*#endregion */
+/* Voor disablen links */
+.not-active {
+    pointer-events: none;
+    cursor: default;
+    background-color: gray;
+}
