@@ -13,7 +13,7 @@ projectenII
 * Visuele feedback (mock-ups), zodat de opdrachtgever overtuigd wordt
 * Specieke vragen aan de klant stellen
 * Begin de presentatie met 'we hebben een afgewerkt product', ' we hebben werkende software, maar nog geen afgewerkte gui'
-* Tijdens de presentatie een soort roleplay opvoeren, met elke persoon een apparte rol zodat de klant een duidelijk beeld heeft op de mogelijkheden van het product
+* Tijdens de presentatie een soort roleplay opvoeren, met elke persoon een apparte rol zodat de klant een duidelijk beeld heeft op de mogelijkheden van het product, met 1 persoon die de computer bedient
 * Straal vertrouwen uit tijdens de presentatie
 * Bij haperingen tijdens de opvoering zeg wat er op dat moment fout loopt, zodat de klant zich geen zorgen begint te maken
 * Gebruik geen vakjargon (vb 'nice to haves', 'must haves')
@@ -27,3 +27,6 @@ projectenII
 
 ### Feedback van de klant
 * De sessie moet gestart kunnen worden alwel zijn niet alle groepen geselecteerd
+* Er moeten een foutmelding verschijnen wanneer het paswoord fout is
+* Voortgang per groep tonen voor leerkracht
+* Mogelijkheid voor volwassenen -> uniforme look of meerdere looks? eventueel zelf aanpasbaar?
