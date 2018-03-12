@@ -1,23 +1,106 @@
 ﻿@model IEnumerable<g16_dotnet.Models.Domain.Groep>
-
-
-<div class="container">
-    <form method="post">
-        <input name="inputCode" type="number" placeholder="Code" />
-        <input type="submit" class="btn btn-primary" />
-    </form>
-</div>
-
-<h1>De code is @TempData["code"]</h1>
-
-@if (Model != null) {
-    <p>Beschikbare groepen: </p>
-
-    @foreach (var item in Model) {
-        <li><a asp-controller="Sessie" asp-action="Deelnemen">@item.Groepsnaam</a></li>
-      
-
-    }
+@{
+    ViewData["Title"] = "Deelnemen sessie";
 }
 
+<a asp-action="BeheerSessies" class="box-button-secundary" style="margin-bottom:10px">
+    Beheer sessies
+</a>
+<!--
+<h2 class="text-center">@ViewData["Title"]</h2>
+<br />
+    -->
+@if ((bool)(ViewData["codeIngegeven"])) {
+    <div class="box">
+        <h2 class="box-title box-title-display">Kies Groep</h2>
+        <div class="box-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Groepsnaam</th>
+                        <th>Groepsleden</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var groep in Model) {
+                        <tr>
+                            <td>@groep.Groepsnaam</td>
+                            <td>
+                                <ul class="table-ul">
+                                    @foreach (var leerling in groep.Leerlingen) {
+                                        <li>
+                                            @($"{leerling.Voornaam} {leerling.Naam}")
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td class="table-align-right">
+                                @if (!groep.DeelnameBevestigd)
+                                {
+                                    <a asp-controller="Groep" asp-action="KiesGroep" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
+                                } else
+                                {
+                                    <span>Deze groep is al gekozen!</span>
+                                }
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--<table class="table table-striped">
+        <tr>
+            <th>Groepsnaam</th>
+            <th>Groepsleden</th>
+            <th></th>
+        </tr>
+        @foreach (var groep in Model) {
+            <tr>
+                <td>
+                    @groep.Groepsnaam
+                </td>
+                <td>
+                    @foreach (var leerling in groep.Leerlingen) {
+                        @($"{leerling.Voornaam} {leerling.Naam}")
+                        <br />
+                    }
+                </td>
+                <td>
+                    <a asp-controller="Groep" asp-action="KiesGroep" asp-route-groepsId="@groep.GroepId" class="btn btn-success">Selecteer</a>
+                </td>
+
+            </tr>
+        }
+    </table>
+        -->
+} else {
+    <div class="box">
+        <form asp-action="ValideerSessieCode">
+            <h2 class="box-title box-title-display">Breakout Box</h2>
+            <div class="box-container">
+                <!--<label class="box-label" for="sessieCode"></label>-->
+                <input class="box-input" name="code" id="sessieCode" placeholder="Sessie code">
+                <button class="box-button" type="submit">Deelnemen</button>
+            </div>
+        </form>
+    </div>
+    <!--
+        <div class="container-fluid text-center">
+            <form asp-action="ValideerSessieCode">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="code"></label>
+                        <input type="text" id="code" name="code" class="form-control text-center" placeholder="Geef sessiecode in" />
+                    </div>
+                    <br />
+                    <br />
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </form>
+        </div>
+        -->
+}
 

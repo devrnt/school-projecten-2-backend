@@ -1,34 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace g16_dotnet.Models.Domain
 {
     public class Sessie
     {
         #region Properties
-        public int SessionId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int SessieCode { get; set; }
+        public string Naam { get; set; }
         public string Omschrijving { get; set; }
-        public int Code { get; set; }
-
-        public ICollection<Groep> Groepen { get; private set; }
-
+        public bool IsActief { get; set; }
+        public IEnumerable<Groep> Groepen { get; set; }
         public Klas Klas { get; set; }
         #endregion
 
         #region Constructor
-        public Sessie(int code, Klas klas)
+        public Sessie(int code, string naam, string omschrijving, IEnumerable<Groep> groepen, Klas klas)
         {
-            Code = code;
+            SessieCode = code;
+            Naam = naam;
+            Omschrijving = omschrijving;
+            Groepen = groepen;
             Klas = klas;
+        }
+
+        public Sessie()
+        {
             Groepen = new List<Groep>();
         }
-        public Sessie(int code, Klas klas, ICollection<Groep> groepen)
+        #endregion
+
+        #region Methods
+        public void ActiveerSessie()
         {
-            Code = code;
-            Klas = klas;
-            Groepen = groepen;
+            if (Groepen.Any(g => !g.DeelnameBevestigd))
+                throw new InvalidOperationException("Alle groepen moeten eerst hun deelname bevestigd hebben!");
+            IsActief = true;
+        }
+
+        public void BlokkeerAlleGroepen()
+        {
+            Groepen.All(g => { g.Pad.IsGeblokkeerd = true; return true; });
+        }
+
+        public void DeblokkeerAlleGroepen()
+        {
+            Groepen.All(g => { g.Pad.IsGeblokkeerd = false; return true; });
         }
         #endregion
     }

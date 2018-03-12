@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace g16_dotnet.Models.Domain
+﻿namespace g16_dotnet.Models.Domain
 {
     public class Oefening
     {
-        public string Opgave { get; private set; }
-        public string GroepsAntwoord { get; private set; }
+        #region Fields and Properties
+        public int OefeningId { get; set; }
+        public string Opgave { get; set; }
+        public int GroepsAntwoord { get; set; }
+        #endregion
 
-        public Oefening(string opgave, string groepsAntwoord)
+        #region Constructors
+        public Oefening(string opgave, int groepsAntwoord)
         {
             Opgave = opgave;
             GroepsAntwoord = groepsAntwoord;
         }
+        // EF
+        public Oefening() {
 
-        public bool ControleerAntwoord(string antwoord)
-        {
-            return antwoord == GroepsAntwoord;
         }
+        #endregion
+
+        #region Methods
+        
+        #endregion
     }
 }

@@ -1,0 +1,34 @@
+﻿@model g16_dotnet.Models.Domain.Groep;
+@{
+    ViewData["Title"] = "GroepOverzicht";
+}
+<div class="box">
+    <h2 class="box-title box-title-display">Uw Groep</h2>
+    <div class="box-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Groepsnaam)</th>
+                    <th>@Html.DisplayNameFor(model => model.Leerlingen)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Groepsnaam</td>
+                    <td>
+                        <ul class="table-ul">
+
+                            @foreach (var leerling in Model.Leerlingen) {
+                            <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
+                    }
+                        </ul>
+                    </td>
+                    <td class="table-align-right">
+                        <a asp-action="StartSpel" asp-route-groepId="@Model.GroepId" class="table-button table-button-large">Start Spel</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
