@@ -1,0 +1,39 @@
+﻿@model g16_dotnet.Models.SessieViewModel.SessieDetailViewModel
+
+
+@foreach (var groep in Model.Groepen)
+{
+    <tr style="vertical-align: text-top">
+        <td id="groep">
+            <b>@groep.Groepsnaam</b>
+        </td>
+        <td>
+            <ul class="table-ul" id="scroll">
+                @foreach (var leerling in groep.Leerlingen)
+                {
+                    <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
+
+                }
+
+            </ul>
+        </td>
+        <td style="text-align:center">
+            <input type="checkbox" readonly="readonly" @(groep.DeelnameBevestigd ? "checked" : "")>
+        </td>
+        <td id="vertical-align">
+            @if (Model.IsActief)
+            {
+                @if (groep.Pad.IsGeblokkeerd)
+                {
+                    <a asp-action="DeblokkeerGroep" asp-route-sessieId="@Model.SessieCode" asp-route-groepId="@groep.GroepId" class="box-button-default">Deblokkeer</a>
+                }
+                else
+                {
+                    <a asp-action="BlokkeerGroep" asp-route-sessieId="@Model.SessieCode" asp-route-groepId="@groep.GroepId" class="box-button-danger">Blokkeer</a>
+                }
+
+            }
+
+        </td>
+    </tr>
+}
