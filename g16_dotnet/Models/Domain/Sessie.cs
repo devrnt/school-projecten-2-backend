@@ -36,8 +36,9 @@ namespace g16_dotnet.Models.Domain
         #region Methods
         public void ActiveerSessie()
         {
-            if (Groepen.Any(g => !g.DeelnameBevestigd))
-                throw new InvalidOperationException("Alle groepen moeten eerst hun deelname bevestigd hebben!");
+            // niet nodig als niet alle groepen geselecteerd moeten zijn
+            //if (Groepen.Any(g => !g.DeelnameBevestigd))
+            //    throw new InvalidOperationException("Alle groepen moeten eerst hun deelname bevestigd hebben!");
             IsActief = true;
         }
 

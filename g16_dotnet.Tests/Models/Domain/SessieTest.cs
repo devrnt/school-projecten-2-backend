@@ -26,10 +26,11 @@ namespace g16_dotnet.Tests.Models.Domain
         }
 
         [Fact]
-        public void ActiveerSessie_NogGroepenTeBevestigen_ThrowsInvalidOperationException()
-        {
-            Assert.Throws<InvalidOperationException>(() => _sessieNogDeelnamesTeBevestigen.ActiveerSessie());
+        public void ActiveerSessie_GroepenNogNietDeelgenomen_SetsSessieActiefTrue() {
+            _sessieNogDeelnamesTeBevestigen.ActiveerSessie();
+            Assert.True(_sessieNogDeelnamesTeBevestigen.IsActief);
         }
+
         #endregion
 
         #region === BlokkeerAlleGroepen ===

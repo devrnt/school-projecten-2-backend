@@ -120,19 +120,20 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
-        public void ActiveerSessie_NogDeelnamesTeBevestigen_ReturnsSessieDetailView()
+        public void ActiveerSessie_NogDeelnamesTeBevestigen_RedirectsToBeheerSessies()
         {
-            var result = _controller.ActiveerSessie(_leerkracht, 456) as ViewResult;
-            Assert.Equal("SessieDetail", result?.ViewName);
+            var result = _controller.ActiveerSessie(_leerkracht, 456) as RedirectToActionResult;
+            Assert.Equal("BeheerSessies", result?.ActionName);
         }
 
-        [Fact]
-        public void ActiveerSessie_NogDeelnamesTeBevestigen_PassesSessieViewModelToViewViaModel()
-        {
-            var result = _controller.ActiveerSessie(_leerkracht, 456) as ViewResult;
-            var svm = new SessieDetailViewModel(_context.SessieNogDeelnamesTeBevestigen);
-            Assert.Equal(svm.SessieNaam, (result?.Model as SessieDetailViewModel).SessieNaam);
-        }
+        // niet meer nodig aangezien activeer sessie redirects to beheersessies
+        //[Fact]
+        //public void ActiveerSessie_NogDeelnamesTeBevestigen_PassesSessieViewModelToViewViaModel()
+        //{
+        //    var result = _controller.ActiveerSessie(_leerkracht, 456) as ViewResult;
+        //    var svm = new SessieDetailViewModel(_context.SessieNogDeelnamesTeBevestigen);
+        //    Assert.Equal(svm.SessieNaam, (result?.Model as SessieDetailViewModel).SessieNaam);
+        //}
 
         #endregion
 
