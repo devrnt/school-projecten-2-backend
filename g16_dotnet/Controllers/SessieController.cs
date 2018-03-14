@@ -175,7 +175,7 @@ namespace g16_dotnet.Controllers
         }
 
         /// <summary>
-        /// Delokkeer een groep op basis van groepId + sessieId
+        /// Deblokkeer een groep op basis van groepId + sessieId
         /// </summary>
         /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
         /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
@@ -242,6 +242,27 @@ namespace g16_dotnet.Controllers
             TempData["message"] = "Alle groepen werden succesvol gedeblokkeerd.";
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
+
+        public IActionResult OntgrendelGroep(Leerkracht leerkracht, int sessieId, int groepId)
+        {
+            Sessie sessie = _sessieRepository.GetById(sessieId);
+            if (sessie == null)
+                return NotFound();
+            Groep groep = sessie.Groepen.FirstOrDefault(g => g.GroepId == groepId); // gebruik linq
+            if (groep == null)
+            {
+                TempData["error"] = "Groep niet gevonden";
+            }
+            else
+            {
+                groep.Pad.HuidigeOpdracht.AantalPogingen = 0;
+                _sessieRepository.SaveChanges();
+                TempData["message"] = "Groep werd succesvol ontgrendeld.";
+            }
+
+            return View("SessieDetail", new SessieDetailViewModel(sessie));
+        }
+
 
         [HttpGet]
         public IActionResult CheckDeelnames(int sessieId)
