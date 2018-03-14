@@ -43,6 +43,12 @@ namespace g16_dotnet.Data.Repositories
                     .ThenInclude(g => g.Leerlingen)
                  .Include(s => s.Groepen)
                     .ThenInclude(g => g.Pad)
+                        .ThenInclude(po => po.Opdrachten)
+                            .ThenInclude(po => po.Opdracht)
+                .Include(s => s.Groepen)
+                    .ThenInclude(g => g.Pad)
+                        .ThenInclude(p => p.Acties)
+                            .ThenInclude(pa => pa.Actie)
                 .SingleOrDefault(s => s.SessieCode == id);
         }
 

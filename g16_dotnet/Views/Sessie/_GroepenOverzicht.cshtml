@@ -20,6 +20,9 @@
         <td style="text-align:center">
             <input type="checkbox" readonly="readonly" @(groep.DeelnameBevestigd ? "checked" : "")>
         </td>
+        <td>
+            @groep.Pad.Voortgang / @groep.Pad.AantalOpdrachten
+        </td>
         <td id="vertical-align">
             @if (Model.IsActief)
             {
