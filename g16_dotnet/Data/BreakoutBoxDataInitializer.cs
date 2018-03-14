@@ -34,16 +34,16 @@ namespace g16_dotnet.Data
 
                 // Opdrachten
                 var opdracht1 = new Opdracht("code1", oefening1, groepsBewerking1);
-                var opdracht2 = new Opdracht("code2", oefening2, groepsBewerking2);
-                var opdracht3 = new Opdracht("code3", oefening3, groepsBewerking3);
+                var opdracht2 = new Opdracht("77", oefening2, groepsBewerking2);
+                var opdracht3 = new Opdracht("256", oefening3, groepsBewerking3);
 
                 var opdrachten = new List<Opdracht>{ opdracht1, opdracht2, opdracht3 };
                 _context.Opdrachten.AddRange(opdrachten);
 
                 // Acties
-                var actie1 = new Actie("Ga naar McDonalds en koop chicken nuggets");
-                var actie2 = new Actie("Ga naar gebouw B");
-                var actie3 = new Actie("Neem de groene ballon");
+                var actie1 = new Actie("Welke getal is geen priemgetal: 71, 73, 77");
+                var actie2 = new Actie("16 x 16 = ");
+                var actie3 = new Actie("2 * 4 / 2 * 6 * 5 = ");
 
                 var acties = new List<Actie>{ actie1, actie2, actie3 };
                 _context.Acties.AddRange(acties);
@@ -81,8 +81,8 @@ namespace g16_dotnet.Data
                 _context.Paden.AddRange(paden);
 
                 // Klas
-                var klas = new Klas("Het Eiland");
-                var klas2 = new Klas("The Office");
+                var klas = new Klas("2A");
+                var klas2 = new Klas("2B");
 
                 // Leerling
                 
@@ -129,8 +129,8 @@ namespace g16_dotnet.Data
 
 
                 // Sessie
-                var sessie = new Sessie(123, "Sessie1", "Dit is sessie 1", groepen1, klas);
-                var sessie2 = new Sessie(321, "Sessie2", "Dit is sessie 2", groepen2, klas2);
+                var sessie = new Sessie(123, "2A : Hoofdrekenen", "Enkel een pen en papier gebruikt worden", groepen1, klas);
+                var sessie2 = new Sessie(321, "2B : Hoofdrekenen", "Enkel een pen en papier gebruikt worden", groepen2, klas2);
                 Sessie[] sessies = { sessie, sessie2 };
 
                 _context.Sessies.AddRange(sessies);
