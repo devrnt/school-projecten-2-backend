@@ -11,6 +11,7 @@
         <div style="display: flex; flex-direction:row;margin-bottom: 30px; align-items:center;">
             <p><strong>Naam</strong>@($"\t{Model.SessieNaam}")</p>
             <p><strong>Code</strong>@($"\t{Model.SessieCode}")</p>
+            <p style="min-width:150px;"><strong>Omschrijving</strong><br />@($"\t{Model.SessieOmschrijving}")</p>
 
             <div style="margin: 30px 0; width:100%; text-align:right">
                 @if (Model.IsActief)

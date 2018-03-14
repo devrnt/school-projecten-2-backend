@@ -56,6 +56,7 @@ namespace g16_dotnet.Controllers
                     if (sessie != null)
                     {
                         ViewData["codeIngegeven"] = true;
+                        ViewBag.SessieOmschrijving = sessie.Omschrijving;
                         return View("Index", sessie.Groepen);
                     }
                     else

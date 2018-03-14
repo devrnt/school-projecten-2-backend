@@ -11,6 +11,8 @@ namespace g16_dotnet.Models.SessieViewModel
         public int SessieCode { get; set; }
         [Display(Name = "Sessie naam")]
         public string SessieNaam { get; set; }
+        [Display(Name = "Sessie omschrijving")]
+        public string SessieOmschrijving { get; set; }
         public IEnumerable<Groep> Groepen { get; set; }
         [HiddenInput]
         public bool IsActief { get; set; }
@@ -20,6 +22,7 @@ namespace g16_dotnet.Models.SessieViewModel
         {
             SessieNaam = sessie.Naam;
             SessieCode = sessie.SessieCode;
+            SessieOmschrijving = sessie.Omschrijving;
             Groepen = sessie.Groepen;
             IsActief = sessie.IsActief;
         }
