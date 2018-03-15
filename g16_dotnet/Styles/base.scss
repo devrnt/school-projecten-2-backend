@@ -468,3 +468,11 @@ td#vertical-align {
 }
 
 /*#endregion */
+
+
+/* Voor disablen links */
+.not-active {
+    pointer-events: none;
+    cursor: default;
+    background-color: gray;
+}
