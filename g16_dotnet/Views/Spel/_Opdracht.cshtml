@@ -2,11 +2,9 @@
 <style>
     .container {
         height: auto;
-         margin-top: 30px;
-         margin-bottom: 30px;
-        
+        margin-top: 30px;
+        margin-bottom: 30px;
     }
-
 </style>
 <div class="options-container">
     <div class="option" id="v">
@@ -23,23 +21,14 @@
         <h3 class="groepsBewerking">
             @Model.HuidigeOpdracht.GroepsBewerking.Omschrijving
         </h3>
-        @if (Model.HuidigeOpdracht.AantalPogingen < 3)
-        {
-            <form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
-                <div class="form-inline">
-                    <div class="">
-                        <label for="groepsAntwoord"></label>
-                        <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="box-input" placeholder="Antwoord" />
-                    </div>
-                    <button type="submit" class="box-button">Bevestigen</button>
+        <form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
+            <div class="form-inline">
+                <div class="">
+                    <label for="groepsAntwoord"></label>
+                    <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="box-input" placeholder="Antwoord" />
                 </div>
-            </form>
-        }
-        else
-        {
-            <p>
-                Jullie hebben al te veel pogingen gedaan, wacht op instructies van je leerkracht om verder te gaan!
-            </p>
-        }
+                <button type="submit" class="box-button">Bevestigen</button>
+            </div>
+        </form>
     </div>
 </div>

@@ -5,21 +5,27 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace g16_dotnet.Filters {
-    public class PadFilter : ActionFilterAttribute {
+namespace g16_dotnet.Filters
+{
+    public class PadFilter : ActionFilterAttribute
+    {
         private Pad _pad;
         private readonly IPadRepository _padRepository;
 
-        public PadFilter(IPadRepository padRepository) {
+        public PadFilter(IPadRepository padRepository)
+        {
             _padRepository = padRepository;
         }
-        public override void OnActionExecuting(ActionExecutingContext context) {
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
             // na implementeren van users zal dit pad gehaald worden adhv de ingelogde groep
             _pad = _padRepository.GetById(1);
             if (_pad.IsGeblokkeerd)
                 _pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
             else if (_pad.Voortgang == _pad.AantalOpdrachten)
                 _pad.PadState = new SchatkistPadState("Schatkist");
+            else if (_pad.IsVergrendeld)
+                _pad.PadState = new VergrendeldPadState("Vergrendeld");
             else if (_pad.Voortgang <= _pad.Acties.Count(a => a.Actie.IsUitgevoerd))
                 _pad.PadState = new OpdrachtPadState("Opdracht");
             else
@@ -28,13 +34,14 @@ namespace g16_dotnet.Filters {
             base.OnActionExecuting(context);
         }
 
-        public override void OnActionExecuted(ActionExecutedContext context) {
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
             _padRepository.SaveChanges();
             base.OnActionExecuted(context);
         }
 
 
-// Deze code is enkel nodig indien we dienen gebruik te maken van Session storage
+        // Deze code is enkel nodig indien we dienen gebruik te maken van Session storage
         //private Pad ReadPadFromSession(HttpContext context) {
         //    Pad pad = null;
         //    if (context.Session.GetString("pad") == null) {

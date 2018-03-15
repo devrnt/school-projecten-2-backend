@@ -13,6 +13,8 @@ namespace g16_dotnet.Models.Domain
         public int? Voortgang { get { return Opdrachten?.Where(po => po.Opdracht.IsVoltooid).Count(); } }
         public Opdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(po => !po.Opdracht.IsVoltooid)?.Opdracht; } }
         public PadState PadState { get; set; }
+        public bool IsVergrendeld { get { return HuidigeOpdracht !=null && HuidigeOpdracht.AantalPogingen > 2 ? true : false; } }
+
 
         public Actie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.Actie.IsUitgevoerd)?.Actie; } }
         public ICollection<PadOpdracht> Opdrachten { get; set; }
