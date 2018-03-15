@@ -103,5 +103,12 @@ namespace g16_dotnet.Controllers
             
             return View("Index", pad);
         }
+
+        [HttpGet]
+        public JsonResult IsPadGeblokkeerd(Pad pad)
+        {
+            var geblokkeerd = Json(new { pad.IsGeblokkeerd });
+            return geblokkeerd;
+        }
     }
 }
