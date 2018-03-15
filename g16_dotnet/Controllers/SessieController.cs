@@ -3,6 +3,8 @@ using g16_dotnet.Models.Domain;
 using g16_dotnet.Models.SessieViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +31,6 @@ namespace g16_dotnet.Controllers
         public IActionResult Index()
         {
             ViewData["codeIngegeven"] = false;
-
             return View();
         }
 
@@ -101,6 +102,7 @@ namespace g16_dotnet.Controllers
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
+            ViewData["Doelgroepen"] = GetDoelgroepenAsSelectList();
 
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
@@ -272,7 +274,31 @@ namespace g16_dotnet.Controllers
                 return NotFound();
             return PartialView("_GroepenOverzicht", new SessieDetailViewModel(sessie));
         }
+
+        [HttpPost]
+        public IActionResult SelecteerDoelgroep([FromBody] JObject inputData) {
+            int sessieId =(int) inputData["sessieId"];
+            DoelgroepEnum doelgroep = inputData["doelgroep"].ToObject<DoelgroepEnum>();
+
+            var sessie =_sessieRepository.GetById(sessieId);
+            if (sessie == null) {
+                return NotFound();
+            }
+            sessie.Doelgroep = doelgroep;
+            _sessieRepository.SaveChanges();
+
+            //overbodig aangezien het een ajax call is, dit wordt gereturned in plain text
+            return View("SessieDetail", new SessieDetailViewModel(sessie));
+        }
+
+        public SelectList GetDoelgroepenAsSelectList() {
+            return new SelectList(Enum.GetValues(typeof(DoelgroepEnum)), nameof(DoelgroepEnum));
+        }
     }
+
+
+   
+
 
 
 }

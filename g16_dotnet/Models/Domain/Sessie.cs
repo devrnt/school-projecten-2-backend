@@ -15,6 +15,7 @@ namespace g16_dotnet.Models.Domain
         public bool IsActief { get; set; }
         public IEnumerable<Groep> Groepen { get; set; }
         public Klas Klas { get; set; }
+        public DoelgroepEnum Doelgroep { get; set; } //nodig voor de custom css per 'doelgroep'
         #endregion
 
         #region Constructor
@@ -25,6 +26,7 @@ namespace g16_dotnet.Models.Domain
             Omschrijving = omschrijving;
             Groepen = groepen;
             Klas = klas;
+            Doelgroep = DoelgroepEnum.Jongeren;
         }
 
         public Sessie()

@@ -370,8 +370,8 @@ li#groep {
     align-items: center;
     color: white;
     position: absolute;
-    right:1vw;
-    top:30px;
+    right: 1vw;
+    top: 30px;
 }
 
 
@@ -429,7 +429,7 @@ td#vertical-align {
 /*#region Account Validation */
 .text-danger {
     color: $red;
-    display:block;
+    display: block;
     margin: 5px 0 10px 0;
     font-size: 14px;
 }
@@ -444,12 +444,12 @@ td#vertical-align {
     border: 1px solid #e4e4ef;
     font-family: 'Muli', sans-serif;
     border-radius: 2px;
-    width:100%;
-    min-width:23vw;
+    width: 100%;
+    min-width: 23vw;
 }
 
 .box-button-small {
-    width:100%;
+    width: 100%;
     margin: 10px 0;
     padding: 14px;
 }
@@ -458,7 +458,7 @@ td#vertical-align {
 .validation-label {
     display: block;
     margin: 10px 0 5px 0;
-    font-size:0.9rem;
+    font-size: 0.9rem;
     color: rgb(59, 59, 59);
 }
 
@@ -475,4 +475,48 @@ td#vertical-align {
     pointer-events: none;
     cursor: default;
     background-color: gray;
+}
+
+
+.select-input {
+    padding: 7px 50px 7px 13px !important;
+    font-family: 'Muli';
+    max-width: 100%;
+    height: auto !important;
+    border: 1px solid #e3e3e3;
+    border-radius: 2px;
+    background: url("https://image.ibb.co/iMeAJv/selectbox_arrow.png") right center no-repeat;
+    background-color: #fff;
+    color: #444444;
+    font-size: 15px;
+    line-height: 16px !important;
+    appearance: none; /* this is must */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+/* body select.select_box option */
+
+body select option {
+    padding: 0 4px;
+}
+/* for IE and Edge */
+
+select::-ms-expand {
+    display: none;
+}
+
+select:disabled::-ms-expand {
+    background: #f60;
+}
+
+.p-margin-top {
+    margin: 10px 0;
+}
+
+.p-margin-top:first-child {
+    margin-top: 0;
+}
+
+.p-margin-top:last-child {
+    margin-bottom: 0;
 }

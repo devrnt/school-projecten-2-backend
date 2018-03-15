@@ -27,7 +27,7 @@ namespace g16_dotnet.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //.\SQLEXPRESS
-            var connectionstring = @"Server=.\SQLEXPRESS;Database=BreakoutBox;Integrated Security=True;";
+            var connectionstring = @"Server=LAPTOP-JONAS;Database=BreakoutBox;Integrated Security=True;";
             optionsBuilder.UseSqlServer(connectionstring);
         }
 

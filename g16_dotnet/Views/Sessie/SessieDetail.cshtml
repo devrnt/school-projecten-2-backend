@@ -4,25 +4,29 @@
     ViewData["Title"] = "SessieDetail";
 }
 
+<h1>@TempData["message"]</h1>
 
 <div class="box">
     <h2 class="box-title box-title-display">Details van de sessie</h2>
     <div class="box-container">
         <div style="display: flex; flex-direction:column;margin-bottom: 10px; align-items:flex-start;">
-            <p><strong>Naam : </strong>@($"\t{Model.SessieNaam}")</p>
-            <p><strong>Code : </strong>@($"\t{Model.SessieCode}")</p>
-            <p style="min-width:150px"><strong>Omschrijving : </strong>@($"\t{Model.SessieOmschrijving}")</p>
+            <p class="p-margin-top"><strong>Naam : </strong>@($"\t{Model.SessieNaam}")</p>
+            <p class="p-margin-top"><strong>Code : </strong>@($"\t{Model.SessieCode}")</p>
+            <p class="p-margin-top" style="min-width:150px"><strong>Omschrijving : </strong>@($"\t{Model.SessieOmschrijving}")</p>
+            <p class="p-margin-top">
+                <strong>Doelgroep : </strong>
+                <select asp-for="@Model.Doelgroep" asp-items="@(ViewData["Doelgroepen"] as SelectList)" id="doelgroepSelect" class="select-input" onchange="selecteerDoelGroep()"></select>
+            </p>
+            <p class="text-danger" style="display:none;" id="succes-doelgroep">De doelgroep werd succesvol gewijzigd</p>
 
-            <div style="margin: 30px 0; width:100%; text-align:right">
-                @if (Model.IsActief)
-                {
+            <div style="margin: 15px 0; width:100%; text-align:right">
+                @if (Model.IsActief) {
                     <a asp-action="BlokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-danger">Blokkeer Alle Groepen</a>
                     <a asp-action="DeblokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-default">Deblokkeer Alle Groepen</a>
 
                 }
             </div>
         </div>
-
         <table class="table">
             <thead>
                 <tr>
@@ -44,16 +48,13 @@
                 </tr>
             </thead>
             <tbody id="groepenOverzicht">
-                @Html.Partial("_GroepenOverzicht", Model);
+                @Html.Partial("_GroepenOverzicht", Model)
             </tbody>
         </table>
         <div class="box-button-group">
-            @if (!Model.IsActief)
-            {
+            @if (!Model.IsActief) {
                 <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="box-button">Activeer deze sessie</a>
-            }
-            else
-            {
+            } else {
                 <span>Deze sessie is al geactiveerd</span>
             }
             <a asp-action="BeheerSessies" class="box-button-default">Terug naar lijst sessies</a>
@@ -80,6 +81,33 @@
 
     checkDeelnames();
 
+</script>
+
+@* Script van jonas *@
+<script>
+    function selecteerDoelGroep() {
+        $('#succes-doelgroep').css('display', 'none');
+
+    console.log('Ajax post called');
+    let doelgroep = document.querySelector('#doelgroepSelect').value;
+    let passData = {}
+    passData.sessieId = "@Model.SessieCode";
+    passData.doelgroep = doelgroep;
+    console.log(passData);
+    if (doelgroep !== '' && doelgroep != null) {
+        let url = '@Url.Action("SelecteerDoelgroep", "Sessie")';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify(passData),
+            contentType: 'application/json',
+            success: function (data) {
+                $('#succes-doelgroep').css('display', 'block');
+            }
+        })
+    }
+
+}
 </script>
 
 

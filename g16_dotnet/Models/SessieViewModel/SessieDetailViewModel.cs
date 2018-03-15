@@ -17,6 +17,7 @@ namespace g16_dotnet.Models.SessieViewModel
         [HiddenInput]
         public bool IsActief { get; set; }
         public bool IsGeblokkeerd { get; set; }
+        public DoelgroepEnum Doelgroep { get; set; }
 
         public SessieDetailViewModel(Sessie sessie)
         {
@@ -25,6 +26,11 @@ namespace g16_dotnet.Models.SessieViewModel
             SessieOmschrijving = sessie.Omschrijving;
             Groepen = sessie.Groepen;
             IsActief = sessie.IsActief;
+            Doelgroep = sessie.Doelgroep;
+        }
+
+        public SessieDetailViewModel() {
+
         }
     }
 }
