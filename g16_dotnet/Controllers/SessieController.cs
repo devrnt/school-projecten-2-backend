@@ -16,6 +16,7 @@ namespace g16_dotnet.Controllers
     public class SessieController : Controller
     {
         private readonly ISessieRepository _sessieRepository;
+        private readonly IGroepRepository _groepRepository;
 
         public SessieController(ISessieRepository sessieRepository)
         {
@@ -257,7 +258,7 @@ namespace g16_dotnet.Controllers
             }
             else
             {
-                groep.Pad.HuidigeOpdracht.AantalPogingen = 0;
+                groep.OntgrendelPad();
                 _sessieRepository.SaveChanges();
                 TempData["message"] = "Groep werd succesvol ontgrendeld.";
             }

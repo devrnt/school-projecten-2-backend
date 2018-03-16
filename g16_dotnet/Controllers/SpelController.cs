@@ -31,7 +31,7 @@ namespace g16_dotnet.Controllers
         /// <summary>
         /// Controleert of het groepsantwoord juist is 
         /// </summary>
-        /// <param name="pad">Aangeleverd door de PadSessionFilter</param>
+        /// <param name="padId">Id van het huidige pad</param>
         /// <param name="groepsAntwoord">Het opgegeven antwoord als oplossing voor de huidige opdracht</param>
         /// <returns>
         ///     Bij een fout of geen antwoord RedirectToAction naar de Index
@@ -55,14 +55,14 @@ namespace g16_dotnet.Controllers
                         TempData["message"] = "Juist antwoord, goed zo!";
                         return View("Index", pad);
                     }
-                    huidig.AantalPogingen++;
                     TempData["error"] = $"{groepsAntwoord} is fout!";
+                    _padRepository.SaveChanges();
                 }
-                catch (System.InvalidOperationException e)
+                catch (InvalidOperationException e)
                 {
                     TempData["error"] = e.Message;
                 }
-                catch (System.FormatException)
+                catch (FormatException)
                 {
                     TempData["error"] = "Je moet een getal invullen!";
                 } 
@@ -107,8 +107,13 @@ namespace g16_dotnet.Controllers
         [HttpGet]
         public JsonResult IsPadGeblokkeerd(Pad pad)
         {
-            var geblokkeerd = Json(new { pad.IsGeblokkeerd });
-            return geblokkeerd;
+            return Json(new { isGeblokkeerd = (pad.PadState.StateName == "Geblokkeerd") });
+        }
+
+        [HttpGet]
+        public JsonResult IsPadVergendeld(Pad pad)
+        {
+            return Json(new { isVergrendeld = (pad.PadState.StateName == "Vergrendeld") });
         }
     }
 }

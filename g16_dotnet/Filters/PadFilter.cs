@@ -20,16 +20,6 @@ namespace g16_dotnet.Filters
         {
             // na implementeren van users zal dit pad gehaald worden adhv de ingelogde groep
             _pad = _padRepository.GetById(1);
-            if (_pad.IsGeblokkeerd)
-                _pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
-            else if (_pad.Voortgang == _pad.AantalOpdrachten)
-                _pad.PadState = new SchatkistPadState("Schatkist");
-            else if (_pad.IsVergrendeld)
-                _pad.PadState = new VergrendeldPadState("Vergrendeld");
-            else if (_pad.Voortgang <= _pad.Acties.Count(a => a.Actie.IsUitgevoerd))
-                _pad.PadState = new OpdrachtPadState("Opdracht");
-            else
-                _pad.PadState = new ActiePadState("Actie");
             context.ActionArguments["pad"] = _pad;
             base.OnActionExecuting(context);
         }

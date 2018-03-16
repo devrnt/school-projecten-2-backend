@@ -35,19 +35,19 @@ namespace g16_dotnet.Tests.Models.Domain
 
         #region === BlokkeerAlleGroepen ===
         [Fact]
-        public void BlokkeerAlleGroepen_SetsIsGeblokkeerdInPadOfAllGroepToTrue()
+        public void BlokkeerAlleGroepen_SetsGeblokkeerdPadStateInGroep()
         {
             _sessieAlleDeelnamesBevestigd.BlokkeerAlleGroepen();
-            Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => g.Pad.IsGeblokkeerd));
+            Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => g.Pad.PadState.StateName == "Geblokkeerd"));
         }
         #endregion
 
         #region === DeblokkeerAlleGroepen ===
         [Fact]
-        public void DeblokkeerAlleGroepen_SetsIsGeblokkeerdInPadOfAllGroepToFalse()
+        public void DeblokkeerAlleGroepen_SetsActieOrOpdrachtPadStateInGroep()
         {
             _sessieAlleDeelnamesBevestigd.DeblokkeerAlleGroepen();
-            Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => !g.Pad.IsGeblokkeerd));
+            Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => g.Pad.PadState.StateName != "Geblokkeerd"));
         }
         #endregion
     }

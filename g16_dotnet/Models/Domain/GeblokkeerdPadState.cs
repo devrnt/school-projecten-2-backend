@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace g16_dotnet.Models.Domain
 {
@@ -10,6 +8,14 @@ namespace g16_dotnet.Models.Domain
         public GeblokkeerdPadState(string name) : base(name)
         {
 
+        }
+
+        public override void DeBlokkeer(Pad pad)
+        {
+            if (pad.Voortgang <= pad.Acties.Count(a => a.Actie.IsUitgevoerd))
+                pad.PadState = new OpdrachtPadState("Opdracht");
+            else
+                pad.PadState = new ActiePadState("Actie");
         }
     }
 }

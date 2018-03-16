@@ -16,6 +16,12 @@ namespace g16_dotnet.Models.Domain
             {
                 pad.HuidigeOpdracht.IsVoltooid = true ;
                 pad.PadState = new ActiePadState("Actie");
+            } else
+            {
+                if (++pad.HuidigeOpdracht.AantalPogingen >= 3)
+                {
+                    pad.PadState = new VergrendeldPadState("Vergrendeld");
+                }
             }
             if (pad.Opdrachten.All(o => o.Opdracht.IsVoltooid))
                 pad.PadState = new SchatkistPadState("Schatkist");

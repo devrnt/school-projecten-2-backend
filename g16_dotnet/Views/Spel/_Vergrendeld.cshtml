@@ -3,7 +3,7 @@
 *@
 
 <div class="box">
-    <h2 class="box-title box-title-display">Groep geblokkeerd</h2>
+    <h2 class="box-title box-title-display">Groep vergrendeld</h2>
 
     <div class="box-container">
         <br />
@@ -12,6 +12,30 @@
         </p>
         <br />
         <br />
-        <a asp-action="Index" class="box-button">Verder gaan met de zoektocht!</a>
+        <a asp-action="Index" class="box-button not-active" id="verdergaan">Verder gaan met de zoektocht!</a>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var checkPad = function () {
+        console.log("Checking pad...");
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("IsPadVergendeld", "Spel")",
+            data: "{}",
+            contentType: "application/json;",
+            dataType: "json",
+            success: function (response) {
+                if (!response.isVergrendeld) {
+                    $("#verdergaan").removeClass("not-active");
+                } else {
+                    setTimeout(checkPad, 3000);
+                }
+            }
+        });
+    }
+
+    checkPad();
+
+</script>
