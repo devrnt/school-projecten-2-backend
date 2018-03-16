@@ -46,12 +46,12 @@ namespace g16_dotnet.Models.Domain
 
         public void BlokkeerAlleGroepen()
         {
-            Groepen.All(g => { g.Pad.IsGeblokkeerd = true; return true; });
+            Groepen.All(g => { g.Pad.Blokkeer(); return true; });
         }
 
         public void DeblokkeerAlleGroepen()
         {
-            Groepen.All(g => { g.Pad.IsGeblokkeerd = false; return true; });
+            Groepen.All(g => { g.Pad.DeBlokkeer(); return true; });
         }
         #endregion
     }

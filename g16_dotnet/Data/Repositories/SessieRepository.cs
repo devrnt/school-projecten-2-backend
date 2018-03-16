@@ -37,7 +37,7 @@ namespace g16_dotnet.Data.Repositories
 
         public Sessie GetById(int id)
         {
-            return _sessies
+            var sessie =  _sessies
                 .Include(s => s.Klas)
                 .Include(s => s.Groepen)
                     .ThenInclude(g => g.Leerlingen)
@@ -50,6 +50,30 @@ namespace g16_dotnet.Data.Repositories
                         .ThenInclude(p => p.Acties)
                             .ThenInclude(pa => pa.Actie)
                 .SingleOrDefault(s => s.SessieCode == id);
+
+            foreach(var groep in sessie.Groepen)
+            {
+                switch (groep.Pad.State)
+                {
+                    case States.Geblokkeerd:
+                        groep.Pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+                        break;
+                    case States.Opdracht:
+                        groep.Pad.PadState = new OpdrachtPadState("Opdracht");
+                        break;
+                    case States.Actie:
+                        groep.Pad.PadState = new ActiePadState("Actie");
+                        break;
+                    case States.Vergrendeld:
+                        groep.Pad.PadState = new VergrendeldPadState("Vergrendeld");
+                        break;
+                    case States.Schatkist:
+                        groep.Pad.PadState = new SchatkistPadState("Geblokkeerd");
+                        break;
+                }
+            }
+
+            return sessie;
         }
 
         public void SaveChanges()

@@ -24,5 +24,23 @@ namespace g16_dotnet.Models.Domain
             throw new InvalidOperationException("Je kan nu geen actie uitvoeren!");
         }
 
+        public virtual void Ontgrendel(Pad pad)
+        {
+        }
+
+        public virtual void Vergrendel(Pad pad)
+        {
+            pad.PadState = new VergrendeldPadState("Vergrendeld");
+        }
+
+        public virtual void Blokkeer(Pad pad)
+        {
+            pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+        }
+
+        public virtual void DeBlokkeer(Pad pad)
+        {
+        }
+
     }
 }

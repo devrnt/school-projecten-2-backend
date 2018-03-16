@@ -4,7 +4,7 @@ using System.Text;
 
 namespace g16_dotnet.Tests.Models.Domain
 {
-    class PadTest
+    public class PadTest
     {
     }
 }

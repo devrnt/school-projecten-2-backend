@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace g16_dotnet.Models.Domain
 {
@@ -28,11 +29,17 @@ namespace g16_dotnet.Models.Domain
         #region Methods
         public void BlokkeerPad()
         {
-            Pad.IsGeblokkeerd = true;
+            Pad.Blokkeer();
         }
+
         public void DeblokkeerPad()
         {
-            Pad.IsGeblokkeerd = false;
+            Pad.DeBlokkeer();
+        }
+
+        public void OntgrendelPad()
+        {
+            Pad.Ontgrendel();
         }
         #endregion
     }

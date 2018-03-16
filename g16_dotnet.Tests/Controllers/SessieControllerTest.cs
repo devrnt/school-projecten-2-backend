@@ -171,7 +171,7 @@ namespace g16_dotnet.Tests.Controllers
         {
             var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
             var result = _controller.BlokkeerGroep(_leerkracht, 123, 1) as ViewResult;
-            Assert.True(groep.Pad.IsGeblokkeerd);
+            Assert.Equal("Geblokkeerd", groep.Pad.PadState.StateName);
             _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
         }
         #endregion
@@ -194,28 +194,40 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void DeblokkeerGroep_SessieValid_ReturnsSessieDetailView()
         {
-            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 2) as ViewResult;
             Assert.Equal("SessieDetail", result?.ViewName);
         }
 
         [Fact]
         public void DeblokkeerGroep_SessieValid_PassesSessieDetailViewModelToViewViaModel()
         {
-            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 2) as ViewResult;
             Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
         }
 
         [Fact]
-        public void DeblokkeerGroep_GroepValid_ChangesAndPersistsGroep()
+        public void DeblokkeerGroep_GroepValidInOpdrachtFase_ChangesStateToOpdrachtAndPersistsGroep()
         {
             var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
+            groep.Pad.Blokkeer();
             var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
-            Assert.False(groep.Pad.IsGeblokkeerd);
+            Assert.Equal("Opdracht", groep.Pad.PadState.StateName);
             _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once); 
+        }
+
+        [Fact]
+        public void DeblokkeerGroep_GroepValidInActieFase_ChangesStateToActieAndPersistsGroep()
+        {
+            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
+            groep.Pad.HuidigeOpdracht.IsVoltooid = true;
+            groep.Pad.Blokkeer();
+            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
+            Assert.Equal("Actie", groep.Pad.PadState.StateName);
+            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
         }
         #endregion
 
-        #region BlokkeerAlleGroepen
+        #region === BlokkeerAlleGroepen ===
         [Fact]
         public void BlokkeerAlleGroepen_SessieNotFound_ReturnsNotFoundResult()
         {
@@ -238,7 +250,7 @@ namespace g16_dotnet.Tests.Controllers
         }
         #endregion
 
-        #region DeblokkeerAlleGroepen
+        #region === DeblokkeerAlleGroepen ===
         [Fact]
         public void DeblokkeerAlleGroepen_SessieNotFound_ReturnsNotFoundResult()
         {
@@ -258,6 +270,46 @@ namespace g16_dotnet.Tests.Controllers
         {
             var result = _controller.DeblokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
             Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
+        }
+        #endregion
+
+        #region === OntgrendelGroep ===
+        [Fact]
+        public void OntgrendelGroep_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 321, 1);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void OntgrendelGroep_GroepNotFound_DoesNotPersistData()
+        {
+            _controller.OntgrendelGroep(_context.Leerkracht1, 123, 50);
+            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
+
+        [Fact]
+        public void OntgrendelGroep_SessieValid_ReturnsSessieDetailView()
+        {
+            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 123, 1) as ViewResult;
+            Assert.Equal("SessieDetail", result?.ViewName);
+        }
+
+        [Fact]
+        public void OntgrendelGroep_SessieValid_PassesSessieDetailViewModelToViewViaModel()
+        {
+            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 123, 1) as ViewResult;
+            Assert.Equal(123, (result?.Model as SessieDetailViewModel)?.SessieCode);
+        }
+
+        [Fact]
+        public void OntgrendelGroep_SessieAndGroupValid_ChangesAndPersistsData()
+        {
+            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
+            groep.Pad.Vergrendel();
+            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 123, 1);
+            Assert.Equal("Opdracht", groep.Pad.PadState.StateName);
+            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
         }
         #endregion
     }

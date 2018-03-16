@@ -37,7 +37,31 @@ namespace g16_dotnet.Data.Repositories
 
         public Groep GetById(int id)
         {
-            return _groepen.Include(g => g.Pad).Include(p => p.Leerlingen).SingleOrDefault(g => g.GroepId == id);
+            var groep =  _groepen
+                .Include(g => g.Pad)
+                .Include(p => p.Leerlingen)
+                .SingleOrDefault(g => g.GroepId == id);
+
+            switch (groep.Pad.State)
+            {
+                case States.Geblokkeerd:
+                    groep.Pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+                    break;
+                case States.Opdracht:
+                    groep.Pad.PadState = new OpdrachtPadState("Opdracht");
+                    break;
+                case States.Actie:
+                    groep.Pad.PadState = new ActiePadState("Actie");
+                    break;
+                case States.Vergrendeld:
+                    groep.Pad.PadState = new VergrendeldPadState("Vergrendeld");
+                    break;
+                case States.Schatkist:
+                    groep.Pad.PadState = new SchatkistPadState("Geblokkeerd");
+                    break;
+            }
+
+            return groep;
         }
 
         public void SaveChanges()

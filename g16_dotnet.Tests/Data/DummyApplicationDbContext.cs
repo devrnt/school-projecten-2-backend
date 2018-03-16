@@ -13,6 +13,7 @@ namespace g16_dotnet.Tests.Data
 
         public Pad Pad { get; }
         public Pad PadMet1Opdracht { get; set; }
+        public Pad PadGeblokkeerd { get; set; }
 
         public Oefening Oef1 { get; }
         public Oefening Oef2 { get; }
@@ -61,10 +62,14 @@ namespace g16_dotnet.Tests.Data
             PadMet1Opdracht.AddOpdracht(Opdracht1);
             PadMet1Opdracht.AddActie(Actie1);
             PadMet1Opdracht.PadState = new OpdrachtPadState("Opdracht");
+            PadGeblokkeerd = new Pad() { PadId = 2 };
+            PadGeblokkeerd.AddOpdracht(Opdracht1);
+            PadGeblokkeerd.AddOpdracht(Opdracht2);
+            PadGeblokkeerd.PadState = new GeblokkeerdPadState("Geblokkeerd");
 
 
             Groep1 = new Groep("Groep1") { GroepId = 1, Pad = Pad, DeelnameBevestigd = true };
-            Groep2 = new Groep("Groep2") { Pad = Pad, DeelnameBevestigd = false };
+            Groep2 = new Groep("Groep2") { GroepId = 2, Pad = PadGeblokkeerd, DeelnameBevestigd = false };
             Leerling1 = new Leerling("McDerp", "Derp");
             Leerling2 = new Leerling("Cena", "John");
             Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });

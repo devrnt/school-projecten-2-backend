@@ -43,6 +43,15 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
+        public void BeantwoordVraag_FoutAntwoordTeveelPogingen_SetsVergendeldPadState()
+        {
+            _spelController.BeantwoordVraag(1, "100");
+            _spelController.BeantwoordVraag(1, "100");
+            _spelController.BeantwoordVraag(1, "100");
+            Assert.Equal("Vergrendeld", _context.Pad.PadState.StateName);
+        }
+
+        [Fact]
         public void BeantwoordVraag_AntwoordIsGeenGetal_RedirectsToIndex()
         {
             var result = _spelController.BeantwoordVraag(1, "abc") as RedirectToActionResult;
