@@ -1,0 +1,8 @@
+﻿@model g16_dotnet.Models.Domain.Pad
+@{
+    ViewData["Title"] = "Spel spelen";
+}
+
+@Html.Partial($"_{Model.PadState.StateName}", Model)
+
+

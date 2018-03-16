@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace g16_dotnet.Controllers
 {
-    [ServiceFilter(typeof(PadFilter))]
     public class SpelController : Controller
     {
         private readonly IPadRepository _padRepository;
@@ -23,8 +22,24 @@ namespace g16_dotnet.Controllers
         /// <returns>
         ///     Index View met als fase opdracht
         /// </returns>
-        public IActionResult Index(Pad pad)
+        public IActionResult Index(int padId)
         {
+           Pad pad = _padRepository.GetById(padId);
+            
+            if (pad.PadState == null)
+            {
+                if (pad.IsGeblokkeerd)
+                    pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+                else if (pad.Voortgang == pad.AantalOpdrachten)
+                    pad.PadState = new SchatkistPadState("Schatkist");
+                else if (pad.IsVergrendeld)
+                    pad.PadState = new VergrendeldPadState("Vergrendeld");
+                else if (pad.Voortgang <= pad.Acties.Count(a => a.Actie.IsUitgevoerd))
+                    pad.PadState = new OpdrachtPadState("Opdracht");
+                else
+                    pad.PadState = new ActiePadState("Actie");
+            }
+
             return View(pad);
         }
 
@@ -41,6 +56,20 @@ namespace g16_dotnet.Controllers
         public IActionResult BeantwoordVraag(int padId, string groepsAntwoord)
         {
             Pad pad = _padRepository.GetById(padId);
+
+            if (pad.PadState == null)
+            {
+                if (pad.IsGeblokkeerd)
+                    pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+                else if (pad.Voortgang == pad.AantalOpdrachten)
+                    pad.PadState = new SchatkistPadState("Schatkist");
+                else if (pad.IsVergrendeld)
+                    pad.PadState = new VergrendeldPadState("Vergrendeld");
+                else 
+                    pad.PadState = new OpdrachtPadState("Opdracht");
+
+            }
+
             if (pad == null)
                 return NotFound();
             if (groepsAntwoord == null || groepsAntwoord.Trim().Length == 0)
@@ -53,6 +82,7 @@ namespace g16_dotnet.Controllers
                     if (pad.ControleerAntwoord(int.Parse(groepsAntwoord)))
                     {
                         TempData["message"] = "Juist antwoord, goed zo!";
+                        _padRepository.SaveChanges();
                         return View("Index", pad);
                     }
                     huidig.AantalPogingen++;
@@ -68,7 +98,7 @@ namespace g16_dotnet.Controllers
                 } 
             }
 
-            return RedirectToAction(nameof(Index));
+            return View("Index",pad);
         }
 
         /// <summary>
@@ -80,8 +110,22 @@ namespace g16_dotnet.Controllers
         ///     Foute of geen code: RedirectToAction Index
         ///     Juiste code: View Index met als fase opdracht
         /// </returns>
-        public IActionResult VoerActieUit(Pad pad, string toegangsCode)
+        public IActionResult VoerActieUit(int padId, string toegangsCode)
         {
+            Pad pad = _padRepository.GetById(padId);
+
+            if (pad.PadState == null)
+            {
+                if (pad.IsGeblokkeerd)
+                    pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+                else if (pad.Voortgang == pad.AantalOpdrachten)
+                    pad.PadState = new SchatkistPadState("Schatkist");
+                else if (pad.IsVergrendeld)
+                    pad.PadState = new VergrendeldPadState("Vergrendeld");
+                else 
+                    pad.PadState = new ActiePadState("Actie");
+               
+            }
 
             try
             {
@@ -89,7 +133,8 @@ namespace g16_dotnet.Controllers
                 {
                     pad.HuidigeActie.IsUitgevoerd = true;
                     TempData["message"] = "De code is juist, de zoektocht gaat verder!";
-                    return RedirectToAction(nameof(Index));
+                    _padRepository.SaveChanges();
+                    return View("Index",pad);
                 }
                 TempData["error"] = $"{toegangsCode} is fout!";
             }

@@ -61,7 +61,7 @@ namespace g16_dotnet.Controllers
             if (huidigeGroep == null)
                 return NotFound();
             if (sessie.IsActief)
-                return RedirectToAction("Index", "Spel", new { pad = huidigeGroep.Pad });
+                return RedirectToAction("Index", "Spel", new{ padId=huidigeGroep.Pad.PadId}) ;
             TempData["error"] = "Wacht op signaal van je leerkracht om verder te gaan!";
             
             return View("GroepOverzicht", huidigeGroep);

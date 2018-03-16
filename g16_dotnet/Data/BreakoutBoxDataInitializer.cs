@@ -43,26 +43,29 @@ namespace g16_dotnet.Data
                 // Acties
                 var actie1 = new Actie("Welke getal is geen priemgetal: 71, 73, 77");
                 var actie2 = new Actie("16 x 16 = ");
-                var actie3 = new Actie("2 * 4 / 2 * 6 * 5 = ");
+                var actie3 = new Actie("tiep code1");
+                var actie4 = new Actie("Welke getal is geen priemgetal: 71, 73, 77");
+                var actie5 = new Actie("16 x 16 = ");
+                var actie6 = new Actie("tiep code1");
 
                 var acties = new List<Actie>{ actie1, actie2, actie3 };
                 _context.Acties.AddRange(acties);
 
                 // Pad
-                var pad = new Pad();               
-                pad.AddOpdracht(opdracht1);
-                pad.AddOpdracht(opdracht2);
-                pad.AddOpdracht(opdracht3);
+                var pad = new Pad();
+                pad.AddOpdracht(new Opdracht("code1", oefening1, groepsBewerking1));
+                pad.AddOpdracht(new Opdracht("77", oefening2, groepsBewerking2));
+                pad.AddOpdracht(new Opdracht("256", oefening3, groepsBewerking3));
                 pad.AddActie(actie1);
                 pad.AddActie(actie2);
                 pad.AddActie(actie3);
                 var pad2 = new Pad();
-                pad2.AddOpdracht(opdracht1);
-                pad2.AddOpdracht(opdracht3);
-                pad2.AddOpdracht(opdracht2);
-                pad2.AddActie(actie1);
-                pad2.AddActie(actie3);
-                pad2.AddActie(actie2);
+                pad2.AddOpdracht(new Opdracht("code1", oefening1, groepsBewerking1));
+                pad2.AddOpdracht(new Opdracht("77", oefening2, groepsBewerking2));
+                pad2.AddOpdracht(new Opdracht("256", oefening3, groepsBewerking3));
+                pad2.AddActie(actie4);
+                pad2.AddActie(actie5);
+                pad2.AddActie(actie6);
                 var pad3 = new Pad();
                 pad3.AddOpdracht(opdracht2);
                 pad3.AddOpdracht(opdracht1);
