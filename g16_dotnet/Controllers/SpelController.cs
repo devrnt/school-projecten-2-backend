@@ -26,21 +26,7 @@ namespace g16_dotnet.Controllers
         {
            Pad pad = _padRepository.GetById(padId);
             
-            if (pad.PadState == null)
-            {
-                if (pad.IsGeblokkeerd)
-                    pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
-                else if (pad.Voortgang == pad.AantalOpdrachten)
-                    pad.PadState = new SchatkistPadState("Schatkist");
-                else if (pad.IsVergrendeld)
-                    pad.PadState = new VergrendeldPadState("Vergrendeld");
-                else if (pad.Voortgang <= pad.Acties.Count(a => a.Actie.IsUitgevoerd))
-                    pad.PadState = new OpdrachtPadState("Opdracht");
-                else
-                    pad.PadState = new ActiePadState("Actie");
-            }
-
-            return View(pad);
+           return View(pad);
         }
 
         /// <summary>
@@ -57,18 +43,7 @@ namespace g16_dotnet.Controllers
         {
             Pad pad = _padRepository.GetById(padId);
 
-            if (pad.PadState == null)
-            {
-                if (pad.IsGeblokkeerd)
-                    pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
-                else if (pad.Voortgang == pad.AantalOpdrachten)
-                    pad.PadState = new SchatkistPadState("Schatkist");
-                else if (pad.IsVergrendeld)
-                    pad.PadState = new VergrendeldPadState("Vergrendeld");
-                else 
-                    pad.PadState = new OpdrachtPadState("Opdracht");
-
-            }
+           
 
             if (pad == null)
                 return NotFound();
@@ -113,19 +88,6 @@ namespace g16_dotnet.Controllers
         public IActionResult VoerActieUit(int padId, string toegangsCode)
         {
             Pad pad = _padRepository.GetById(padId);
-
-            if (pad.PadState == null)
-            {
-                if (pad.IsGeblokkeerd)
-                    pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
-                else if (pad.Voortgang == pad.AantalOpdrachten)
-                    pad.PadState = new SchatkistPadState("Schatkist");
-                else if (pad.IsVergrendeld)
-                    pad.PadState = new VergrendeldPadState("Vergrendeld");
-                else 
-                    pad.PadState = new ActiePadState("Actie");
-               
-            }
 
             try
             {
