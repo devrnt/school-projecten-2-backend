@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace g16_dotnet.Filters
 {
@@ -16,7 +17,7 @@ namespace g16_dotnet.Filters
         }
 
         public override void OnActionExecuting(ActionExecutingContext context) {
-            _sessie = _sessieRepository.GetById(123);
+            _sessie = _sessieRepository.GetById(System.Int32.Parse(context.HttpContext.Session.GetString("sessieCode")));
             context.ActionArguments["sessie"] = _sessie;
             base.OnActionExecuting(context);
         }

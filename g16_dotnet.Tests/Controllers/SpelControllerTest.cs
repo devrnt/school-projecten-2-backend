@@ -28,7 +28,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void Index_PassesPadToViewViaModel()
         {
-            var result = _spelController.Index(_context.Pad) as ViewResult;
+            var result = _spelController.Index(_context.Pad.PadId) as ViewResult;
             Assert.Equal(1, (result?.Model as Pad).PadId);
         }
 
@@ -102,21 +102,21 @@ namespace g16_dotnet.Tests.Controllers
         {
             _context.Pad.HuidigeOpdracht.IsVoltooid = true;
             _context.Pad.PadState = new ActiePadState("Actie");
-            var result = _spelController.VoerActieUit(_context.Pad, "toegangsCode678") as RedirectToActionResult;
+            var result = _spelController.VoerActieUit(_context.Pad.PadId, "toegangsCode678") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
 
         [Fact]
         public void VoerActieUit_FouteCode_ReturnsIndexView()
         {
-            var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
+            var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as ViewResult;
             Assert.Equal("Index", result?.ViewName);
         }
 
         [Fact]
         public void VoerActieUit_FouteCode_PassesPadToViewViaModel()
         {
-            var result = _spelController.VoerActieUit(_context.Pad, "uvw") as ViewResult;
+            var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as ViewResult;
             Assert.Equal(1, (result?.Model as Pad).PadId);
         } 
         #endregion

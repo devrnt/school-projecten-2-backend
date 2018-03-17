@@ -55,7 +55,7 @@ namespace g16_dotnet
             services.AddTransient<BreakoutBoxDataInitializer>();
             
             services.AddTransient<IEmailSender, EmailSender>();
-
+            services.AddSession();
             services.AddMvc();
         }
 
@@ -76,7 +76,7 @@ namespace g16_dotnet
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

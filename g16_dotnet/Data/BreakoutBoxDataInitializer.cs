@@ -36,6 +36,7 @@ namespace g16_dotnet.Data
                 var opdracht1 = new Opdracht("code1", oefening1, groepsBewerking1);
                 var opdracht2 = new Opdracht("77", oefening2, groepsBewerking2);
                 var opdracht3 = new Opdracht("256", oefening3, groepsBewerking3);
+             
 
                 var opdrachten = new List<Opdracht>{ opdracht1, opdracht2, opdracht3 };
                 _context.Opdrachten.AddRange(opdrachten);
@@ -67,19 +68,19 @@ namespace g16_dotnet.Data
                 pad2.AddActie(actie5);
                 pad2.AddActie(actie6);
                 var pad3 = new Pad();
-                pad3.AddOpdracht(opdracht2);
                 pad3.AddOpdracht(opdracht1);
+                pad3.AddOpdracht(opdracht2);
                 pad3.AddOpdracht(opdracht3);
-                pad3.AddActie(actie2);
                 pad3.AddActie(actie1);
+                pad3.AddActie(actie2);
                 pad3.AddActie(actie3);
                 var pad4 = new Pad();
-                pad4.AddOpdracht(opdracht3);
-                pad4.AddOpdracht(opdracht2);
                 pad4.AddOpdracht(opdracht1);
-                pad4.AddActie(actie3);
-                pad4.AddActie(actie2);
+                pad4.AddOpdracht(opdracht2);
+                pad4.AddOpdracht(opdracht3);
                 pad4.AddActie(actie1);
+                pad4.AddActie(actie2);
+                pad4.AddActie(actie3);
                 var paden = new List<Pad>{ pad, pad2, pad3, pad4 };
                 foreach (var item in paden)
                     item.PadState = new OpdrachtPadState("Opdracht");

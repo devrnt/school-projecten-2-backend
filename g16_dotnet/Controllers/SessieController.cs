@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace g16_dotnet.Controllers
 {
@@ -59,6 +60,7 @@ namespace g16_dotnet.Controllers
                     {
                         ViewData["codeIngegeven"] = true;
                         ViewBag.SessieOmschrijving = sessie.Omschrijving;
+                        HttpContext.Session.SetString("sessieCode",sessieCode.ToString());
                         return View("Index", sessie.Groepen);
                     }
                     else
