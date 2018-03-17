@@ -8,7 +8,15 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('wwwroot/css'));
 });
 
+gulp.task('sass2', function () {
+    return gulp.src('Styles/main2.scss')
+        .pipe(sass({outputStyle: 'expanded'}))
+        .pipe(gulp.dest('wwwroot/css'))
+})
+
+
 // onchange exec task 'sass'
 gulp.task('sass:watch', function () {
     gulp.watch('Styles/*.scss', ['sass'])
 });
+

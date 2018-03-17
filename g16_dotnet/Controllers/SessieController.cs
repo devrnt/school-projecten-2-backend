@@ -61,6 +61,7 @@ namespace g16_dotnet.Controllers
                         ViewData["codeIngegeven"] = true;
                         ViewBag.SessieOmschrijving = sessie.Omschrijving;
                         HttpContext.Session.SetString("sessieCode",sessieCode.ToString());
+                        HttpContext.Session.SetString("Doelgroep", sessie.Doelgroep.ToString());
                         return View("Index", sessie.Groepen);
                     }
                     else
@@ -289,6 +290,7 @@ namespace g16_dotnet.Controllers
             }
             sessie.Doelgroep = doelgroep;
             _sessieRepository.SaveChanges();
+            HttpContext.Session.SetString("Doelgroep", sessie.Doelgroep.ToString());
 
             //overbodig aangezien het een ajax call is, dit wordt gereturned in plain text
             return View("SessieDetail", new SessieDetailViewModel(sessie));
