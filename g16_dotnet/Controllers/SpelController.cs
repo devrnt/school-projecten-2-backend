@@ -24,9 +24,9 @@ namespace g16_dotnet.Controllers
         /// </returns>
         public IActionResult Index(int padId)
         {
-           Pad pad = _padRepository.GetById(padId);
-            
-           return View(pad);
+            Pad pad = _padRepository.GetById(padId);
+
+            return View(pad);
         }
 
         /// <summary>
@@ -43,10 +43,9 @@ namespace g16_dotnet.Controllers
         {
             Pad pad = _padRepository.GetById(padId);
 
-           
-
             if (pad == null)
                 return NotFound();
+
             if (groepsAntwoord == null || groepsAntwoord.Trim().Length == 0)
                 TempData["error"] = "Geef een antwoord in!";
             else
@@ -58,7 +57,6 @@ namespace g16_dotnet.Controllers
                     {
                         TempData["message"] = "Juist antwoord, goed zo!";
                         _padRepository.SaveChanges();
-                        return View("Index", pad);
                     }
                     TempData["error"] = $"{groepsAntwoord} is fout!";
                     _padRepository.SaveChanges();
@@ -70,10 +68,10 @@ namespace g16_dotnet.Controllers
                 catch (FormatException)
                 {
                     TempData["error"] = "Je moet een getal invullen!";
-                } 
+                }
             }
 
-            return View("Index",pad);
+            return RedirectToAction(nameof(Index), new { padId });
         }
 
         /// <summary>
@@ -96,30 +94,33 @@ namespace g16_dotnet.Controllers
                     pad.HuidigeActie.IsUitgevoerd = true;
                     TempData["message"] = "De code is juist, de zoektocht gaat verder!";
                     _padRepository.SaveChanges();
-                    return View("Index",pad);
+                    return RedirectToAction(nameof(Index), new { padId });
                 }
                 TempData["error"] = $"{toegangsCode} is fout!";
             }
             catch (InvalidOperationException e)
             {
                 TempData["error"] = e.Message;
-            } catch (ArgumentException e)
+            }
+            catch (ArgumentException e)
             {
                 TempData["error"] = e.Message;
             }
-            
+
             return View("Index", pad);
         }
 
         [HttpGet]
-        public JsonResult IsPadGeblokkeerd(Pad pad)
+        public JsonResult IsPadGeblokkeerd(string padId)
         {
+            Pad pad = _padRepository.GetById(int.Parse(padId));
             return Json(new { isGeblokkeerd = (pad.PadState.StateName == "Geblokkeerd") });
         }
 
         [HttpGet]
-        public JsonResult IsPadVergendeld(Pad pad)
+        public JsonResult IsPadVergendeld(string padId)
         {
+            Pad pad = _padRepository.GetById(int.Parse(padId));
             return Json(new { isVergrendeld = (pad.PadState.StateName == "Vergrendeld") });
         }
     }

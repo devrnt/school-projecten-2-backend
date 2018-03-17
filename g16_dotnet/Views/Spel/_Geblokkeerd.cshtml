@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model g16_dotnet.Models.Domain.Pad
 
 <div class="box">
     <h2 class="box-title box-title-display">Groep geblokkeerd</h2>
@@ -12,7 +10,7 @@
         </p>
         <br />
         <br />
-        <a asp-action="Index" class="box-button not-active" id="verdergaan">Verder gaan met de zoektocht!</a>
+        <a asp-action="Index" asp-route-padId="@Model.PadId" class="box-button not-active" id="verdergaan">Verder gaan met de zoektocht!</a>
     </div>
 </div>
 
@@ -23,7 +21,7 @@
         $.ajax({
             type: "GET",
             url: "@Url.Action("IsPadGeblokkeerd", "Spel")",
-            data: "{}",
+            data: {padId: JSON.stringify(@Model.PadId)},
             contentType: "application/json;",
             dataType: "json",
             success: function (response) {
