@@ -37,6 +37,7 @@ namespace g16_dotnet.Tests.Models.Domain
         [Fact]
         public void BlokkeerAlleGroepen_SetsGeblokkeerdPadStateInGroep()
         {
+            _sessieAlleDeelnamesBevestigd.Groepen.All(g => { g.Pad.PadState = new OpdrachtPadState("Opdracht"); return true; });
             _sessieAlleDeelnamesBevestigd.BlokkeerAlleGroepen();
             Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => g.Pad.PadState.StateName == "Geblokkeerd"));
         }
@@ -46,6 +47,7 @@ namespace g16_dotnet.Tests.Models.Domain
         [Fact]
         public void DeblokkeerAlleGroepen_SetsActieOrOpdrachtPadStateInGroep()
         {
+            _sessieAlleDeelnamesBevestigd.Groepen.All(g => { g.Pad.PadState = new GeblokkeerdPadState("Geblokkeerd"); return true; });
             _sessieAlleDeelnamesBevestigd.DeblokkeerAlleGroepen();
             Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => g.Pad.PadState.StateName != "Geblokkeerd"));
         }

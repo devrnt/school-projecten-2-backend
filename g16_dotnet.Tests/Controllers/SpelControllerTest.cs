@@ -67,31 +67,31 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
-        public void BeantwoordVraag_JuistAntwoord_ReturnsIndexView()
+        public void BeantwoordVraag_JuistAntwoord_RedirectsToActionIndex()
         {
-            var result = _spelController.BeantwoordVraag(1, "98") as ViewResult;
-            Assert.Equal("Index", result?.ViewName);
+            var result = _spelController.BeantwoordVraag(1, "98") as RedirectToActionResult;
+            Assert.Equal("Index", result?.ActionName);
         }
 
         [Fact]
-        public void BeantwoordVraag_JuistAntwoordNogOpdrachtenOver_PassesPadToViewViaModel()
+        public void BeantwoordVraag_JuistAntwoordNogOpdrachtenOver_PassesPadIdToIndex()
         {
-            var result = _spelController.BeantwoordVraag(1, "98") as ViewResult;
-            Assert.Equal(1, (result?.Model as Pad)?.PadId);
+            var result = _spelController.BeantwoordVraag(1, "98") as RedirectToActionResult;
+            Assert.Equal(1, result?.RouteValues.Values.First());
         }
 
         [Fact]
         public void BeantwoordVraag_JuistAntwoordNogOpdrachtenOver_PadHeeftActiePadState()
         {
-            var result = _spelController.BeantwoordVraag(1, "98") as ViewResult;
-            Assert.Equal("Actie", (result?.Model as Pad)?.PadState.StateName);
+            _spelController.BeantwoordVraag(1, "98");
+            Assert.Equal("Actie", _context.Pad.PadState.StateName);
         }
 
         [Fact]
         public void BeantwoordVraag_JuistAntwoordGeenOpdrachtenOver_PadHeeftSchatkistPadState()
         {
             var result = _spelController.BeantwoordVraag(5, "98") as ViewResult;
-            Assert.Equal("Schatkist", (result?.Model as Pad)?.PadState.StateName);
+            Assert.Equal("Schatkist", _context.PadMet1Opdracht.PadState.StateName);
         }
 
         #endregion

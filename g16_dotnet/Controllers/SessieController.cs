@@ -60,7 +60,6 @@ namespace g16_dotnet.Controllers
                     {
                         ViewData["codeIngegeven"] = true;
                         ViewBag.SessieOmschrijving = sessie.Omschrijving;
-                        HttpContext.Session.SetString("sessieCode",sessieCode.ToString());
                         return View("Index", sessie.Groepen);
                     }
                     else
@@ -105,7 +104,7 @@ namespace g16_dotnet.Controllers
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
-            ViewData["Doelgroepen"] = GetDoelgroepenAsSelectList();
+            ViewData["Doelgroepen"] = GetDoelgroepenAsSelectList(sessie.Doelgroep);
 
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
@@ -279,23 +278,27 @@ namespace g16_dotnet.Controllers
         }
 
         [HttpPost]
-        public IActionResult SelecteerDoelgroep([FromBody] JObject inputData) {
-            int sessieId =(int) inputData["sessieId"];
-            DoelgroepEnum doelgroep = inputData["doelgroep"].ToObject<DoelgroepEnum>();
-
-            var sessie =_sessieRepository.GetById(sessieId);
+        public IActionResult SelecteerDoelgroep(int sessieCode, int doelgroep) {
+            DoelgroepEnum gekozen = ((DoelgroepEnum)doelgroep);
+            var sessie =_sessieRepository.GetById(sessieCode);
             if (sessie == null) {
                 return NotFound();
             }
-            sessie.Doelgroep = doelgroep;
+            sessie.Doelgroep = gekozen;
             _sessieRepository.SaveChanges();
 
-            //overbodig aangezien het een ajax call is, dit wordt gereturned in plain text
+
+            ViewData["Doelgroepen"] = GetDoelgroepenAsSelectList(sessie.Doelgroep);
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
 
-        public SelectList GetDoelgroepenAsSelectList() {
-            return new SelectList(Enum.GetValues(typeof(DoelgroepEnum)), nameof(DoelgroepEnum));
+        public SelectList GetDoelgroepenAsSelectList(DoelgroepEnum doelgroep) {
+            return new SelectList(Enum.GetValues(typeof(DoelgroepEnum))
+                .Cast<DoelgroepEnum>()
+                .Select(d => new SelectListItem {
+                    Text = d.ToString(),
+                    Value = ((int)d).ToString()
+                }).ToList(), "Value", "Text", doelgroep);
         }
     }
 

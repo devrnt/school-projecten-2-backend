@@ -13,10 +13,12 @@
             <p class="p-margin-top"><strong>Naam : </strong>@($"\t{Model.SessieNaam}")</p>
             <p class="p-margin-top"><strong>Code : </strong>@($"\t{Model.SessieCode}")</p>
             <p class="p-margin-top" style="min-width:150px"><strong>Omschrijving : </strong>@($"\t{Model.SessieOmschrijving}")</p>
-            <p class="p-margin-top">
-                <strong>Doelgroep : </strong>
-                <select asp-for="@Model.Doelgroep" asp-items="@(ViewData["Doelgroepen"] as SelectList)" id="doelgroepSelect" class="select-input" onchange="selecteerDoelGroep()"></select>
-            </p>
+            <form method="post" asp-action="SelecteerDoelgroep" asp-route-sessieCode="@Model.SessieCode">
+                <label for="doelgroep">Doelgroep: </label>
+                <select asp-for="@Model.Doelgroep" asp-items="@(ViewData["Doelgroepen"] as SelectList)" id="doelgroep" name="doelgroep" class="select-input">
+                </select>
+                <button type="submit">Bevestigen</button>
+            </form>
             <p class="text-danger" style="display:none;" id="succes-doelgroep">De doelgroep werd succesvol gewijzigd</p>
 
             <div style="margin: 15px 0; width:100%; text-align:right">
@@ -84,7 +86,7 @@
 </script>
 
 @* Script van jonas *@
-<script>
+@*<script>
     function selecteerDoelGroep() {
         $('#succes-doelgroep').css('display', 'none');
 
@@ -108,7 +110,7 @@
     }
 
 }
-</script>
+</script>*@
 
 
 <!--
