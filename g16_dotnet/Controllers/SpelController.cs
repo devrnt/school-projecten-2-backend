@@ -101,8 +101,10 @@ namespace g16_dotnet.Controllers
                     pad.HuidigeActie.IsUitgevoerd = true;
                     TempData["message"] = "De code is juist, de zoektocht gaat verder!";
                     _padRepository.SaveChanges();
+                } else
+                {
+                    TempData["error"] = $"{toegangsCode} is fout!";
                 }
-                TempData["error"] = $"{toegangsCode} is fout!";
             }
             catch (InvalidOperationException e)
             {

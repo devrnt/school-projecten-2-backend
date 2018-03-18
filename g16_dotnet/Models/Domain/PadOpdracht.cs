@@ -9,15 +9,17 @@
         public Pad Pad { get; set; }
         public int AantalPogingen { get; set; }
         public bool IsVoltooid { get; set; }
+        public int Order { get; set; }
         #endregion
 
         #region Constructors
-        public PadOpdracht(Pad pad, Opdracht opdracht)
+        public PadOpdracht(Pad pad, Opdracht opdracht, int order)
         {
             Opdracht = opdracht;
             Pad = pad;
             PadId = pad.PadId;
             OpdrachtId = opdracht.VolgNr;
+            Order = order;
         }
 
         public PadOpdracht()

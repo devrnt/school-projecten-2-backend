@@ -40,12 +40,12 @@ namespace g16_dotnet.Models.Domain
         // Voor persistentie
         public States State { get; set; }
         public PadActie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.IsUitgevoerd); } }
-        public ICollection<PadOpdracht> Opdrachten { get; set; }
-        public ICollection<PadActie> Acties { get; set; }
+        public IList<PadOpdracht> Opdrachten { get; set; }
+        public IList<PadActie> Acties { get; set; }
         #endregion
 
         #region Constructors
-        public Pad(ICollection<PadOpdracht> opdrachten, ICollection<PadActie> acties)
+        public Pad(IList<PadOpdracht> opdrachten, IList<PadActie> acties)
         {
             Opdrachten = opdrachten;
             Acties = acties;
@@ -56,19 +56,18 @@ namespace g16_dotnet.Models.Domain
             Opdrachten = new List<PadOpdracht>();
             Acties = new List<PadActie>();
 
-            // Stelt de PadState in adhv de State die is opgeslagen in de databank
         }
         #endregion
 
         #region Methods
-        public void AddOpdracht(Opdracht opdracht)
+        public void AddOpdracht(Opdracht opdracht, int order)
         {
-            Opdrachten.Add(new PadOpdracht(this, opdracht));
+            Opdrachten.Add(new PadOpdracht(this, opdracht, order));
         }
 
-        public void AddActie(Actie actie)
+        public void AddActie(Actie actie, int order)
         {
-            Acties.Add(new PadActie(this, actie));
+            Acties.Add(new PadActie(this, actie, order));
         }
 
         public bool ControleerAntwoord(int antwoord)

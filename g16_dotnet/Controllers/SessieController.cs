@@ -4,11 +4,9 @@ using g16_dotnet.Models.SessieViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace g16_dotnet.Controllers

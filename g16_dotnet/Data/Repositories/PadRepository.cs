@@ -25,6 +25,9 @@ namespace g16_dotnet.Data.Repositories
                     .ThenInclude(pa => pa.Actie)
                 .SingleOrDefault(p => p.PadId == id);
 
+            pad.Opdrachten.OrderBy(po => po.Order);
+            pad.Acties.OrderBy(pa => pa.Order);
+
             switch (pad.State)
             {
                 case States.Geblokkeerd:
@@ -40,7 +43,7 @@ namespace g16_dotnet.Data.Repositories
                     pad.PadState = new VergrendeldPadState("Vergrendeld");
                     break;
                 case States.Schatkist:
-                    pad.PadState = new SchatkistPadState("Geblokkeerd");
+                    pad.PadState = new SchatkistPadState("Schatkist");
                     break;
             }
 
