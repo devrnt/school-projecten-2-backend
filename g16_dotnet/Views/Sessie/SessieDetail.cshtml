@@ -12,7 +12,7 @@
             <p class="p-margin-top"><strong>Naam : </strong>@($"\t{Model.SessieNaam}")</p>
             <p class="p-margin-top"><strong>Code : </strong>@($"\t{Model.SessieCode}")</p>
             <p class="p-margin-top" style="min-width:150px"><strong>Omschrijving : </strong>@($"\t{Model.SessieOmschrijving}")</p>
-            <form method="post" asp-action="SelecteerDoelgroep" asp-route-sessieCode="@Model.SessieCode">
+            <form method="post" asp-action="SelecteerDoelgroep" asp-route-sessieId="@Model.SessieCode">
                 <label for="doelgroep">Doelgroep: </label>
                 <select asp-for="@Model.Doelgroep" asp-items="@(ViewData["Doelgroepen"] as SelectList)" id="doelgroep" name="doelgroep" class="select-input">
                 </select>
