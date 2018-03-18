@@ -4,6 +4,7 @@ using g16_dotnet.Tests.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
+using Newtonsoft.Json;
 using System.Linq;
 using Xunit;
 
@@ -20,6 +21,7 @@ namespace g16_dotnet.Tests.Controllers
             _context = new DummyApplicationDbContext();
             _padRepository = new Mock<IPadRepository>();
             _padRepository.Setup(m => m.GetById(1)).Returns(_context.Pad);
+            _padRepository.Setup(m => m.GetById(2)).Returns(null as Pad);
             _padRepository.Setup(m => m.GetById(5)).Returns(_context.PadMet1Opdracht);
             _spelController = new SpelController(_padRepository.Object) { TempData = new Mock<ITempDataDictionary>().Object};
         }
@@ -32,9 +34,23 @@ namespace g16_dotnet.Tests.Controllers
             Assert.Equal(1, (result?.Model as Pad).PadId);
         }
 
+        [Fact]
+        public void Index_PadNotFound_ReturnsNotFoundResult()
+        {
+            var result = _spelController.Index(2);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
         #endregion
 
         #region === BeantwoordVraag ===
+        [Fact]
+        public void BeantwoordVraag_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _spelController.BeantwoordVraag(2, "1");
+            Assert.IsType<NotFoundResult>(result);
+        }
+
         [Fact]
         public void BeantwoordVraag_FoutAntwoord_RedirectsToIndex()
         {
@@ -61,7 +77,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void BeantwoordVraag_JuistAntwoord_MarksOpdrachtAsComplete()
         {
-            Opdracht opdracht = _context.Pad.Opdrachten.First(po => !po.Opdracht.IsVoltooid).Opdracht;
+            PadOpdracht opdracht = _context.Pad.Opdrachten.First(po => !po.IsVoltooid);
             _spelController.BeantwoordVraag(1, "98");
             Assert.True(opdracht.IsVoltooid);
         }
@@ -90,8 +106,29 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void BeantwoordVraag_JuistAntwoordGeenOpdrachtenOver_PadHeeftSchatkistPadState()
         {
-            var result = _spelController.BeantwoordVraag(5, "98") as ViewResult;
+            _spelController.BeantwoordVraag(5, "98");
             Assert.Equal("Schatkist", _context.PadMet1Opdracht.PadState.StateName);
+        }
+
+        [Fact]
+        public void BeantwoordVraag_GeenAntwoord_DoesNotChangeOrPersistData()
+        {
+            PadOpdracht opdracht = _context.Pad.HuidigeOpdracht;
+            _spelController.BeantwoordVraag(1, string.Empty);
+            Assert.Equal(0, _context.Pad.HuidigeOpdracht.AantalPogingen);
+            Assert.False(opdracht.IsVoltooid);
+            _padRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
+
+        [Fact]
+        public void BeantwoordVraag_PadNietInOpdrachtPadState_DoesNotChangeOrPersistData()
+        {
+            PadOpdracht opdracht = _context.Pad.HuidigeOpdracht;
+            _context.Pad.PadState = new ActiePadState("Actie");
+            _spelController.BeantwoordVraag(1, "2");
+            Assert.Equal(0, _context.Pad.HuidigeOpdracht.AantalPogingen);
+            Assert.False(opdracht.IsVoltooid);
+            _padRepository.Verify(m => m.SaveChanges(), Times.Never);
         }
 
         #endregion
@@ -107,18 +144,42 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
-        public void VoerActieUit_FouteCode_ReturnsIndexView()
+        public void VoerActieUit_FouteCode_RedirectsToIndex()
         {
-            var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as ViewResult;
-            Assert.Equal("Index", result?.ViewName);
+            _context.Pad.HuidigeOpdracht.IsVoltooid = true;
+            _context.Pad.PadState = new ActiePadState("Actie");
+            var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as RedirectToActionResult;
+            Assert.Equal("Index", result?.ActionName);
+
         }
 
         [Fact]
-        public void VoerActieUit_FouteCode_PassesPadToViewViaModel()
+        public void VoerActieUit_JuisteCode_PassesPadIdToIndexAction()
         {
-            var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as ViewResult;
-            Assert.Equal(1, (result?.Model as Pad).PadId);
-        } 
+            _context.Pad.HuidigeOpdracht.IsVoltooid = true;
+            _context.Pad.PadState = new ActiePadState("Actie");
+            var result = _spelController.VoerActieUit(_context.Pad.PadId, "toegangsCode678") as RedirectToActionResult;
+            Assert.Equal(1, result?.RouteValues.Values.First());
+        }
+
+        [Fact]
+        public void VoerActieUit_FouteCode_PassesPadIdToIndexAction()
+        {
+            _context.Pad.HuidigeOpdracht.IsVoltooid = true;
+            _context.Pad.PadState = new ActiePadState("Actie");
+            var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as RedirectToActionResult;
+            Assert.Equal(1, result?.RouteValues.Values.First());
+        }
+
+        [Fact]
+        public void VoerActieUit_PadNietInActiePadState_DoesNotChangeOrPersistData()
+        {
+            _context.Pad.PadState = new OpdrachtPadState("Opdracht");
+            PadActie actie = _context.Pad.HuidigeActie;
+            _spelController.VoerActieUit(1, "abc");
+            Assert.False(actie.IsUitgevoerd);
+            _padRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
         #endregion
     }
 }

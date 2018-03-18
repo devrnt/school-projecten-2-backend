@@ -14,7 +14,7 @@ namespace g16_dotnet.Models.Domain
 
         public override bool ControleerToegangsCode(Pad pad, string toegangscode)
         {
-            bool juist = pad.HuidigeOpdracht.ControleerToegangsCode(toegangscode);
+            bool juist = pad.HuidigeOpdracht.Opdracht.ControleerToegangsCode(toegangscode);
             if (juist)
                 pad.PadState = new OpdrachtPadState("Opdracht");
             return juist;

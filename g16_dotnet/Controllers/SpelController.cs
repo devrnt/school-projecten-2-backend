@@ -16,15 +16,19 @@ namespace g16_dotnet.Controllers
         }
 
         /// <summary>
-        /// Geeft de Index pagina weer
+        ///     Geeft de Index pagina weer, deze rendert een
+        ///     PartialView o.b.v. de PadState van het huidige Pad
         /// </summary>
-        /// <param name="pad">Aangeleverd door PadSessionFilter</param>
+        /// <param name="padId">Id van het huidige Pad</param>
         /// <returns>
-        ///     Index View met als fase opdracht
+        /// Index View met als Model een Pad
+        /// NotFoundResult indien er geen Pad gevonden wordt met meegegeven id
         /// </returns>
         public IActionResult Index(int padId)
         {
             Pad pad = _padRepository.GetById(padId);
+            if (pad == null)
+                return NotFound();
 
             return View(pad);
         }
@@ -35,9 +39,8 @@ namespace g16_dotnet.Controllers
         /// <param name="padId">Id van het huidige pad</param>
         /// <param name="groepsAntwoord">Het opgegeven antwoord als oplossing voor de huidige opdracht</param>
         /// <returns>
-        ///     Bij een fout of geen antwoord RedirectToAction naar de Index
-        ///     Bij een juist antwoord maar nog opdrachten over de Index view met als fase actie
-        ///     Bij een juist antwoord en geen opdracht meer over de Index view met als fase schatkist
+        ///     RedirectToAction Index
+        ///     NotFoundResult indien er geen Pad wordt gevonden met meegegeven id
         /// </returns>
         public IActionResult BeantwoordVraag(int padId, string groepsAntwoord)
         {
@@ -52,13 +55,15 @@ namespace g16_dotnet.Controllers
             {
                 try
                 {
-                    Opdracht huidig = pad.HuidigeOpdracht;
+                    PadOpdracht huidig = pad.HuidigeOpdracht;
                     if (pad.ControleerAntwoord(int.Parse(groepsAntwoord)))
                     {
                         TempData["message"] = "Juist antwoord, goed zo!";
-                        _padRepository.SaveChanges();
                     }
-                    TempData["error"] = $"{groepsAntwoord} is fout!";
+                    else
+                    {
+                        TempData["error"] = $"{groepsAntwoord} is fout!";
+                    }
                     _padRepository.SaveChanges();
                 }
                 catch (InvalidOperationException e)
@@ -75,17 +80,19 @@ namespace g16_dotnet.Controllers
         }
 
         /// <summary>
-        /// Controleert of de meegegeven toegangscode juist is
+        /// Controleert of de toegangscode voor de volgende Opdracht juist is 
         /// </summary>
-        /// <param name="pad">Aangeleverd door PadSessionFilter</param>
+        /// <param name="padId">Id van het huidige pad</param>
         /// <param name="toegangsCode">De opgegeven toegangscode</param>
         /// <returns>
-        ///     Foute of geen code: RedirectToAction Index
-        ///     Juiste code: View Index met als fase opdracht
+        ///     RedirectToAction Index
+        ///     NotFoundResult indien er geen Pad wordt gevonden met meegegeven id
         /// </returns>
         public IActionResult VoerActieUit(int padId, string toegangsCode)
         {
             Pad pad = _padRepository.GetById(padId);
+            if (pad == null)
+                return NotFound();
 
             try
             {
@@ -94,7 +101,6 @@ namespace g16_dotnet.Controllers
                     pad.HuidigeActie.IsUitgevoerd = true;
                     TempData["message"] = "De code is juist, de zoektocht gaat verder!";
                     _padRepository.SaveChanges();
-                    return RedirectToAction(nameof(Index), new { padId });
                 }
                 TempData["error"] = $"{toegangsCode} is fout!";
             }
@@ -102,26 +108,28 @@ namespace g16_dotnet.Controllers
             {
                 TempData["error"] = e.Message;
             }
-            catch (ArgumentException e)
-            {
-                TempData["error"] = e.Message;
-            }
 
-            return View("Index", pad);
+            return RedirectToAction(nameof(Index), new { padId });
+
         }
 
+        /// <summary>
+        ///     Controleert het meegegeven pad
+        /// </summary>
+        /// <param name="padId">Id van het te te controleren Pad</param>
+        /// <returns>een Json object met isGeblokkeerd en isVergrendeld properties</returns>
         [HttpGet]
-        public JsonResult IsPadGeblokkeerd(string padId)
+        public JsonResult CheckPad(string padId)
         {
-            Pad pad = _padRepository.GetById(int.Parse(padId));
-            return Json(new { isGeblokkeerd = (pad.PadState.StateName == "Geblokkeerd") });
-        }
+            int id = 0;
+            Pad pad = null;
+            if (int.TryParse(padId, out id))
+                pad = _padRepository.GetById(int.Parse(padId));
 
-        [HttpGet]
-        public JsonResult IsPadVergendeld(string padId)
-        {
-            Pad pad = _padRepository.GetById(int.Parse(padId));
-            return Json(new { isVergrendeld = (pad.PadState.StateName == "Vergrendeld") });
+            return Json(new {
+                isGeblokkeerd = (pad?.PadState.StateName == "Geblokkeerd"),
+                isVergrendeld = (pad?.PadState.StateName == "Vergrendeld")
+            });
         }
     }
 }

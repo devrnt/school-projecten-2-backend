@@ -11,7 +11,7 @@ namespace g16_dotnet.Models.Domain
 
         public override bool ControleerAntwoord(Pad pad, int antwoord)
         {
-            bool juist = pad.HuidigeOpdracht.ControleerAntwoord(antwoord);
+            bool juist = pad.HuidigeOpdracht.Opdracht.ControleerAntwoord(antwoord);
             if (juist)
             {
                 pad.HuidigeOpdracht.IsVoltooid = true ;
@@ -23,7 +23,7 @@ namespace g16_dotnet.Models.Domain
                     pad.PadState = new VergrendeldPadState("Vergrendeld");
                 }
             }
-            if (pad.Opdrachten.All(o => o.Opdracht.IsVoltooid))
+            if (pad.Opdrachten.All(po => po.IsVoltooid))
                 pad.PadState = new SchatkistPadState("Schatkist");
             return juist;
         }

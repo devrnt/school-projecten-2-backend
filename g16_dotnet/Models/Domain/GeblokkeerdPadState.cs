@@ -10,9 +10,9 @@ namespace g16_dotnet.Models.Domain
 
         }
 
-        public override void DeBlokkeer(Pad pad)
+        public override void Deblokkeer(Pad pad)
         {
-            if (pad.Voortgang <= pad.Acties.Count(a => a.Actie.IsUitgevoerd))
+            if (pad.Voortgang <= pad.Acties.Count(a => a.IsUitgevoerd))
                 pad.PadState = new OpdrachtPadState("Opdracht");
             else
                 pad.PadState = new ActiePadState("Actie");

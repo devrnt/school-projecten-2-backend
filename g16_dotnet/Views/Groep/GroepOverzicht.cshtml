@@ -8,8 +8,8 @@
         console.log("Checking sessie...");
         $.ajax({
             type: "GET",
-            url: "@Url.Action("IsSessieActief", "Groep")",
-            data: "{}",
+            url: "@Url.Action("IsSessieActief", "Sessie")",
+            data: {sessieId: @((int)ViewData["sessieId"])},
             contentType: "application/json;",
             dataType: "json",
             success: function (response) {

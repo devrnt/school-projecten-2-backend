@@ -30,15 +30,15 @@
                  {
                      @if (groep.Pad.State == g16_dotnet.Models.Domain.States.Geblokkeerd)
                       {
-                          <a asp-action="DeblokkeerGroep" asp-route-sessieId="@Model.SessieCode" asp-route-groepId="@groep.GroepId" class="box-button-default">Deblokkeer</a>
+                          <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="1" asp-route-groepId="@groep.GroepId" class="box-button-default">Deblokkeer</a>
                       }
                       else
                       {
-                          <a asp-action="BlokkeerGroep" asp-route-sessieId="@Model.SessieCode" asp-route-groepId="@groep.GroepId" class="box-button-danger">Blokkeer</a>
+                          <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="0" asp-route-groepId="@groep.GroepId" class="box-button-danger">Blokkeer</a>
                       }
                      @if (groep.Pad.State == g16_dotnet.Models.Domain.States.Vergrendeld)
                       {
-                          <a asp-action="OntgrendelGroep" asp-route-sessieId="@Model.SessieCode" asp-route-groepId="@groep.GroepId" class="box-button-default">Ontgrendel</a>
+                          <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="3" asp-route-groepId="@groep.GroepId" class="box-button-default">Ontgrendel</a>
                       }
                  }
             }

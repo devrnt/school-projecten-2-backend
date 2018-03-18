@@ -5,26 +5,32 @@ using System;
 
 namespace g16_dotnet.Controllers
 {
-    [ServiceFilter(typeof(SessieFilter))]
-    public class GroepController : Controller {
+    public class GroepController : Controller
+    {
         private readonly IGroepRepository _groepsRepository;
-        public GroepController(IGroepRepository groepRepository) {
+
+        public GroepController(IGroepRepository groepRepository)
+        {
             _groepsRepository = groepRepository;
         }
-        public IActionResult Index() {
-            return View();
+
+        public IActionResult Index()
+        {
+            return NotFound();
         }
 
         /// <summary>
-        ///     Selecteert de Groep om de deelname te bevestigen
+        ///     Kiest de Groep om het spel te spelen
         /// </summary>
-        /// <param name="sessie">Aangeleverd door SessieFilter</param>
-        /// <param name="groepsId">Het id van de gekozen Groep</param>
+        /// <param name="sessieId">Id van de huidige Sessie</param>
+        /// <param name="groepsId">Id van de gekozen Groep</param>
         /// <returns>
-        ///     GroepOverzicht View met een Groep als Model
-        ///     Indien er geen Groep wordt gevonden met meegegeven id wordt er een NotFoundResult teruggeven
+        ///     GroepOverzicht View met als Model de gekozen Groep
+        ///     NotFoundResult indien de Groep niet gevonden werd
+        ///     RedirectToAction Index in SessieController indien de Groep al gekozen werd
         /// </returns>
-        public IActionResult KiesGroep(Sessie sessie, int groepsId) {
+        public IActionResult KiesGroep(int sessieId, int groepsId)
+        {
             Groep gekozenGroep = _groepsRepository.GetById(groepsId);
             if (gekozenGroep == null)
                 return NotFound();
@@ -34,11 +40,15 @@ namespace g16_dotnet.Controllers
                 return RedirectToAction(nameof(Index), "Sessie");
             }
 
-            try {
-                    gekozenGroep.DeelnameBevestigd = true;
-                    _groepsRepository.SaveChanges();
-                    TempData["message"] = "U heeft succesvol deelgenomen aan de sessie. Op dit moment moet u wachten op het startsignaal van uw leerkracht.";
-            } catch {
+            try
+            {
+                gekozenGroep.DeelnameBevestigd = true;
+                _groepsRepository.SaveChanges();
+                TempData["message"] = "Je hebt nu deelgenomen, zo dadelijk kan je beginnen";
+                ViewData["sessieId"] = sessieId;
+            }
+            catch
+            {
                 TempData["error"] = "Er is iets fout gelopen bij het kiezen van uw groep.";
             }
             return View("GroepOverzicht", gekozenGroep);
@@ -47,30 +57,21 @@ namespace g16_dotnet.Controllers
         /// <summary>
         ///     Start het spel voor de gekozen groep
         /// </summary>
-        /// <param name="sessie">Aangeleverd door SessieFilter</param>
         /// <param name="groepId">Id van de gekozen groep</param>
         /// <returns>
         ///     RedirectToAction Index in SpelController
-        ///     Indien de Groep niet werd gevonden wordt er een NotFoundResult teruggegeven
-        ///     Indien de Sessie nog niet op actief is gezet wordt de GroepOverzicht teruggegeven
-        ///     met een Groep als Model.
+        ///     NotFoundResult indien de Groep niet werd gevonden     
         /// </returns>
-        public IActionResult StartSpel(Sessie sessie, int groepId)
+        public IActionResult StartSpel(int groepId)
         {
             Groep huidigeGroep = _groepsRepository.GetById(groepId);
             if (huidigeGroep == null)
                 return NotFound();
-            if (sessie.IsActief)
-                return RedirectToAction("Index", "Spel", new{ padId=huidigeGroep.Pad.PadId}) ;
-            TempData["error"] = "Wacht op signaal van je leerkracht om verder te gaan!";
-            
-            return View("GroepOverzicht", huidigeGroep);
+
+            return RedirectToAction("Index", "Spel", new { padId = huidigeGroep.Pad.PadId });
         }
 
-        [HttpGet]
-        public JsonResult IsSessieActief(Sessie sessie)
-        {
-            return Json(new { sessie.IsActief });
-        }
+
+
     }
 }

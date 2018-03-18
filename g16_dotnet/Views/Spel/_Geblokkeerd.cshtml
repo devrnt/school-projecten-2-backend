@@ -20,7 +20,7 @@
         console.log("Checking pad...");
         $.ajax({
             type: "GET",
-            url: "@Url.Action("IsPadGeblokkeerd", "Spel")",
+            url: "@Url.Action("CheckPad", "Spel")",
             data: {padId: JSON.stringify(@Model.PadId)},
             contentType: "application/json;",
             dataType: "json",

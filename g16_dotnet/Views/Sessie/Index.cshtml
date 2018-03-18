@@ -10,12 +10,13 @@
 <h2 class="text-center">@ViewData["Title"]</h2>
 <br />
     -->
-@if ((bool)(ViewData["codeIngegeven"])) {
+@if ((bool)(ViewData["codeIngegeven"]))
+{
     <div class="box">
         <h2 class="box-title box-title-display">Kies Groep</h2>
         <div class="box-container">
-            
-            <div><p><strong> Omschrijving</strong> : @ViewBag.SessieOmschrijving</p></div>
+
+            <div><p><strong> Omschrijving</strong> : @ViewData["sessieOmschrijving"]</p></div>
             <table class="table">
                 <thead>
                     <tr>
@@ -25,30 +26,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var groep in Model) {
-                <tr>
-                    <td>@groep.Groepsnaam</td>
-                    <td>
-                        <ul class="table-ul">
-                            @foreach (var leerling in groep.Leerlingen) {
-                        <li>
-                            @($"{leerling.Voornaam} {leerling.Naam}")
-                        </li>
-            }
-                        </ul>
-                    </td>
-                    <td class="table-align-right">
-                        @if (!groep.DeelnameBevestigd)
-                {
-                    <a asp-controller="Groep" asp-action="KiesGroep" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
-        } else
-        {
-            <span>Deze groep is al gekozen!</span>
-}
-                    </td>
-                </tr>
+                    @foreach (var groep in Model)
+                    {
+                        <tr>
+                            <td>@groep.Groepsnaam</td>
+                            <td>
+                                <ul class="table-ul">
+                                    @foreach (var leerling in groep.Leerlingen)
+                                    {
+                                        <li>
+                                            @($"{leerling.Voornaam} {leerling.Naam}")
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td class="table-align-right">
+                                @if (!groep.DeelnameBevestigd)
+                                {
+                                    <a asp-controller="Groep" asp-action="KiesGroep" asp-route-sessieId="@(int.Parse(ViewData["sessieCode"] as string))" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
+                                }
+                                else
+                                {
+                                    <span>Deze groep is al gekozen!</span>
+                                }
+                            </td>
+                        </tr>
 
-    }
+                    }
                 </tbody>
             </table>
         </div>
@@ -78,7 +82,9 @@
         }
     </table>
         -->
-} else {
+}
+else
+{
     <div class="box">
         <form asp-action="ValideerSessieCode">
             <h2 class="box-title box-title-display">Breakout Box</h2>

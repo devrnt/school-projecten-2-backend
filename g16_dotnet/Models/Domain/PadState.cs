@@ -38,7 +38,7 @@ namespace g16_dotnet.Models.Domain
             pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
         }
 
-        public virtual void DeBlokkeer(Pad pad)
+        public virtual void Deblokkeer(Pad pad)
         {
         }
 

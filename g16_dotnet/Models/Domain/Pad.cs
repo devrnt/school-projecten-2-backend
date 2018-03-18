@@ -11,8 +11,8 @@ namespace g16_dotnet.Models.Domain
         #region Fields and Properties
         public int PadId { get; set; }
         public int? AantalOpdrachten { get { return Opdrachten?.Count(); } }
-        public int? Voortgang { get { return Opdrachten?.Where(po => po.Opdracht.IsVoltooid).Count(); } }
-        public Opdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(po => !po.Opdracht.IsVoltooid)?.Opdracht; } }
+        public int? Voortgang { get { return Opdrachten?.Where(po => po.IsVoltooid).Count(); } }
+        public PadOpdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(po => !po.IsVoltooid); } }
         public PadState PadState { get { return _padState; }
             set
             {
@@ -39,7 +39,7 @@ namespace g16_dotnet.Models.Domain
         }
         // Voor persistentie
         public States State { get; set; }
-        public Actie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.Actie.IsUitgevoerd)?.Actie; } }
+        public PadActie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.IsUitgevoerd); } }
         public ICollection<PadOpdracht> Opdrachten { get; set; }
         public ICollection<PadActie> Acties { get; set; }
         #endregion
@@ -98,7 +98,7 @@ namespace g16_dotnet.Models.Domain
 
         public void DeBlokkeer()
         {
-            PadState.DeBlokkeer(this);
+            PadState.Deblokkeer(this);
         }
         #endregion
     }

@@ -3,8 +3,10 @@ using g16_dotnet.Models.Domain;
 using g16_dotnet.Models.SessieViewModel;
 using g16_dotnet.Tests.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -55,6 +57,29 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
+        public void ValideerSessieCode_JuisteCode_PassesSessieCodeInViewData()
+        {
+            var result = _controller.ValideerSessiecode("123") as ViewResult;
+            Assert.Equal(_context.SessieAlleDeelnamesBevestigd.SessieCode, int.Parse(result?.ViewData["sessieCode"] as string));
+
+        }
+
+        [Fact]
+        public void ValideerSessieCode_JuisteCode_PassesSessieDoelgroepInViewData()
+        {
+            var result = _controller.ValideerSessiecode("123") as ViewResult;
+            Assert.Equal(_context.SessieAlleDeelnamesBevestigd.Doelgroep, JsonConvert.DeserializeObject<DoelgroepEnum>(result?.ViewData["Doelgroep"] as string));
+
+        }
+
+        [Fact]
+        public void ValideerSessieCode_JuisteCode_PassesSessieOmschrijvingToViewViaViewData()
+        {
+            var result = _controller.ValideerSessiecode("123") as ViewResult;
+            Assert.Equal(_context.SessieAlleDeelnamesBevestigd.Omschrijving, result?.ViewData["sessieOmschrijving"]);
+        }
+
+        [Fact]
         public void ValideerSessieCode_JuisteCode_PassesGroepenToViewViaModel()
         {
             var result = _controller.ValideerSessiecode("123") as ViewResult;
@@ -83,7 +108,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void SelecteerSessie_PassesSessieViewModelToViewViaModel()
         {
-            var result = _controller.SelecteerSessie(_leerkracht, 123) as ViewResult;
+            var result = _controller.SelecteerSessie(123) as ViewResult;
             var svm = new SessieDetailViewModel(_context.SessieAlleDeelnamesBevestigd);
             Assert.Equal(svm.SessieNaam, (result?.Model as SessieDetailViewModel).SessieNaam);
         }
@@ -92,223 +117,113 @@ namespace g16_dotnet.Tests.Controllers
         public void SelecteerSessie_SessieNotFound_ReturnsNotFoundResult()
         {
             _mockSessieRepository.Setup(m => m.GetById(2)).Returns(null as Sessie);
-            var result = _controller.SelecteerSessie(_leerkracht, 2);
+            var result = _controller.SelecteerSessie( 2);
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
         public void SelecteerSessie_ReturnsSessieDetailView()
         {
-            var result = _controller.SelecteerSessie(_leerkracht, 123) as ViewResult;
+            var result = _controller.SelecteerSessie(123) as ViewResult;
             Assert.Equal("SessieDetail", result?.ViewName);
+        }
+
+        [Fact]
+        public void SelecteerSessie_PassesSelectListInViewData()
+        {
+            var result = _controller.SelecteerSessie(123) as ViewResult;
+            Assert.Equal(2, (result?.ViewData["Doelgroepen"] as SelectList).Count());
         }
         #endregion
 
         #region === ActiveerSessie ===
         [Fact]
-        public void ActiveerSessie_AlleDeelnamesBevestigd_RedirectsToBeheerSessies()
+        public void ActiveerSessie_RedirectsToSelecteerSessie()
         {
-            var result = _controller.ActiveerSessie(_leerkracht, 123) as RedirectToActionResult;
-            Assert.Equal("BeheerSessies", result?.ActionName);
+            var result = _controller.ActiveerSessie(123) as RedirectToActionResult;
+            Assert.Equal("SelecteerSessie", result?.ActionName);
         }
 
         [Fact]
         public void ActiveerSessie_SessieNotFound_ReturnsNotFoundResult()
         {
-            var result = _controller.ActiveerSessie(_leerkracht, 2);
+            var result = _controller.ActiveerSessie( 2);
             Assert.IsType<NotFoundResult>(result);
         }
-
-        [Fact]
-        public void ActiveerSessie_NogDeelnamesTeBevestigen_RedirectsToBeheerSessies()
-        {
-            var result = _controller.ActiveerSessie(_leerkracht, 456) as RedirectToActionResult;
-            Assert.Equal("BeheerSessies", result?.ActionName);
-        }
-
-        // niet meer nodig aangezien activeer sessie redirects to beheersessies
-        //[Fact]
-        //public void ActiveerSessie_NogDeelnamesTeBevestigen_PassesSessieViewModelToViewViaModel()
-        //{
-        //    var result = _controller.ActiveerSessie(_leerkracht, 456) as ViewResult;
-        //    var svm = new SessieDetailViewModel(_context.SessieNogDeelnamesTeBevestigen);
-        //    Assert.Equal(svm.SessieNaam, (result?.Model as SessieDetailViewModel).SessieNaam);
-        //}
 
         #endregion
 
-        #region === BlokkeerGroep ===
+        #region === WijzigGroepen ===
         [Fact]
-        public void BlokkeerGroep_SessieNotFound_ReturnsNotFoundResult()
+        public void WijzigGroepen_ReturnsRedirectToActionSelecteerSessie()
         {
-            var result = _controller.BlokkeerGroep(_leerkracht, 321, 1);
-            Assert.IsType<NotFoundResult>(result);
+            var result = _controller.WijzigGroepen(123, 0) as RedirectToActionResult;
+            Assert.Equal("SelecteerSessie", result?.ActionName);
         }
 
         [Fact]
-        public void BlokkeerGroep_GeenGroepMetId_DoesNotChangeOrPersist()
+        public void WijzigGroepen_PassesSessieIdToActionSelecteerSessie()
         {
-            var result = _controller.BlokkeerGroep(_leerkracht, 123, 99) as ViewResult;
-            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
+            var result = _controller.WijzigGroepen(123, 0) as RedirectToActionResult;
+            Assert.Equal(123, result?.RouteValues.Values.First());
         }
 
         [Fact]
-        public void BlokkeerGroep_SessieValid_ReturnsSessieDetailView()
+        public void WijzigGroepen_ChangesAndPersistsData()
         {
-            var result = _controller.BlokkeerGroep(_leerkracht, 123, 1) as ViewResult;
-            Assert.Equal("SessieDetail", result?.ViewName);
-        }
-
-        [Fact]
-        public void BlokkeerGroep_SessieValid_PassesSessieDetailViewModelToViewViaModel()
-        {
-            var result = _controller.BlokkeerGroep(_leerkracht, 123, 1) as ViewResult;
-            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
-        }
-
-        [Fact]
-        public void BlokkeerGroep_GroepValid_ChangesAndPersistsGroep()
-        {
-            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
-            var result = _controller.BlokkeerGroep(_leerkracht, 123, 1) as ViewResult;
-            Assert.Equal("Geblokkeerd", groep.Pad.PadState.StateName);
+            var result = _controller.WijzigGroepen(123, 0) as RedirectToActionResult;
+            Assert.True(_context.SessieAlleDeelnamesBevestigd.Groepen.All(p => p.Pad.PadState.StateName == "Geblokkeerd"));
             _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
         }
         #endregion
 
-        #region === DeblokkeerGroep ===
+
+        #region === CheckDeelnames ===
         [Fact]
-        public void DeblokkeerGroep_SessieNotFound_ReturnsNotFoundResult()
+        public void CheckDeelnames_SessieNotFound_ReturnsNotFoundResult()
         {
-            var result = _controller.DeblokkeerGroep(_leerkracht, 321, 1);
+            var result = _controller.CheckDeelnames(321);
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
-        public void DeblokkeerGroep_GeenGroepMetId_DoesNotChangeOrPersist()
+        public void CheckDeelnames_SessieValid_ReturnsGroepenOverzichtPartialView()
         {
-            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 99) as ViewResult;
+            var result = _controller.CheckDeelnames(123) as PartialViewResult;
+            Assert.Equal("_GroepenOverzicht", result?.ViewName);
+        }
+
+        [Fact]
+        public void CheckDeelnames_SessieValid_PassesSessieDetailViewModelToViewViaModel()
+        {
+            var result = _controller.CheckDeelnames(123) as PartialViewResult;
+            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
+        }
+        #endregion
+
+        #region === SelecteerDoelgroep ===
+        [Fact]
+        public void SelecteerDoelGroep_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _controller.SelecteerDoelgroep(321, 0);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void SelecteerDoelGroep_SessieValidDoelGroepInvalid_DoesNotChangeOrPersistData()
+        {
+            var sessie = _context.SessieAlleDeelnamesBevestigd;
+            var result = _controller.SelecteerDoelgroep(123, -1) as ViewResult;
+            Assert.Equal(DoelgroepEnum.Jongeren, sessie.Doelgroep);
             _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
         }
 
         [Fact]
-        public void DeblokkeerGroep_SessieValid_ReturnsSessieDetailView()
+        public void SelecteerDoelGroep_SessieValidDoelGroepValid_DoesNotChangeOrPersistData()
         {
-            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 2) as ViewResult;
-            Assert.Equal("SessieDetail", result?.ViewName);
-        }
-
-        [Fact]
-        public void DeblokkeerGroep_SessieValid_PassesSessieDetailViewModelToViewViaModel()
-        {
-            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 2) as ViewResult;
-            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
-        }
-
-        [Fact]
-        public void DeblokkeerGroep_GroepValidInOpdrachtFase_ChangesStateToOpdrachtAndPersistsGroep()
-        {
-            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
-            groep.Pad.Blokkeer();
-            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
-            Assert.Equal("Opdracht", groep.Pad.PadState.StateName);
-            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once); 
-        }
-
-        [Fact]
-        public void DeblokkeerGroep_GroepValidInActieFase_ChangesStateToActieAndPersistsGroep()
-        {
-            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
-            groep.Pad.HuidigeOpdracht.IsVoltooid = true;
-            groep.Pad.Blokkeer();
-            var result = _controller.DeblokkeerGroep(_leerkracht, 123, 1) as ViewResult;
-            Assert.Equal("Actie", groep.Pad.PadState.StateName);
-            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
-        }
-        #endregion
-
-        #region === BlokkeerAlleGroepen ===
-        [Fact]
-        public void BlokkeerAlleGroepen_SessieNotFound_ReturnsNotFoundResult()
-        {
-            var result = _controller.BlokkeerAlleGroepen(_leerkracht, 321);
-            Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-        public void BlokkeerAlleGroepen_SessieValid_ReturnsSessieDetailView()
-        {
-            var result = _controller.BlokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
-            Assert.Equal("SessieDetail", result?.ViewName);
-        }
-
-        [Fact]
-        public void BlokkeerAlleGroepen_SessieValid_PassesSessieDetailViewModelToViewViaModel()
-        {
-            var result = _controller.BlokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
-            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
-        }
-        #endregion
-
-        #region === DeblokkeerAlleGroepen ===
-        [Fact]
-        public void DeblokkeerAlleGroepen_SessieNotFound_ReturnsNotFoundResult()
-        {
-            var result = _controller.DeblokkeerAlleGroepen(_leerkracht, 321);
-            Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-        public void DeblokkeerAlleGroepen_SessieValid_ReturnsSessieDetailView()
-        {
-            var result = _controller.DeblokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
-            Assert.Equal("SessieDetail", result?.ViewName);
-        }
-
-        [Fact]
-        public void DeblokkeerAlleGroepen_SessieValid_PassesSessieDetailViewModelToViewViaModel()
-        {
-            var result = _controller.DeblokkeerAlleGroepen(_leerkracht, 123) as ViewResult;
-            Assert.Equal(123, (result?.Model as SessieDetailViewModel).SessieCode);
-        }
-        #endregion
-
-        #region === OntgrendelGroep ===
-        [Fact]
-        public void OntgrendelGroep_SessieNotFound_ReturnsNotFoundResult()
-        {
-            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 321, 1);
-            Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-        public void OntgrendelGroep_GroepNotFound_DoesNotPersistData()
-        {
-            _controller.OntgrendelGroep(_context.Leerkracht1, 123, 50);
-            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
-        }
-
-        [Fact]
-        public void OntgrendelGroep_SessieValid_ReturnsSessieDetailView()
-        {
-            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 123, 1) as ViewResult;
-            Assert.Equal("SessieDetail", result?.ViewName);
-        }
-
-        [Fact]
-        public void OntgrendelGroep_SessieValid_PassesSessieDetailViewModelToViewViaModel()
-        {
-            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 123, 1) as ViewResult;
-            Assert.Equal(123, (result?.Model as SessieDetailViewModel)?.SessieCode);
-        }
-
-        [Fact]
-        public void OntgrendelGroep_SessieAndGroupValid_ChangesAndPersistsData()
-        {
-            var groep = _context.SessieAlleDeelnamesBevestigd.Groepen.FirstOrDefault(g => g.GroepId == 1);
-            groep.Pad.Vergrendel();
-            var result = _controller.OntgrendelGroep(_context.Leerkracht1, 123, 1);
-            Assert.Equal("Opdracht", groep.Pad.PadState.StateName);
+            var sessie = _context.SessieAlleDeelnamesBevestigd;
+            var result = _controller.SelecteerDoelgroep(123, 1) as ViewResult;
+            Assert.Equal(DoelgroepEnum.Volwassenen, sessie.Doelgroep);
             _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
         }
         #endregion

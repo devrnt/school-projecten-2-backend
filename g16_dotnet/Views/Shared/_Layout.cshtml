@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using g16_dotnet.Models.Domain;
 @inject IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html>
@@ -20,17 +22,16 @@
 
     @* Werk met een switch statement *@
     @{
-        var doelgroep = HttpContextAccessor.HttpContext.Session.GetString("Doelgroep");
+        var value = HttpContextAccessor.HttpContext.Session.GetString("Doelgroep");
+        var doelgroep = DoelgroepEnum.Jongeren;
+        if (value != null)
+        {
+            doelgroep = JsonConvert.DeserializeObject<DoelgroepEnum>(value);
+        }
     }
-    @if (doelgroep == "Jongeren") {
 
-        <link href="~/css/main.css" rel="stylesheet" />
-    }
-    @if (doelgroep == "Volwassenen") {
-        <link href="~/css/main2.css" rel="stylesheet" />
-    } else {
-        <link href="~/css/main.css" rel="stylesheet" />
-    }
+    <link href="~/css/main@($"{(((DoelgroepEnum)doelgroep) == 0 ? "" : "2")}").css" rel="stylesheet" />
+
 
 
 </head>

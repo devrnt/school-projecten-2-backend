@@ -24,6 +24,8 @@ namespace g16_dotnet.Data.Mappers
 
             builder.HasMany(s => s.Groepen)
                 .WithOne();
+
+            builder.Ignore(s => s.GroepBehaviour);
         }
     }
 }

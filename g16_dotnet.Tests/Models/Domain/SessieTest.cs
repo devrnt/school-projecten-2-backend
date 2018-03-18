@@ -1,4 +1,5 @@
 ﻿using g16_dotnet.Models.Domain;
+using g16_dotnet.Tests.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,49 +9,39 @@ namespace g16_dotnet.Tests.Models.Domain
 {
     public class SessieTest
     {
-        private Sessie _sessieAlleDeelnamesBevestigd;
-        private Sessie _sessieNogDeelnamesTeBevestigen;
+        private readonly DummyApplicationDbContext _context;
+        private readonly Sessie _sessie;
 
         public SessieTest()
         {
-            _sessieAlleDeelnamesBevestigd = new Sessie(123, "Test", "testen", new List<Groep> { new Groep() { DeelnameBevestigd = true, Pad = new Pad() } }, new Klas());
-            _sessieNogDeelnamesTeBevestigen = new Sessie(321, "Test2", "testen2", new List<Groep> { new Groep() { DeelnameBevestigd = false, Pad = new Pad() } }, new Klas());
+            _context = new DummyApplicationDbContext();
+            _sessie = _context.SessieAlleDeelnamesBevestigd;
         }
 
-        #region === ActiveerSessie ===
+        #region === WijzigGroepen ===
         [Fact]
-        public void ActiveerSessie_AlleGroepenDeelgenomen_SetsIsActiefTrue()
+        public void WijzigGroepen_BlokkeerBehaviourBehaviourId0_SetsPadGeblokkeerdInAllGroep()
         {
-            _sessieAlleDeelnamesBevestigd.ActiveerSessie();
-            Assert.True(_sessieAlleDeelnamesBevestigd.IsActief);
+            _sessie.WijzigGroepen(0, 0);
+            Assert.True(_sessie.Groepen.All(g => g.Pad.PadState.StateName == "Geblokkeerd"));
         }
 
         [Fact]
-        public void ActiveerSessie_GroepenNogNietDeelgenomen_SetsSessieActiefTrue() {
-            _sessieNogDeelnamesTeBevestigen.ActiveerSessie();
-            Assert.True(_sessieNogDeelnamesTeBevestigen.IsActief);
+        public void WijzigGroepen_BlokkeerBehaviourBehaviourId1_SetsPadGedeblokkeerdInAllGroep()
+        {
+            _sessie.Groepen.All(g => { g.BlokkeerPad(); return true;  });
+            _sessie.WijzigGroepen(1, 0);
+            Assert.True(_sessie.Groepen.All(g => g.Pad.PadState.StateName == "Opdracht"));
         }
 
+        [Fact]
+        public void WijzigGroepen_BlokkeerBehaviourBehaviourId2_SetsPadOntgrendeldInAllGroep()
+        {
+            _sessie.Groepen.All(g => { g.Pad.PadState = new VergrendeldPadState("Vergrendeld"); return true; });
+            _sessie.WijzigGroepen(2, 0);
+            Assert.True(_sessie.Groepen.All(g => g.Pad.PadState.StateName == "Opdracht"));
+        }
         #endregion
 
-        #region === BlokkeerAlleGroepen ===
-        [Fact]
-        public void BlokkeerAlleGroepen_SetsGeblokkeerdPadStateInGroep()
-        {
-            _sessieAlleDeelnamesBevestigd.Groepen.All(g => { g.Pad.PadState = new OpdrachtPadState("Opdracht"); return true; });
-            _sessieAlleDeelnamesBevestigd.BlokkeerAlleGroepen();
-            Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => g.Pad.PadState.StateName == "Geblokkeerd"));
-        }
-        #endregion
-
-        #region === DeblokkeerAlleGroepen ===
-        [Fact]
-        public void DeblokkeerAlleGroepen_SetsActieOrOpdrachtPadStateInGroep()
-        {
-            _sessieAlleDeelnamesBevestigd.Groepen.All(g => { g.Pad.PadState = new GeblokkeerdPadState("Geblokkeerd"); return true; });
-            _sessieAlleDeelnamesBevestigd.DeblokkeerAlleGroepen();
-            Assert.True(_sessieAlleDeelnamesBevestigd.Groepen.All(g => g.Pad.PadState.StateName != "Geblokkeerd"));
-        }
-        #endregion
     }
 }

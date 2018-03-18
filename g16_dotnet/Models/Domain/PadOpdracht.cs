@@ -7,6 +7,8 @@
         public int PadId { get; set; }
         public Opdracht Opdracht { get; set; }
         public Pad Pad { get; set; }
+        public int AantalPogingen { get; set; }
+        public bool IsVoltooid { get; set; }
         #endregion
 
         #region Constructors
