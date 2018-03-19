@@ -16,7 +16,7 @@
         <h2 class="box-title box-title-display">Kies Groep</h2>
         <div class="box-container">
 
-            <div><p><strong> Omschrijving</strong> : @ViewData["sessieOmschrijving"]</p></div>
+            <div><p style="margin-bottom: 15px "><strong> Omschrijving</strong> : @ViewData["sessieOmschrijving"]</p></div>
             <table class="table">
                 <thead>
                     <tr>
@@ -40,7 +40,7 @@
                                     }
                                 </ul>
                             </td>
-                            <td class="table-align-right">
+                            <td >
                                 @if (!groep.DeelnameBevestigd)
                                 {
                                     <a asp-controller="Groep" asp-action="KiesGroep" asp-route-sessieId="@(int.Parse(ViewData["sessieCode"] as string))" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
@@ -91,7 +91,7 @@ else
             <div class="box-container">
                 <!--<label class="box-label" for="sessieCode"></label>-->
                 <input class="box-input" name="code" id="sessieCode" placeholder="Sessie code">
-                <button class="box-button" type="submit">Deelnemen</button>
+                <button class="box-button" type="submit" style="width: 100%;">Deelnemen</button>
             </div>
         </form>
     </div>

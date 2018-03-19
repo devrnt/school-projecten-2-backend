@@ -14,9 +14,9 @@
 
 <div class="box">
     <h2 class="box-title box-title-display">Opgave</h2>
+            <embed src="~/docs/@(Model.HuidigeOpdracht.Opdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="600">
 
     <div class="box-container">
-        <embed src="~/docs/@(Model.HuidigeOpdracht.Opdracht.Oefening.Opgave).pdf" type="application/pdf" width="800" height="600">
 
         <h3 class="groepsBewerking">
             @Model.HuidigeOpdracht.Opdracht.GroepsBewerking.Omschrijving
@@ -27,7 +27,7 @@
                     <label for="groepsAntwoord"></label>
                     <input type="text" id="groepsAntwoord" name="groepsAntwoord" class="box-input" placeholder="Antwoord" />
                 </div>
-                <button type="submit" class="box-button">Bevestigen</button>
+                <button type="submit" class="box-button" style="width:100%">Bevestigen</button>
             </div>
         </form>
     </div>

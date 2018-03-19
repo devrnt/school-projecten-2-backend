@@ -4,14 +4,14 @@
   padding: 0;
 }
 
-/*$main-color: #ff1744;
-$main-color-dark: #c62828;
-$light-purple: #FFC400;
-$dark-purple: #FF8F00;
+/*$main-color: #2979FF;
+$main-color-dark: #0D47A1;
+$light-purple: #FF9100;
+$dark-purple: #E65100;
 $red: #E53935;
 $dark-red: #b71c1c;
-$yellow: #FFC107;
-$dark-yellow: #F9A825;*/
+$yellow: #4CAF50;
+$dark-yellow: #1B5E20;*/
 body {
   font-family: 'Muli', 'Helvetica', sans-serif;
   background: linear-gradient(120deg, #00C48A, #00AA77);
@@ -115,7 +115,6 @@ body {
 }
 
 .box-button {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
@@ -130,6 +129,7 @@ body {
   transition: all 0.15s ease-in-out;
   margin: 1px 0;
   text-decoration: none;
+  display: inline-block;
 }
 
 .box-button-secundary {
@@ -153,7 +153,6 @@ body {
 }
 
 .box-button-default {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
@@ -170,10 +169,10 @@ body {
   margin-left: 10px;
   text-decoration: none;
   border: 1px solid #BDBDBD;
+  display: inline-block;
 }
 
 .box-button-danger {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
@@ -192,7 +191,6 @@ body {
 }
 
 .box-button-yellow {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
@@ -211,7 +209,7 @@ body {
 
 .box-button-group {
   text-align: center;
-  margin: 35px 0 0;
+  margin: 30px 0 0;
 }
 
 .box-button:hover {
@@ -413,6 +411,10 @@ td#vertical-align {
   font-size: 14px;
 }
 
+.text-danger > ul {
+  list-style-type: none;
+}
+
 .validation-input {
   outline: none;
   border: none;
@@ -428,9 +430,9 @@ td#vertical-align {
 }
 
 .box-button-small {
-  width: 100%;
   margin: 10px 0;
   padding: 14px;
+  display: inline-block;
 }
 
 .validation-label {
@@ -494,4 +496,9 @@ select:disabled::-ms-expand {
 
 .p-margin-top:last-child {
   margin-bottom: 0;
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
 }

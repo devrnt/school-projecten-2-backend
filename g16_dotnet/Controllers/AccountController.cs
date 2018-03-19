@@ -78,7 +78,7 @@ namespace g16_dotnet.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Email en/of wachtwoord is verkeerd.");
                     return View(model);
                 }
             }

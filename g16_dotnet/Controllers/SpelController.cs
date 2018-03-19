@@ -4,14 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
-namespace g16_dotnet.Controllers
-{
-    public class SpelController : Controller
-    {
+namespace g16_dotnet.Controllers {
+    public class SpelController : Controller {
         private readonly IPadRepository _padRepository;
 
-        public SpelController(IPadRepository padRepository)
-        {
+        public SpelController(IPadRepository padRepository) {
             _padRepository = padRepository;
         }
 
@@ -24,8 +21,7 @@ namespace g16_dotnet.Controllers
         /// Index View met als Model een Pad
         /// NotFoundResult indien er geen Pad gevonden wordt met meegegeven id
         /// </returns>
-        public IActionResult Index(int padId)
-        {
+        public IActionResult Index(int padId) {
             Pad pad = _padRepository.GetById(padId);
             if (pad == null)
                 return NotFound();
@@ -42,8 +38,7 @@ namespace g16_dotnet.Controllers
         ///     RedirectToAction Index
         ///     NotFoundResult indien er geen Pad wordt gevonden met meegegeven id
         /// </returns>
-        public IActionResult BeantwoordVraag(int padId, string groepsAntwoord)
-        {
+        public IActionResult BeantwoordVraag(int padId, string groepsAntwoord) {
             Pad pad = _padRepository.GetById(padId);
 
             if (pad == null)
@@ -51,27 +46,18 @@ namespace g16_dotnet.Controllers
 
             if (groepsAntwoord == null || groepsAntwoord.Trim().Length == 0)
                 TempData["error"] = "Geef een antwoord in!";
-            else
-            {
-                try
-                {
+            else {
+                try {
                     PadOpdracht huidig = pad.HuidigeOpdracht;
-                    if (pad.ControleerAntwoord(int.Parse(groepsAntwoord)))
-                    {
+                    if (pad.ControleerAntwoord(int.Parse(groepsAntwoord))) {
                         TempData["message"] = "Juist antwoord, goed zo!";
-                    }
-                    else
-                    {
+                    } else {
                         TempData["error"] = $"{groepsAntwoord} is fout!";
                     }
                     _padRepository.SaveChanges();
-                }
-                catch (InvalidOperationException e)
-                {
+                } catch (InvalidOperationException e) {
                     TempData["error"] = e.Message;
-                }
-                catch (FormatException)
-                {
+                } catch (FormatException) {
                     TempData["error"] = "Je moet een getal invullen!";
                 }
             }
@@ -88,27 +74,24 @@ namespace g16_dotnet.Controllers
         ///     RedirectToAction Index
         ///     NotFoundResult indien er geen Pad wordt gevonden met meegegeven id
         /// </returns>
-        public IActionResult VoerActieUit(int padId, string toegangsCode)
-        {
+        public IActionResult VoerActieUit(int padId, string toegangsCode) {
             Pad pad = _padRepository.GetById(padId);
             if (pad == null)
                 return NotFound();
-
-            try
-            {
-                if (pad.ControleerToegangsCode(toegangsCode))
-                {
-                    pad.HuidigeActie.IsUitgevoerd = true;
-                    TempData["message"] = "De code is juist, de zoektocht gaat verder!";
-                    _padRepository.SaveChanges();
-                } else
-                {
-                    TempData["error"] = $"{toegangsCode} is fout!";
+            if (toegangsCode == null || toegangsCode.Trim().Length == 0)
+                TempData["error"] = "Geef een code in";
+            else {
+                try {
+                    if (pad.ControleerToegangsCode(toegangsCode)) {
+                        pad.HuidigeActie.IsUitgevoerd = true;
+                        TempData["message"] = "De code is juist, de zoektocht gaat verder!";
+                        _padRepository.SaveChanges();
+                    } else {
+                        TempData["error"] = $"{toegangsCode} is fout!";
+                    }
+                } catch (InvalidOperationException e) {
+                    TempData["error"] = e.Message;
                 }
-            }
-            catch (InvalidOperationException e)
-            {
-                TempData["error"] = e.Message;
             }
 
             return RedirectToAction(nameof(Index), new { padId });
@@ -121,8 +104,7 @@ namespace g16_dotnet.Controllers
         /// <param name="padId">Id van het te te controleren Pad</param>
         /// <returns>een Json object met isGeblokkeerd en isVergrendeld properties</returns>
         [HttpGet]
-        public JsonResult CheckPad(string padId)
-        {
+        public JsonResult CheckPad(string padId) {
             int id = 0;
             Pad pad = null;
             if (int.TryParse(padId, out id))

@@ -13,17 +13,16 @@
             <p class="p-margin-top"><strong>Code : </strong>@($"\t{Model.SessieCode}")</p>
             <p class="p-margin-top" style="min-width:150px"><strong>Omschrijving : </strong>@($"\t{Model.SessieOmschrijving}")</p>
             <form method="post" asp-action="SelecteerDoelgroep" asp-route-sessieId="@Model.SessieCode">
-                <label for="doelgroep">Doelgroep: </label>
-                <select asp-for="@Model.Doelgroep" asp-items="@(ViewData["Doelgroepen"] as SelectList)" id="doelgroep" name="doelgroep" class="select-input">
-                </select>
-                <button type="submit">Bevestigen</button>
+                <label for="doelgroep"><strong>Doelgroep: </strong></label>
+                <select asp-for="@Model.Doelgroep" asp-items="@(ViewData["Doelgroepen"] as SelectList)" id="doelgroep" name="doelgroep" class="select-input"></select>
+                <button type="submit" class="box-button box-button-small" style="margin: 8px;margin-left: 5px; margin-bottom:0px; padding: 8px 14px">Bevestigen</button>
             </form>
             <p class="text-danger" style="display:none;" id="succes-doelgroep">De doelgroep werd succesvol gewijzigd</p>
 
             <div style="margin: 15px 0; width:100%; text-align:right">
-                @if (Model.IsActief) {
-                    <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="0" class="box-button-danger">Blokkeer Alle Groepen</a>
-                    <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="1" class="box-button-default">Deblokkeer Alle Groepen</a>
+                @if (Model.IsActief && Model.Groepen.Count(g => g.DeelnameBevestigd) > 0) {
+                    <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="0" class="box-button-danger box-button-small" style="margin-top: 20px;">Blokkeer Alle Groepen</a>
+                    <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="1" class="box-button-default box-button-small">Deblokkeer Alle Groepen</a>
 
                 }
             </div>
@@ -86,30 +85,30 @@
 
 @* Script van jonas *@
 @*<script>
-    function selecteerDoelGroep() {
-        $('#succes-doelgroep').css('display', 'none');
+        function selecteerDoelGroep() {
+            $('#succes-doelgroep').css('display', 'none');
 
-    console.log('Ajax post called');
-    let doelgroep = document.querySelector('#doelgroepSelect').value;
-    let passData = {}
-    passData.sessieId = "@Model.SessieCode";
-    passData.doelgroep = doelgroep;
-    console.log(passData);
-    if (doelgroep !== '' && doelgroep != null) {
-        let url = '@Url.Action("SelecteerDoelgroep", "Sessie")';
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: JSON.stringify(passData),
-            contentType: 'application/json',
-            success: function (data) {
-                $('#succes-doelgroep').css('display', 'block');
-            }
-        })
+        console.log('Ajax post called');
+        let doelgroep = document.querySelector('#doelgroepSelect').value;
+        let passData = {}
+        passData.sessieId = "@Model.SessieCode";
+        passData.doelgroep = doelgroep;
+        console.log(passData);
+        if (doelgroep !== '' && doelgroep != null) {
+            let url = '@Url.Action("SelecteerDoelgroep", "Sessie")';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(passData),
+                contentType: 'application/json',
+                success: function (data) {
+                    $('#succes-doelgroep').css('display', 'block');
+                }
+            })
+        }
+
     }
-
-}
-</script>*@
+    </script>*@
 
 
 <!--

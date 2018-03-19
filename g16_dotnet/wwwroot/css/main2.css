@@ -4,10 +4,10 @@
   padding: 0;
 }
 
-/*$main-color: #ff1744;
-$main-color-dark: #c62828;
-$light-purple: #FFC400;
-$dark-purple: #FF8F00;
+/*$main-color: #00C48A;
+$main-color-dark: #00AA77;
+$light-purple: #651FFF;
+$dark-purple: #4527A0;
 $red: #E53935;
 $dark-red: #b71c1c;
 $yellow: #FFC107;
@@ -83,7 +83,7 @@ body {
 .box .box-title {
   text-align: center;
   padding: 10px;
-  background-color: #F50057;
+  background-color: #FF9100;
   color: white;
   font-weight: normal;
   display: none;
@@ -115,7 +115,6 @@ body {
 }
 
 .box-button {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
@@ -130,6 +129,7 @@ body {
   transition: all 0.15s ease-in-out;
   margin: 1px 0;
   text-decoration: none;
+  display: inline-block;
 }
 
 .box-button-secundary {
@@ -144,7 +144,7 @@ body {
   font-weight: bold;
   font-size: 15px;
   transition: all 0.15s ease-in-out;
-  background-color: #F50057;
+  background-color: #FF9100;
   text-decoration: none;
   position: absolute;
   top: calc(8vh);
@@ -153,7 +153,6 @@ body {
 }
 
 .box-button-default {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
@@ -170,10 +169,10 @@ body {
   margin-left: 10px;
   text-decoration: none;
   border: 1px solid #BDBDBD;
+  display: inline-block;
 }
 
 .box-button-danger {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
@@ -192,13 +191,12 @@ body {
 }
 
 .box-button-yellow {
-  width: 100%;
   cursor: pointer;
   outline: none;
   border: none;
   padding: 16px 20px;
   color: white;
-  background-color: #FFC107;
+  background-color: #4CAF50;
   text-transform: uppercase;
   font-family: 'Muli', sans-serif;
   border-radius: 2px;
@@ -211,7 +209,7 @@ body {
 
 .box-button-group {
   text-align: center;
-  margin: 35px 0 0;
+  margin: 30px 0 0;
 }
 
 .box-button:hover {
@@ -221,7 +219,7 @@ body {
 
 .box-button-secundary:hover {
   transform: translateY(-1px);
-  box-shadow: 0px 2px 0px #AD1457;
+  box-shadow: 0px 2px 0px #E65100;
 }
 
 .box-button-default:hover {
@@ -231,7 +229,7 @@ body {
 
 .box-button-yellow:hover {
   transform: translateY(-1px);
-  box-shadow: 0px 2px 0px #F9A825;
+  box-shadow: 0px 2px 0px #1B5E20;
 }
 
 .box-button-danger:hover {
@@ -261,7 +259,7 @@ body {
 }
 
 .alert-success {
-  background-color: #FFC107;
+  background-color: #4CAF50;
   color: white;
 }
 
@@ -348,7 +346,7 @@ li#groep {
 .option {
   width: 100px;
   height: 50px;
-  background-color: #F50057;
+  background-color: #FF9100;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -364,7 +362,7 @@ li#groep {
   top: 50%;
   left: -60%;
   transform: translateY(-50%);
-  background-image: url(/images/icons/question-sign.svg);
+  background-image: url(/images/icons/question-sign-orange.svg);
   background-position: center;
   background-size: 59%;
   background-repeat: no-repeat;
@@ -413,6 +411,10 @@ td#vertical-align {
   font-size: 14px;
 }
 
+.text-danger > ul {
+  list-style-type: none;
+}
+
 .validation-input {
   outline: none;
   border: none;
@@ -428,9 +430,9 @@ td#vertical-align {
 }
 
 .box-button-small {
-  width: 100%;
   margin: 10px 0;
   padding: 14px;
+  display: inline-block;
 }
 
 .validation-label {
@@ -494,4 +496,9 @@ select:disabled::-ms-expand {
 
 .p-margin-top:last-child {
   margin-bottom: 0;
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
 }

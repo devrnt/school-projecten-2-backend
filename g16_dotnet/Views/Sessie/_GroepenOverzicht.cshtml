@@ -17,10 +17,10 @@
 
             </ul>
         </td>
-        <td style="text-align:center">
-            <input type="checkbox" readonly="readonly" @(groep.DeelnameBevestigd ? "checked" : "")>
+        <td style="text-align:center; vertical-align:middle;">
+            <input type="checkbox" onclick="return false;" @(groep.DeelnameBevestigd ? "checked" : "") class="checkbox">
         </td>
-        <td>
+        <td style="vertical-align: middle; text-align:center;">
             @groep.Pad.Voortgang / @groep.Pad.AantalOpdrachten
         </td>
         <td id="vertical-align">
