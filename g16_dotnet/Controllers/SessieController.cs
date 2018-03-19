@@ -47,7 +47,7 @@ namespace g16_dotnet.Controllers
         public IActionResult ValideerSessiecode(string code)
         {
             if (code == null || code.Trim().Length == 0)
-                TempData["error"] = "Geef een code in: ";
+                TempData["error"] = "Geef een code in)";
             else
             {
                 try

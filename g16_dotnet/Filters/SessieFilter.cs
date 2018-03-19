@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace g16_dotnet.Filters
-{
-    public class SessieFilter: ActionFilterAttribute {
+namespace g16_dotnet.Filters {
+    public class SessieFilter : ActionFilterAttribute {
         private readonly ISessieRepository _sessieRepository;
 
         public SessieFilter(ISessieRepository sessieRepository) {
@@ -25,8 +24,10 @@ namespace g16_dotnet.Filters
 
             string sessieCode = (context.Controller as Controller).ViewData["sessieCode"] as string;
             string doelgroep = (context.Controller as Controller).ViewData["Doelgroep"] as string;
-            context.HttpContext.Session.SetString("sessieCode", sessieCode);
-            context.HttpContext.Session.SetString("Doelgroep", doelgroep);
+            if (sessieCode != null) {
+                context.HttpContext.Session.SetString("sessieCode", sessieCode);
+                context.HttpContext.Session.SetString("Doelgroep", doelgroep);
+            }
             base.OnActionExecuted(context);
         }
     }
