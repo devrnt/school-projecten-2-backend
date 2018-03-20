@@ -14,7 +14,7 @@ $yellow: #FFC107;
 $dark-yellow: #F9A825;*/
 body {
   font-family: 'Muli', 'Helvetica', sans-serif;
-  background: linear-gradient(120deg, #2979FF, #0D47A1);
+  background: linear-gradient(120deg, #FAFAFA, #E0E0E0);
 }
 
 /*#region Header */
@@ -36,7 +36,7 @@ body {
 
 .header h4 {
   margin: 0 40px 0 5px;
-  color: #2979FF;
+  color: #FAFAFA;
 }
 
 .header li {
@@ -83,7 +83,7 @@ body {
 .box .box-title {
   text-align: center;
   padding: 10px;
-  background-color: #FF9100;
+  background-color: #2979FF;
   color: white;
   font-weight: normal;
   display: none;
@@ -120,7 +120,7 @@ body {
   border: none;
   padding: 16px 20px;
   color: white;
-  background-color: #2979FF;
+  background-color: #4CAF50;
   text-transform: uppercase;
   font-family: 'Muli', sans-serif;
   border-radius: 2px;
@@ -144,7 +144,7 @@ body {
   font-weight: bold;
   font-size: 15px;
   transition: all 0.15s ease-in-out;
-  background-color: #FF9100;
+  background-color: #2979FF;
   text-decoration: none;
   position: absolute;
   top: calc(8vh);
@@ -188,6 +188,7 @@ body {
   margin: 1px 0;
   margin-left: 10px;
   text-decoration: none;
+  display: inline-block;
 }
 
 .box-button-yellow {
@@ -214,12 +215,12 @@ body {
 
 .box-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0px 2px 0px #0D47A1;
+  box-shadow: 0px 2px 0px #E0E0E0;
 }
 
 .box-button-secundary:hover {
   transform: translateY(-1px);
-  box-shadow: 0px 2px 0px #E65100;
+  box-shadow: 0px 2px 0px #0D47A1;
 }
 
 .box-button-default:hover {
@@ -324,7 +325,7 @@ li#groep {
   border: none;
   padding: 14px 18px;
   color: white;
-  background-color: #2979FF;
+  background-color: #4CAF50;
   text-transform: uppercase;
   font-family: 'Muli', sans-serif;
   border-radius: 2px;
@@ -338,7 +339,7 @@ li#groep {
 
 .table-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0px 2px 0px #0D47A1;
+  box-shadow: 0px 2px 0px #E0E0E0;
 }
 
 /*#endregion */
@@ -346,7 +347,7 @@ li#groep {
 .option {
   width: 100px;
   height: 50px;
-  background-color: #FF9100;
+  background-color: #2979FF;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -362,7 +363,7 @@ li#groep {
   top: 50%;
   left: -60%;
   transform: translateY(-50%);
-  background-image: url(/images/icons/question-sign-orange.svg);
+  background-image: url(/images/icons/question-sign-blue.svg);
   background-position: center;
   background-size: 59%;
   background-repeat: no-repeat;
