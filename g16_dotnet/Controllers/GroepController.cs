@@ -2,6 +2,8 @@
 using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using g16_dotnet.Models.GroepViewModels;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace g16_dotnet.Controllers
 {
@@ -51,6 +53,7 @@ namespace g16_dotnet.Controllers
             {
                 TempData["error"] = "Er is iets fout gelopen bij het kiezen van uw groep.";
             }
+
             return View("GroepOverzicht", gekozenGroep);
         }
 
@@ -68,10 +71,26 @@ namespace g16_dotnet.Controllers
             if (huidigeGroep == null)
                 return NotFound();
 
-            return RedirectToAction("Index", "Spel", new { padId = huidigeGroep.Pad.PadId });
+            return RedirectToAction("Index", "Spel", new {padId = huidigeGroep.Pad.PadId});
         }
 
 
+        public IActionResult ModifieerGroep(int sessieId, int groepsId, Sessie sessie)
+        {
+            if (sessie == null)
+            {
 
+                GetSessieFromSessieController(sessieId, groepsId);
+            }
+            //oude groepvieuwmodel weg??
+            //   GroepViewModel GVM = new GroepViewModel(sessie, Groep)
+
+            throw new NotImplementedException();
+        }
+
+        private void GetSessieFromSessieController(int sessieId, int groepsId)
+        {
+            RedirectToAction("GetSessie", "Sessie", new {sessieId = sessieId, groepsId = groepsId});
+        }
     }
 }

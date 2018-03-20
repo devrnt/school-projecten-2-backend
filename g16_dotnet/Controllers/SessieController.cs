@@ -221,6 +221,12 @@ namespace g16_dotnet.Controllers
                     Value = ((int)d).ToString()
                 }).ToList(), "Value", "Text", doelgroep);
         }
+
+
+        public void GetSessie(int sessieid, int groepsId)
+        {
+            RedirectToAction("ModifieerGroep","Groep",new{sessieId = sessieid, groepsId = groepsId, sessie = _sessieRepository.GetById(sessieid) });
+        }
     }
 
 
