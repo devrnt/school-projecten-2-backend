@@ -2,11 +2,13 @@
 using g16_dotnet.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using g16_dotnet.Models.GroepViewModels;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace g16_dotnet.Controllers
 {
+    [ServiceFilter(typeof(SessieFilter))]
     public class GroepController : Controller
     {
         private readonly IGroepRepository _groepsRepository;
@@ -75,22 +77,31 @@ namespace g16_dotnet.Controllers
         }
 
 
-        public IActionResult ModifieerGroep(int sessieId, int groepsId, Sessie sessie)
+        public IActionResult ModifieerGroep(Sessie sessie, int groepsId)
         {
-            if (sessie == null)
-            {
+         
 
-                GetSessieFromSessieController(sessieId, groepsId);
-            }
-            //oude groepvieuwmodel weg??
-            //   GroepViewModel GVM = new GroepViewModel(sessie, Groep)
+            return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepsId), sessie));
 
+           
+        }
+
+
+        public IActionResult ModifieerGroepVerwijderLeerling(Sessie sessie, int groepsId, int leerlingId)
+        {
             throw new NotImplementedException();
         }
 
-        private void GetSessieFromSessieController(int sessieId, int groepsId)
+        public IActionResult ModifieerGroepLeerlingToevoegen()
         {
-            RedirectToAction("GetSessie", "Sessie", new {sessieId = sessieId, groepsId = groepsId});
+            throw new NotImplementedException();
+        }
+        [HttpPost]
+        public IActionResult ModifieerGroepGroepsnaamWijzigen(Sessie sessie, GroepViewModel gVM, int groepId)
+        {
+            sessie.Groepen.First(x => x.GroepId.Equals(groepId)).Groepsnaam = gVM.GroepNaam;
+            ViewBag.GroepsnaamSuccesvolVerandert = "ok";
+            return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepId), sessie));
         }
     }
 }

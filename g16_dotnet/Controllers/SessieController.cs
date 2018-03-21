@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace g16_dotnet.Controllers
@@ -61,6 +62,7 @@ namespace g16_dotnet.Controllers
                         // om via de filter in Session weg te schrijven
                         ViewData["sessieCode"] = sessieCode.ToString();
                         ViewData["Doelgroep"] = JsonConvert.SerializeObject(sessie.Doelgroep);
+                        HttpContext.Session.SetString("sessieCode", sessieCode.ToString());
                         return View("Index", sessie.Groepen);
                     }
                     else
@@ -223,10 +225,7 @@ namespace g16_dotnet.Controllers
         }
 
 
-        public void GetSessie(int sessieid, int groepsId)
-        {
-            RedirectToAction("ModifieerGroep","Groep",new{sessieId = sessieid, groepsId = groepsId, sessie = _sessieRepository.GetById(sessieid) });
-        }
+     
     }
 
 

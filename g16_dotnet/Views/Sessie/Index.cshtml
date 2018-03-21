@@ -42,7 +42,7 @@
                                 </ul>
                             </td>
                             <td>
-                                <a asp-controller="Groep" asp-action="ModifieerGroep" asp-route-sessieId="@(int.Parse(ViewData["sessieCode"] as string))" asp-route-groepsId="@groep.GroepId"  class="table-button">Aanpassen</a>
+                                <a asp-controller="Groep" asp-action="ModifieerGroep"  asp-route-groepsId="@groep.GroepId"  class="table-button">Aanpassen</a>
                            </td>
                             <td >
                                 @if (!groep.DeelnameBevestigd)

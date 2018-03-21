@@ -1,0 +1,79 @@
+﻿@model g16_dotnet.Models.GroepViewModels.GroepViewModel
+
+@{
+    ViewData["Title"] = "Aaspassen groep";
+}
+
+
+
+
+<div class="box">
+    <h2 class="box-title box-title-display">Aanpassen groep</h2>
+    <div class="box-container">
+
+        <div><p style="margin-bottom: 15px "><strong> Omschrijving</strong> :@Model.Sessie.Omschrijving</p></div>
+        <table class="table">
+            <thead>
+                <tr>
+                    @using (Html.BeginForm("ModifieerGroepGroepsnaamWijzigen", "Groep", new { groepId = @Model.Groep.GroepId }, FormMethod.Post))
+                    {
+                        if (ViewBag.GroepsnaamSuccesvolVerandert == "ok")
+                        {
+                            <td>
+                                @Html.TextBoxFor(model => model.GroepNaam)
+                                <p>Succesvol!</p>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.TextBoxFor(model => model.GroepNaam)
+                            </td>
+                        }
+                        <td>
+                            <button class="table-button" type="submit">Groepsnaam aanpassen</button>
+                        </td>}
+
+                </tr>
+
+                <tr>
+
+                    <th>Naam</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var leerling in @Model.Groep.Leerlingen)
+                {
+                    <tr>
+                        <td> @($"{leerling.Voornaam} {leerling.Naam}")</td>
+
+                        <td>
+                            <a asp-controller="Groep" asp-action="ModifieerGroepVerwijderLeerling" asp-route-groepsId="@Model.Groep.GroepId" asp-route-leerlingId="@leerling.LeerlingId" class="table-button">Verwijderen</a>
+                        </td>
+
+                    </tr>
+
+                }
+                <tr>
+                    @if (@Model.Groep.Leerlingen.Count == 4)
+                    {
+                        <td></td>
+                        <td>
+                            <a asp-controller="Groep" asp-action="ModifieerGroepLeerlingToevoegen" class="table-button not-active"> MAX 4 leerlingen </a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td>
+                            <a asp-controller="Groep" asp-action="ModifieerGroepLeerlingToevoegen" class="table-button"> Toevoegen </a>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+        <a asp-controller="Sessie" asp-action="ValideerSessiecode" asp-route-code="@Model.Sessie.SessieCode" class="box-button-default">Keer terug naar lijst groepen</a>
+    </div>
+</div>
