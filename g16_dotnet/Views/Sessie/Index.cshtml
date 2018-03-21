@@ -42,17 +42,24 @@
                                 </ul>
                             </td>
                             <td>
-                                <a asp-controller="Groep" asp-action="ModifieerGroep"  asp-route-groepsId="@groep.GroepId"  class="table-button">Aanpassen</a>
-                           </td>
-                            <td >
+                                <a asp-controller="Groep" asp-action="ModifieerGroep" asp-route-groepsId="@groep.GroepId" class="table-button">Aanpassen</a>
+                            </td>
+                            <td>
                                 @if (!groep.DeelnameBevestigd)
-                                {
-                                    <a asp-controller="Groep" asp-action="KiesGroep" asp-route-sessieId="@(int.Parse(ViewData["sessieCode"] as string))" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
-                                }
-                                else
-                                {
-                                    <span>Deze groep is al gekozen!</span>
-                                }
+                                {@if (groep.Leerlingen.Count() < 2)
+                                    {
+                                        <a asp-controller="Groep" asp-action="KiesGroep" class="table-button not-active ">Minimaal 2 spelers</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Groep" asp-action="KiesGroep" asp-route-sessieId="@(int.Parse(ViewData["sessieCode"] as string))" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
+                                    }
+
+                            }
+                            else
+                            {
+                                <span>Deze groep is al gekozen!</span>
+                            }
                             </td>
                         </tr>
 
