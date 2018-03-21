@@ -6,20 +6,16 @@ using System.Linq;
 using g16_dotnet.Models.GroepViewModels;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace g16_dotnet.Controllers
-{
+namespace g16_dotnet.Controllers {
     [ServiceFilter(typeof(SessieFilter))]
-    public class GroepController : Controller
-    {
+    public class GroepController : Controller {
         private readonly IGroepRepository _groepsRepository;
 
-        public GroepController(IGroepRepository groepRepository)
-        {
+        public GroepController(IGroepRepository groepRepository) {
             _groepsRepository = groepRepository;
         }
 
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
             return NotFound();
         }
 
@@ -33,26 +29,21 @@ namespace g16_dotnet.Controllers
         ///     NotFoundResult indien de Groep niet gevonden werd
         ///     RedirectToAction Index in SessieController indien de Groep al gekozen werd
         /// </returns>
-        public IActionResult KiesGroep(int sessieId, int groepsId)
-        {
+        public IActionResult KiesGroep(int sessieId, int groepsId) {
             Groep gekozenGroep = _groepsRepository.GetById(groepsId);
             if (gekozenGroep == null)
                 return NotFound();
-            if (gekozenGroep.DeelnameBevestigd)
-            {
+            if (gekozenGroep.DeelnameBevestigd) {
                 TempData["error"] = "Groep is al gekozen!";
                 return RedirectToAction(nameof(Index), "Sessie");
             }
 
-            try
-            {
+            try {
                 gekozenGroep.DeelnameBevestigd = true;
                 _groepsRepository.SaveChanges();
                 TempData["message"] = "Je hebt nu deelgenomen, zo dadelijk kan je beginnen";
                 ViewData["sessieId"] = sessieId;
-            }
-            catch
-            {
+            } catch {
                 TempData["error"] = "Er is iets fout gelopen bij het kiezen van uw groep.";
             }
 
@@ -67,56 +58,52 @@ namespace g16_dotnet.Controllers
         ///     RedirectToAction Index in SpelController
         ///     NotFoundResult indien de Groep niet werd gevonden     
         /// </returns>
-        public IActionResult StartSpel(int groepId)
-        {
+        public IActionResult StartSpel(int groepId) {
             Groep huidigeGroep = _groepsRepository.GetById(groepId);
             if (huidigeGroep == null)
                 return NotFound();
 
-            return RedirectToAction("Index", "Spel", new {padId = huidigeGroep.Pad.PadId});
+            return RedirectToAction("Index", "Spel", new { padId = huidigeGroep.Pad.PadId });
         }
 
 
-        public IActionResult ModifieerGroep(Sessie sessie, int groepsId)
-        {
-           
+        public IActionResult ModifieerGroep(Sessie sessie, int groepsId) {
+
 
             return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepsId), sessie));
 
-           
+
         }
 
 
-        public IActionResult ModifieerGroepVerwijderLeerling(Sessie sessie, int groepsId, int leerlingId)
-        {
+        public IActionResult ModifieerGroepVerwijderLeerling(Sessie sessie, int groepsId, int leerlingId) {
             Groep groep = _groepsRepository.GetById(groepsId);
             var lln = _groepsRepository.GetById(groepsId).Leerlingen.First(x => x.LeerlingId.Equals(leerlingId));
             groep.VerwijderLeerlingUitGroep(lln);
-    
+            TempData["message"] = $"Leerling {lln.Voornaam} {lln.Naam} is verwijderd";
+
             //sessie.Groepen.First(y => y.GroepId.Equals(groepsId)).VerwijderLeerlingUitGroep(lln);
             return View("ModifieerGroep", new GroepViewModel(groep, sessie));
 
         }
 
-        public IActionResult ModifieerGroepLeerlingToevoegen(Sessie sessie,String leerlingId,int groepId)
-        {
+        public IActionResult ModifieerGroepLeerlingToevoegen(Sessie sessie, String leerlingId, int groepId) {
             //throw new NotImplementedException();
 
             //Ik krijg in sessie.klas enkel de lln die al in een groep zitten...
             Groep groep = _groepsRepository.GetById(groepId);
-            if(leerlingId != null) { 
-            Leerling leerling = sessie.Klas.Leerlingen.First(x => x.LeerlingId.ToString().Equals(leerlingId));
-            groep.Leerlingen.Add(leerling);
-
-            return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+            if (leerlingId != null) {
+                Leerling leerling = sessie.Klas.Leerlingen.First(x => x.LeerlingId.ToString().Equals(leerlingId));
+                groep.Leerlingen.Add(leerling);
+                TempData["message"] = $"Leerling {leerling.Voornaam} {leerling.Naam} is toegevoegd";
+                return View("ModifieerGroep", new GroepViewModel(groep, sessie));
             } else {
                 TempData["error"] = "Selecteer een leerling om toe te voegen";
                 return View("ModifieerGroep", new GroepViewModel(groep, sessie));
             }
         }
         [HttpPost]
-        public IActionResult ModifieerGroepGroepsnaamWijzigen(Sessie sessie, GroepViewModel gVM, int groepId)
-        {
+        public IActionResult ModifieerGroepGroepsnaamWijzigen(Sessie sessie, GroepViewModel gVM, int groepId) {
             sessie.Groepen.First(x => x.GroepId.Equals(groepId)).Groepsnaam = gVM.GroepNaam;
             ViewBag.GroepsnaamSuccesvolVerandert = "ok";
             TempData["message"] = "Groepsnaam succesvol gewijzigd.";
