@@ -89,6 +89,13 @@ namespace g16_dotnet.Controllers
 
         public IActionResult ModifieerGroepVerwijderLeerling(Sessie sessie, int groepsId, int leerlingId)
         {
+            Groep groep = _groepsRepository.GetById(groepsId);
+            var lln = _groepsRepository.GetById(groepsId).Leerlingen.First(x => x.LeerlingId.Equals(leerlingId));
+            groep.VerwijderLeerlingUitGroep(lln);
+    
+            //sessie.Groepen.First(y => y.GroepId.Equals(groepsId)).VerwijderLeerlingUitGroep(lln);
+            return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+
             throw new NotImplementedException();
         }
 

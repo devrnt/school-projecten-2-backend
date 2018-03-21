@@ -27,6 +27,12 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Methods
+
+        public void VerwijderLeerlingUitGroep(Leerling lln)
+        {
+            Leerlingen.Remove(lln);
+        }
+
         public void BlokkeerPad()
         {
             Pad.Blokkeer();
