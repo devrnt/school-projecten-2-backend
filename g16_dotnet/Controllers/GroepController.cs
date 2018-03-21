@@ -104,16 +104,22 @@ namespace g16_dotnet.Controllers
 
             //Ik krijg in sessie.klas enkel de lln die al in een groep zitten...
             Groep groep = _groepsRepository.GetById(groepId);
+            if(leerlingId != null) { 
             Leerling leerling = sessie.Klas.Leerlingen.First(x => x.LeerlingId.ToString().Equals(leerlingId));
             groep.Leerlingen.Add(leerling);
 
             return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+            } else {
+                TempData["error"] = "Selecteer een leerling om toe te voegen";
+                return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+            }
         }
         [HttpPost]
         public IActionResult ModifieerGroepGroepsnaamWijzigen(Sessie sessie, GroepViewModel gVM, int groepId)
         {
             sessie.Groepen.First(x => x.GroepId.Equals(groepId)).Groepsnaam = gVM.GroepNaam;
             ViewBag.GroepsnaamSuccesvolVerandert = "ok";
+            TempData["message"] = "Groepsnaam succesvol gewijzigd.";
             return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepId), sessie));
         }
     }
