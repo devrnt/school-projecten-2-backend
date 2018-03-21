@@ -32,6 +32,7 @@ namespace g16_dotnet.Data.Repositories {
         public Sessie GetById(int id) {
             var sessie = _sessies
                 .Include(s => s.Klas)
+                    .ThenInclude(g=>g.Leerlingen)
                 .Include(s => s.Groepen)
                     .ThenInclude(g => g.Leerlingen)
                  .Include(s => s.Groepen)

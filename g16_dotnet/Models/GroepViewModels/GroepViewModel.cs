@@ -36,7 +36,7 @@ namespace g16_dotnet.Models.GroepViewModels
 
         private void CheckBeschikbareLeerlingen()
         {
-            foreach (var leerling in BeschikbareLeerlingen)
+            foreach (var leerling in Sessie.Klas.Leerlingen)
             {
                 bool antwoord = true;
 

@@ -66,10 +66,16 @@
                     }
                     else
                     {
-                        <td></td>
-                        <td>
-                            <a asp-controller="Groep" asp-action="ModifieerGroepLeerlingToevoegen" class="table-button"> Toevoegen </a>
-                        </td>
+                        using (Html.BeginForm("ModifieerGroepLeerlingToevoegen", "Groep",new { groepId = @Model.Groep.GroepId }, FormMethod.Post))
+                        {
+                            <td>
+                                @Html.DropDownList("leerlingId", @Model.BeschikbareLeerlingen.Select(x => new SelectListItem { Value = x.LeerlingId.ToString(), Text = x.Voornaam + " " + x.Naam }), "Kies een leerling")
+                            </td>
+                            <td>
+                                <input type="submit" value="Leerling toevoegen" class="table-button"/>
+                            </td>
+                        }
+                        
                     }
                 </tr>
             </tbody>

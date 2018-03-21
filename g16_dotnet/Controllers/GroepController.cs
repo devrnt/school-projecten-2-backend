@@ -79,7 +79,7 @@ namespace g16_dotnet.Controllers
 
         public IActionResult ModifieerGroep(Sessie sessie, int groepsId)
         {
-         
+           
 
             return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepsId), sessie));
 
@@ -96,12 +96,18 @@ namespace g16_dotnet.Controllers
             //sessie.Groepen.First(y => y.GroepId.Equals(groepsId)).VerwijderLeerlingUitGroep(lln);
             return View("ModifieerGroep", new GroepViewModel(groep, sessie));
 
-            throw new NotImplementedException();
         }
 
-        public IActionResult ModifieerGroepLeerlingToevoegen()
+        public IActionResult ModifieerGroepLeerlingToevoegen(Sessie sessie,String leerlingId,int groepId)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            //Ik krijg in sessie.klas enkel de lln die al in een groep zitten...
+            Groep groep = _groepsRepository.GetById(groepId);
+            Leerling leerling = sessie.Klas.Leerlingen.First(x => x.LeerlingId.ToString().Equals(leerlingId));
+            groep.Leerlingen.Add(leerling);
+
+            return View("ModifieerGroep", new GroepViewModel(groep, sessie));
         }
         [HttpPost]
         public IActionResult ModifieerGroepGroepsnaamWijzigen(Sessie sessie, GroepViewModel gVM, int groepId)
