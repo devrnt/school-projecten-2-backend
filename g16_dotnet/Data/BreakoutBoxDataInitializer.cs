@@ -35,9 +35,9 @@ namespace g16_dotnet.Data
                 var groepsBewerking3 = new GroepsBewerking("Deel door 3", 3, Operator.delen);
 
                 // Opdrachten
-                var opdracht1 = new Opdracht("nugget", oefening1, groepsBewerking1);
-                var opdracht2 = new Opdracht("gebouw", oefening2, groepsBewerking2);
-                var opdracht3 = new Opdracht("ballon", oefening3, groepsBewerking3);
+                var opdracht1 = new Opdracht("code1", oefening1, groepsBewerking1);
+                var opdracht2 = new Opdracht("code2", oefening2, groepsBewerking2);
+                var opdracht3 = new Opdracht("code3", oefening3, groepsBewerking3);
                 var opdrachten = new List<Opdracht> { opdracht1, opdracht2, opdracht3 };
                 _context.Opdrachten.AddRange(opdrachten);
 
@@ -116,7 +116,7 @@ namespace g16_dotnet.Data
 
                 foreach (var leerling in leerlingen1)
                     klas.Leerlingen.Add(leerling);
-                klas2.Leerlingen.Add(new Leerling("LaPlace", "Bucky", "bucky.laplace@student.synalco.be"));
+                klas2.Leerlingen.Add(new Leerling("LaPlace", "Bucky", "leerling@school.be"));
 
                 // Groep
                 var groep = new Groep("Het Eiland") { Pad = pad };
@@ -150,12 +150,12 @@ namespace g16_dotnet.Data
                 _context.SaveChanges();
 
                 // Leerkracht
-                var leerkracht = new Leerkracht("Protut", "Lydia", "lydia.protut@synalco.be") { Sessies = new List<Sessie> { sessie, sessie2 } };
+                var leerkracht = new Leerkracht("Protut", "Lydia", "leerkracht@school.be") { Sessies = new List<Sessie> { sessie, sessie2 } };
                 _context.Leerkrachten.Add(leerkracht);
-                ApplicationUser user = new ApplicationUser { UserName = "lydia.protut@synalco.be", Email = "lydia.protut@synalco.be" };
+                ApplicationUser user = new ApplicationUser { UserName = "leerkracht@school.be", Email = "leerkracht@school.be" };
                 await _userManager.CreateAsync(user, "P@ssword1");
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerkracht"));
-                user = new ApplicationUser { UserName = "bucky.laplace@student.synalco.be", Email = "bucky.laplace@student.synalco.be" };
+                user = new ApplicationUser { UserName = "leerling@school.be", Email = "leerling@school.be" };
                 await _userManager.CreateAsync(user, "P@ssword1");
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerling"));
 
