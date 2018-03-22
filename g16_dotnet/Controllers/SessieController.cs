@@ -62,7 +62,6 @@ namespace g16_dotnet.Controllers
                         // om via de filter in Session weg te schrijven
                         ViewData["sessieCode"] = sessieCode.ToString();
                         ViewData["Doelgroep"] = JsonConvert.SerializeObject(sessie.Doelgroep);
-                        HttpContext.Session.SetString("sessieCode", sessieCode.ToString());
                         return View("Index", sessie.Groepen);
                     }
                     else

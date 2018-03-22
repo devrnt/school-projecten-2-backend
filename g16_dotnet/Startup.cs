@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +30,8 @@ namespace g16_dotnet
                 options.UseSqlServer("Server=.\\sqlexpress;Database=BreakoutBox;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
             services.AddAuthorization(options => options.AddPolicy("Leerkracht", policy => policy.RequireClaim(ClaimTypes.Role, "Leerkracht")));
-            
+            services.AddAuthorization(options => options.AddPolicy("Leerling", policy => policy.RequireClaim(ClaimTypes.Role, "Leerling")));
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -49,9 +46,11 @@ namespace g16_dotnet
             services.AddScoped<IActieRepository, ActieRepository>();
             services.AddScoped<IGroepRepository, GroepRepository>();
             services.AddScoped<ILeerkrachtRepository, LeerkrachtRepository>();
+            services.AddScoped<ILeerlingRepository, LeerlingRepository>();
             services.AddScoped<PadFilter>();
             services.AddScoped<LeerkrachtFilter>();
             services.AddScoped<SessieFilter>();
+            services.AddScoped<LeerlingFilter>();
             services.AddTransient<BreakoutBoxDataInitializer>();
             
             services.AddTransient<IEmailSender, EmailSender>();

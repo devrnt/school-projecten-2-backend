@@ -23,6 +23,15 @@ namespace g16_dotnet.Tests.Controllers
             _groepController = new GroepController(_mockGroepRepository.Object) { TempData = new Mock<ITempDataDictionary>().Object };
         }
 
+        #region === Index ===
+        [Fact]
+        public void Index_ReturnsNotFoundResult()
+        {
+            var result = _groepController.Index();
+            Assert.IsType<NotFoundResult>(result);
+        }
+        #endregion
+
         #region === KiesGroep ===
         [Fact]
         public void KiesGroep_GeldigeGroep_ReturnsGroepOverzichtView() {

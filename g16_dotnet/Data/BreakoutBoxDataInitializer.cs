@@ -88,21 +88,21 @@ namespace g16_dotnet.Data
 
                 // Leerling
 
+            //    Leerling[] leerlingen1 =
+            //    { new Leerling("Balthazar", "Boma"),
+            //        new Leerling("Costermans", "Fernand"),
+            //        new Leerling("Crucke", "Bieke"),
+            //        new Leerling("De Backer", "Pascale"),
+            //        new Leerling("De Praetere","Maurice"),
+            //        new Leerling("De Tremmerie","pol"),
+            //        new Leerling("Van Hoeck","Doortje"),
+            //       new Leerling("Vertongen", "marc"),
+            //       new Leerling("Waterslaeghers", "Carmen")
+
+
+            //};
+
                 Leerling[] leerlingen1 =
-                { new Leerling("Balthazar", "Boma"),
-                    new Leerling("Costermans", "Fernand"),
-                    new Leerling("Crucke", "Bieke"),
-                    new Leerling("De Backer", "Pascale"),
-                    new Leerling("De Praetere","Maurice"),
-                    new Leerling("De Tremmerie","pol"),
-                    new Leerling("Van Hoeck","Doortje"),
-                   new Leerling("Vertongen", "marc"),
-                   new Leerling("Waterslaeghers", "Carmen")
-
-
-            };
-
-                Leerling[] leerlingen2 =
                 {
                     new Leerling("Halpert", "Jim"),
                     new Leerling("Beesley", "Pam"),
@@ -116,35 +116,24 @@ namespace g16_dotnet.Data
 
                 foreach (var leerling in leerlingen1)
                     klas.Leerlingen.Add(leerling);
-                foreach (var leerling in leerlingen2)
-                    klas2.Leerlingen.Add(leerling);
+                klas2.Leerlingen.Add(new Leerling("LaPlace", "Bucky", "bucky.laplace@student.synalco.be"));
 
                 // Groep
                 var groep = new Groep("Het Eiland") { Pad = pad };
                 var groep2 = new Groep("The Office") { Pad = pad2 };
                 var groep3 = new Groep("2B1") { Pad = pad3 };
                 var groep4 = new Groep("2B2") { Pad = pad4 };
-                foreach (var leerling in klas.Leerlingen.ToList())
+
+                for (int i = 0; i < 4; i++)
                 {
-                    if (groep.Leerlingen.Count<4)
-                    {
-                        groep.Leerlingen.Add(leerling);
-                    } else if (groep2.Leerlingen.Count < 3)
-                    {
-                        groep2.Leerlingen.Add(leerling);
-                    }
+                    groep2.Leerlingen.Add(leerlingen1[i]);
                 }
-                foreach (var leerling in klas2.Leerlingen.ToList())
+
+                for (int i = 4; i < leerlingen1.Length; i++)
                 {
-                    if (groep3.Leerlingen.Count<4)
-                    {
-                        groep3.Leerlingen.Add(leerling);
-                    } else if (groep4.Leerlingen.Count < 3)
-                    {
-                        groep4.Leerlingen.Add(leerling);
-                    }
+                    groep.Leerlingen.Add(leerlingen1[i]);
                 }
-               
+
 
                 Groep[] groepen = { groep, groep2, groep3, groep4 };
 
@@ -166,6 +155,10 @@ namespace g16_dotnet.Data
                 ApplicationUser user = new ApplicationUser { UserName = "lydia.protut@synalco.be", Email = "lydia.protut@synalco.be" };
                 await _userManager.CreateAsync(user, "P@ssword1");
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerkracht"));
+                user = new ApplicationUser { UserName = "bucky.laplace@student.synalco.be", Email = "bucky.laplace@student.synalco.be" };
+                await _userManager.CreateAsync(user, "P@ssword1");
+                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerling"));
+
                 _context.SaveChanges();
             }
             _context.SaveChanges();

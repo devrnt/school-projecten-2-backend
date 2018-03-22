@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using g16_dotnet.Models.GroepViewModels;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace g16_dotnet.Controllers {
     [ServiceFilter(typeof(SessieFilter))]
@@ -38,14 +39,10 @@ namespace g16_dotnet.Controllers {
                 return RedirectToAction(nameof(Index), "Sessie");
             }
 
-            try {
-                gekozenGroep.DeelnameBevestigd = true;
-                _groepsRepository.SaveChanges();
-                TempData["message"] = "Je hebt nu deelgenomen, zo dadelijk kan je beginnen";
-                ViewData["sessieId"] = sessieId;
-            } catch {
-                TempData["error"] = "Er is iets fout gelopen bij het kiezen van uw groep.";
-            }
+            gekozenGroep.DeelnameBevestigd = true;
+            _groepsRepository.SaveChanges();
+            TempData["message"] = "Je hebt nu deelgenomen, zo dadelijk kan je beginnen";
+            ViewData["sessieId"] = sessieId;
 
             return View("GroepOverzicht", gekozenGroep);
         }
@@ -66,48 +63,60 @@ namespace g16_dotnet.Controllers {
             return RedirectToAction("Index", "Spel", new { padId = huidigeGroep.Pad.PadId });
         }
 
-
-        public IActionResult ModifieerGroep(Sessie sessie, int groepsId) {
-
-
-            return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepsId), sessie));
-
-
-        }
-
-
-        public IActionResult ModifieerGroepVerwijderLeerling(Sessie sessie, int groepsId, int leerlingId) {
-            Groep groep = _groepsRepository.GetById(groepsId);
-            var lln = _groepsRepository.GetById(groepsId).Leerlingen.First(x => x.LeerlingId.Equals(leerlingId));
-            groep.VerwijderLeerlingUitGroep(lln);
-            TempData["message"] = $"Leerling {lln.Voornaam} {lln.Naam} is verwijderd";
-
-            //sessie.Groepen.First(y => y.GroepId.Equals(groepsId)).VerwijderLeerlingUitGroep(lln);
-            return View("ModifieerGroep", new GroepViewModel(groep, sessie));
-
-        }
-
-        public IActionResult ModifieerGroepLeerlingToevoegen(Sessie sessie, String leerlingId, int groepId) {
-            //throw new NotImplementedException();
-
-            //Ik krijg in sessie.klas enkel de lln die al in een groep zitten...
+        [Authorize(Policy = "Leerling")]
+        [ServiceFilter(typeof(LeerlingFilter))]
+        public IActionResult Deelnemen(Sessie sessie, Leerling leerling, int groepId)
+        {
             Groep groep = _groepsRepository.GetById(groepId);
-            if (leerlingId != null) {
-                Leerling leerling = sessie.Klas.Leerlingen.First(x => x.LeerlingId.ToString().Equals(leerlingId));
+            if (sessie.Klas.Leerlingen.Any(l => l.LeerlingId == leerling.LeerlingId))
+            {
                 groep.Leerlingen.Add(leerling);
-                TempData["message"] = $"Leerling {leerling.Voornaam} {leerling.Naam} is toegevoegd";
-                return View("ModifieerGroep", new GroepViewModel(groep, sessie));
-            } else {
-                TempData["error"] = "Selecteer een leerling om toe te voegen";
-                return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+                _groepsRepository.SaveChanges();
+            } else
+            {
+                TempData["error"] = "Je zit niet in de klas voor deze sessie!";
             }
+            return RedirectToAction("ValideerSessieCode", "Sessie", new { code = sessie.SessieCode.ToString()});
         }
-        [HttpPost]
-        public IActionResult ModifieerGroepGroepsnaamWijzigen(Sessie sessie, GroepViewModel gVM, int groepId) {
-            sessie.Groepen.First(x => x.GroepId.Equals(groepId)).Groepsnaam = gVM.GroepNaam;
-            ViewBag.GroepsnaamSuccesvolVerandert = "ok";
-            TempData["message"] = "Groepsnaam succesvol gewijzigd.";
-            return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepId), sessie));
-        }
+
+
+        //public IActionResult ModifieerGroep(Sessie sessie, int groepsId) {
+        //    return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepsId), sessie));
+        //}
+
+
+        //public IActionResult ModifieerGroepVerwijderLeerling(Sessie sessie, int groepsId, int leerlingId) {
+        //    Groep groep = _groepsRepository.GetById(groepsId);
+        //    var lln = _groepsRepository.GetById(groepsId).Leerlingen.First(x => x.LeerlingId.Equals(leerlingId));
+        //    groep.VerwijderLeerlingUitGroep(lln);
+        //    TempData["message"] = $"Leerling {lln.Voornaam} {lln.Naam} is verwijderd";
+
+        //    //sessie.Groepen.First(y => y.GroepId.Equals(groepsId)).VerwijderLeerlingUitGroep(lln);
+        //    return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+
+        //}
+
+        //public IActionResult ModifieerGroepLeerlingToevoegen(Sessie sessie, string leerlingId, int groepId) {
+        //    //throw new NotImplementedException();
+
+        //    //Ik krijg in sessie.klas enkel de lln die al in een groep zitten...
+        //    Groep groep = _groepsRepository.GetById(groepId);
+        //    if (leerlingId != null) {
+        //        Leerling leerling = sessie.Klas.Leerlingen.First(x => x.LeerlingId.ToString().Equals(leerlingId));
+        //        groep.Leerlingen.Add(leerling);
+        //        TempData["message"] = $"Leerling {leerling.Voornaam} {leerling.Naam} is toegevoegd";
+        //        return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+        //    } else {
+        //        TempData["error"] = "Selecteer een leerling om toe te voegen";
+        //        return View("ModifieerGroep", new GroepViewModel(groep, sessie));
+        //    }
+        //}
+        //[HttpPost]
+        //public IActionResult ModifieerGroepGroepsnaamWijzigen(Sessie sessie, GroepViewModel gVM, int groepId) {
+        //    sessie.Groepen.First(x => x.GroepId.Equals(groepId)).Groepsnaam = gVM.GroepNaam;
+        //    ViewBag.GroepsnaamSuccesvolVerandert = "ok";
+        //    TempData["message"] = "Groepsnaam succesvol gewijzigd.";
+        //    return View("ModifieerGroep", new GroepViewModel(_groepsRepository.GetById(groepId), sessie));
+        //}
     }
 }

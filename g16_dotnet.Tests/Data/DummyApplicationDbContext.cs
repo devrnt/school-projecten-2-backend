@@ -53,18 +53,18 @@ namespace g16_dotnet.Tests.Data
             Acties = new[] { Actie1, Actie2 };
 
             Pad = new Pad() { PadId = 1 };
-            Pad.AddOpdracht(Opdracht1);
-            Pad.AddOpdracht(Opdracht2);
-            Pad.AddActie(Actie1);
-            Pad.AddActie(Actie2);
+            Pad.AddOpdracht(Opdracht1, 1);
+            Pad.AddOpdracht(Opdracht2, 2);
+            Pad.AddActie(Actie1, 1);
+            Pad.AddActie(Actie2, 2);
             Pad.PadState = new OpdrachtPadState("Opdracht");
             PadMet1Opdracht = new Pad() { PadId = 5 };
-            PadMet1Opdracht.AddOpdracht(Opdracht1);
-            PadMet1Opdracht.AddActie(Actie1);
+            PadMet1Opdracht.AddOpdracht(Opdracht1, 1);
+            PadMet1Opdracht.AddActie(Actie1, 1);
             PadMet1Opdracht.PadState = new OpdrachtPadState("Opdracht");
             PadGeblokkeerd = new Pad() { PadId = 2 };
-            PadGeblokkeerd.AddOpdracht(Opdracht1);
-            PadGeblokkeerd.AddOpdracht(Opdracht2);
+            PadGeblokkeerd.AddOpdracht(Opdracht1, 1);
+            PadGeblokkeerd.AddOpdracht(Opdracht2, 2);
             PadGeblokkeerd.PadState = new GeblokkeerdPadState("Geblokkeerd");
 
 

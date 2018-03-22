@@ -11,11 +11,11 @@
     <h2 class="box-title box-title-display">Aanpassen groep</h2>
     <div class="box-container">
 
-        <div><p style="margin-bottom: 15px "><strong> Omschrijving</strong> :@Model.Sessie.Omschrijving</p></div>
+        <div><p style="margin-bottom: 15px "><strong> Omschrijving</strong> :Model.Sessie.Omschrijving</p></div>
         <table class="table">
             <thead>
                 <tr>
-                    @using (Html.BeginForm("ModifieerGroepGroepsnaamWijzigen", "Groep", new { groepId = @Model.Groep.GroepId }, FormMethod.Post)) {
+                    @using (Html.BeginForm("ModifieerGroepGroepsnaamWijzigen", "Groep", new { groepId = Model.Groep.GroepId }, FormMethod.Post)) {
 
                         <td>
                             <input asp-for="GroepNaam" class="box-input" style="padding: 14px 10px; text-align:left; margin:0" />
@@ -33,27 +33,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var leerling in @Model.Groep.Leerlingen) {
+                @foreach (var leerling in Model.Groep.Leerlingen) {
                     <tr>
                         <td> @($"{leerling.Voornaam} {leerling.Naam}")</td>
 
                         <td>
-                            <a asp-controller="Groep" asp-action="ModifieerGroepVerwijderLeerling" asp-route-groepsId="@Model.Groep.GroepId" asp-route-leerlingId="@leerling.LeerlingId" class="box-button box-button-danger box-button-small">Verwijderen</a>
+                            <a asp-controller="Groep" asp-action="ModifieerGroepVerwijderLeerling" asp-route-groepsId="Model.Groep.GroepId" asp-route-leerlingId="@leerling.LeerlingId" class="box-button box-button-danger box-button-small">Verwijderen</a>
                         </td>
 
                     </tr>
 
                 }
                 <tr>
-                    @if (@Model.Groep.Leerlingen.Count == 4) {
+                    @if (Model.Groep.Leerlingen.Count == 4) {
                         <td></td>
                         <td>
                             <a asp-controller="Groep" asp-action="ModifieerGroepLeerlingToevoegen" class="table-button not-active"> MAX 4 leerlingen </a>
                         </td>
                     } else {
-                        using (Html.BeginForm("ModifieerGroepLeerlingToevoegen", "Groep", new { groepId = @Model.Groep.GroepId }, FormMethod.Post)) {
+                        using (Html.BeginForm("ModifieerGroepLeerlingToevoegen", "Groep", new { groepId = Model.Groep.GroepId }, FormMethod.Post)) {
                             <td>
-                                @Html.DropDownList("leerlingId", @Model.BeschikbareLeerlingen.Select(x => new SelectListItem { Value = x.LeerlingId.ToString(), Text = x.Voornaam + " " + x.Naam }), "Kies een leerling", new { @class= "select-input" })
+                                @Html.DropDownList("leerlingId", Model.BeschikbareLeerlingen.Select(x => new SelectListItem { Value = x.LeerlingId.ToString(), Text = x.Voornaam + " " + x.Naam }), "Kies een leerling", new { @class= "select-input" })
                             </td>
                             <td>
                                 <input type="submit" value="Leerling toevoegen" class="box-button box-button-small"   />
@@ -64,6 +64,6 @@
                 </tr>
             </tbody>
         </table>
-        <a asp-controller="Sessie" asp-action="ValideerSessiecode" asp-route-code="@Model.Sessie.SessieCode" class="box-button-default" style="margin-top: 20px;">Keer terug naar lijst groepen</a>
+        <a asp-controller="Sessie" asp-action="ValideerSessiecode" asp-route-code="Model.Sessie.SessieCode" class="box-button-default" style="margin-top: 20px;">Keer terug naar lijst groepen</a>
     </div>
 </div>

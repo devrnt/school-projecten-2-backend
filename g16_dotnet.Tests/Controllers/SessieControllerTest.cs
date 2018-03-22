@@ -162,6 +162,13 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
+        public void WijzigGroepen_SessieNotFound_ReturnsNotFoundResult()
+        {
+            var result = _controller.WijzigGroepen(321, 0);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
         public void WijzigGroepen_PassesSessieIdToActionSelecteerSessie()
         {
             var result = _controller.WijzigGroepen(123, 0) as RedirectToActionResult;

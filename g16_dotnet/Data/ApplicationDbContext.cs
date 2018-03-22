@@ -19,6 +19,7 @@ namespace g16_dotnet.Data
         public DbSet<Actie> Acties { get; set; }
         public DbSet<Groep> Groepen { get; set; }
         public DbSet<Leerkracht> Leerkrachten { get; set; }
+        public DbSet<Leerling> Leerlingen { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
