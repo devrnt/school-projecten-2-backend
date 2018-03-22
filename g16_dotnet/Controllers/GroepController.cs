@@ -65,9 +65,11 @@ namespace g16_dotnet.Controllers {
 
         [Authorize(Policy = "Leerling")]
         [ServiceFilter(typeof(LeerlingFilter))]
-        public IActionResult Deelnemen(Sessie sessie, Leerling leerling, int groepId)
+        public IActionResult NeemDeel(Sessie sessie, Leerling leerling, int groepId)
         {
             Groep groep = _groepsRepository.GetById(groepId);
+            if (groep == null)
+                return NotFound();
             if (sessie.Klas.Leerlingen.Any(l => l.LeerlingId == leerling.LeerlingId))
             {
                 groep.Leerlingen.Add(leerling);

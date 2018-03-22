@@ -28,8 +28,10 @@ namespace g16_dotnet.Tests.Data
         public Groep Groep1 { get; set; }
         public Groep Groep2 { get; set; }
         public Klas Klas1 { get; set; }
+        public Klas Klas2 { get; set; }
         public Leerling Leerling1 { get; set; }
         public Leerling Leerling2 { get; set; }
+        public Leerling Leerling3 { get; set; }
 
         public Opdracht PadOpdracht1 { get; }
         public Leerkracht Leerkracht1 { get; set; }
@@ -72,9 +74,11 @@ namespace g16_dotnet.Tests.Data
             Groep2 = new Groep("Groep2") { GroepId = 2, Pad = PadGeblokkeerd, DeelnameBevestigd = false };
             Leerling1 = new Leerling("McDerp", "Derp");
             Leerling2 = new Leerling("Cena", "John");
+            Leerling3 = new Leerling("Flib", "Flub") { LeerlingId = 3};
             Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });
+            Klas2 = new Klas("Klas2", new List<Leerling> { Leerling3 });
             SessieAlleDeelnamesBevestigd = new Sessie(123, "Sessie1", "Dit is sessie1", new List<Groep> { Groep1 }, Klas1);
-            SessieNogDeelnamesTeBevestigen = new Sessie(321, "Sessie2", "Dit is sessie2", new List<Groep> { Groep2 }, Klas1);
+            SessieNogDeelnamesTeBevestigen = new Sessie(321, "Sessie2", "Dit is sessie2", new List<Groep> { Groep2 }, Klas2);
             Leerkracht1 = new Leerkracht("VanDam", "Alain", "alain.vandam@synalco.be") { Sessies = new List<Sessie> { SessieAlleDeelnamesBevestigd } };
         }
 

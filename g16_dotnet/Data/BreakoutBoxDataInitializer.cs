@@ -86,21 +86,6 @@ namespace g16_dotnet.Data
                 var klas = new Klas("2A");
                 var klas2 = new Klas("2B");
 
-                // Leerling
-
-            //    Leerling[] leerlingen1 =
-            //    { new Leerling("Balthazar", "Boma"),
-            //        new Leerling("Costermans", "Fernand"),
-            //        new Leerling("Crucke", "Bieke"),
-            //        new Leerling("De Backer", "Pascale"),
-            //        new Leerling("De Praetere","Maurice"),
-            //        new Leerling("De Tremmerie","pol"),
-            //        new Leerling("Van Hoeck","Doortje"),
-            //       new Leerling("Vertongen", "marc"),
-            //       new Leerling("Waterslaeghers", "Carmen")
-
-
-            //};
 
                 Leerling[] leerlingen1 =
                 {

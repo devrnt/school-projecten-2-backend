@@ -104,5 +104,44 @@ namespace g16_dotnet.Tests.Controllers
 
         #endregion
 
+        [Fact]
+        public void NeemDeel_GroepNotFound_ReturnsNotFoundResult()
+        {
+            var result = _groepController.NeemDeel(_context.SessieAlleDeelnamesBevestigd, _context.Leerling1, 2);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void NeemDeel_RedirectsToActionValideerSessieCodeInSessieController()
+        {
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal("ValideerSessieCode", result?.ActionName);
+            Assert.Equal("Sessie", result?.ControllerName);
+        }
+
+        [Fact]
+        public void NeemDeel_PassesSessieCodeToRedirectToAction()
+        {
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal("321", result?.RouteValues.Values.First());
+        }
+
+        [Fact]
+        public void NeemDeel_LeerlingInKlas_AddsLeerlingToGroep()
+        {
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3);
+            Assert.Contains(_context.Groep2.Leerlingen, l => l.LeerlingId == _context.Leerling3.LeerlingId);
+            _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Once);
+        }
+
+        [Fact]
+        public void NeemDeel_LeerlingNietInKlas_DoesNotChangeNorPersistData()
+        {
+            var aantal = _context.Groep2.Leerlingen.Count;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling1, 3);
+            Assert.Equal(aantal, _context.Groep2.Leerlingen.Count);
+            _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
+
     }
 }
