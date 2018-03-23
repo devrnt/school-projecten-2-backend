@@ -214,6 +214,19 @@ namespace g16_dotnet.Controllers
             return Json(new { sessie?.IsActief });
         }
 
+        /// <summary>
+        ///     Speelt het spel verder met meegegeven Pad
+        /// </summary>
+        /// <param name="padId">Het id van het te spelen Pad</param>
+        /// <returns>PartialView met een Pad als Model</returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult VerderSpelen(int padId)
+        {
+            Pad pad = new Pad() { PadId = padId };
+            return PartialView("_VerderSpelen", pad);
+        }
+
         private SelectList GetDoelgroepenAsSelectList(DoelgroepEnum doelgroep) {
             return new SelectList(Enum.GetValues(typeof(DoelgroepEnum))
                 .Cast<DoelgroepEnum>()

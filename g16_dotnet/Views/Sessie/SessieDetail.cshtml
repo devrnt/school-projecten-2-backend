@@ -66,22 +66,11 @@
 
 <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
 <script type="text/javascript">
-    var checkDeelnames = function () {
-        console.log("Checking deelnames...");
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("CheckDeelnames", "Sessie")",
-            data: { sessieId: @Model.SessieCode},
-            success: function (partialView) {
-                $("#groepenOverzicht").html(partialView);
-                setTimeout(checkDeelnames, 3000);
-            }
-        });
-    }
 
-    checkDeelnames();
-
+    window.localStorage.setItem("sessieId", @Model.SessieCode);
 </script>
+<script type="text/javascript" src="~/js/checkDeelnames.js">
+</script>    
 
 @* Script van jonas *@
 @*<script>

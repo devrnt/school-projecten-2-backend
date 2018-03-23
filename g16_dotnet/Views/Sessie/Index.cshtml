@@ -22,15 +22,14 @@ else
     <div class="box">
         <form asp-action="ValideerSessieCode">
             <h2 class="box-title box-title-display">Breakout Box</h2>
-            <div class="box-container">
-                <input class="box-input" name="code" id="sessieCode" placeholder="Sessie code">
-                <button class="box-button" type="submit" style="width: 100%;">Deelnemen</button>
+            <div class="box-container" id="indexWindow">
+                <img id="ajaxLoading" src="~/images/ajax-loader.gif" hidden>
             </div>
         </form>
     </div>
 }
 
-<script type="text/javascript">
-    window.localStorage.setItem("doelgroep", @Model?.Doelgroep.ToString())
+<script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="~/js/verderspelen.js">
 </script>
 

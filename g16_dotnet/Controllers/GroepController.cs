@@ -55,10 +55,15 @@ namespace g16_dotnet.Controllers {
         ///     RedirectToAction Index in SpelController
         ///     NotFoundResult indien de Groep niet werd gevonden     
         /// </returns>
-        public IActionResult StartSpel(int groepId) {
+        public IActionResult StartSpel(Sessie sessie, int groepId) {
             Groep huidigeGroep = _groepsRepository.GetById(groepId);
             if (huidigeGroep == null)
                 return NotFound();
+            if (!sessie.IsActief)
+            {
+                ViewData["sessieId"] = sessie.SessieCode;
+                return View("GroepOverzicht", huidigeGroep);
+            }
 
             return RedirectToAction("Index", "Spel", new { padId = huidigeGroep.Pad.PadId });
         }
