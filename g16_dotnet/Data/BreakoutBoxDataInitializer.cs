@@ -83,8 +83,8 @@ namespace g16_dotnet.Data
                 _context.Paden.AddRange(paden);
 
                 // Klas
-                var klas = new Klas("2A");
-                var klas2 = new Klas("2B");
+                var klas = new Klas("2A1");
+                var klas2 = new Klas("2TILE");
 
 
                 Leerling[] leerlingen1 =
@@ -106,8 +106,8 @@ namespace g16_dotnet.Data
                 // Groep
                 var groep = new Groep("Het Eiland") { Pad = pad };
                 var groep2 = new Groep("The Office") { Pad = pad2 };
-                var groep3 = new Groep("2B1") { Pad = pad3 };
-                var groep4 = new Groep("2B2") { Pad = pad4 };
+                var groep3 = new Groep("Plaats 1") { Pad = pad3 };
+                var groep4 = new Groep("Plaats 2") { Pad = pad4 };
 
                 for (int i = 0; i < 4; i++)
                 {
@@ -128,7 +128,7 @@ namespace g16_dotnet.Data
 
                 // Sessie
                 var sessie = new Sessie(123, "2A : Hoofdrekenen", "Enkel een pen en papier dienen gebruikt te worden", new List<Groep> { groep, groep2 }, klas);
-                var sessie2 = new Sessie(321, "2B : Hoofdrekenen", "Enkel een pen en papier dienen gebruikt te worden", new List<Groep> { groep3, groep4 }, klas2);
+                var sessie2 = new Sessie(321, "2TILE: Brugcursus Wiskunde", "Enkel een pen en papier dienen gebruikt te worden", new List<Groep> { groep3, groep4 }, klas2) { Doelgroep = DoelgroepEnum.Volwassenen};
                 Sessie[] sessies = { sessie, sessie2 };
 
                 _context.Sessies.AddRange(sessies);

@@ -78,6 +78,12 @@ namespace g16_dotnet.Controllers {
             {
                 TempData["error"] = "Je zit niet in de klas voor deze sessie!";
             }
+            if (sessie.Doelgroep == DoelgroepEnum.Volwassenen)
+            {
+                groep.DeelnameBevestigd = true;
+                _groepsRepository.SaveChanges();
+                return RedirectToAction(nameof(StartSpel), new { groepId });
+            }
             return RedirectToAction("ValideerSessieCode", "Sessie", new { code = sessie.SessieCode.ToString()});
         }
 
