@@ -125,12 +125,12 @@ body {
 }
 
 .box-button {
-
     cursor: pointer;
     outline: none;
     border: none;
     padding: 16px 20px;
     color: white;
+    //volwassen background-color: $yellow
     background-color: $main-color;
     text-transform: uppercase;
     font-family: 'Muli', sans-serif;
@@ -142,6 +142,13 @@ body {
     text-decoration: none;
     display: inline-block;
 }
+
+.login-beheer {
+    display: flex;
+    justify-content: center;
+    height: auto;
+}
+
 
 .box-button-secundary {
     cursor: pointer;
@@ -157,11 +164,8 @@ body {
     transition: all 0.15s ease-in-out;
     background-color: $light-purple;
     text-decoration: none;
-    position: absolute;
-    // 70px is the hight of the header
-    top: calc(8vh);
-    right: 4vw;
-    text-decoration: none;
+    display: block;
+    margin: 2rem 10px;
 }
 
 .box-button-default {
@@ -363,6 +367,14 @@ li#groep {
 
 
 /*#region Option Container */
+.options-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
 .option {
     width: 100px;
     height: 50px;
@@ -371,26 +383,23 @@ li#groep {
     justify-content: center;
     align-items: center;
     color: white;
-    position: absolute;
-    right: 1vw;
-    top: 30px;
+    margin-left: 50px;
+    position: relative;
 }
-
 
 
 .option::before {
     content: ' ';
-    position: absolute;
-    top: 50%;
-    left: -60%;
-    transform: translateY(-50%);
-    background-image: url(/images/icons/question-sign.svg);
-    background-position: center;
-    background-size: 59%;
-    background-repeat: no-repeat;
     height: 100%;
+    width: 50px;
+    position: absolute;
+    top: 0;
+    left: -50px;
     background-color: white;
-    width: 60%;
+    background-image: url(/images/icons/checkmark.svg);
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 

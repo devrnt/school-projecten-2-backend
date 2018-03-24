@@ -132,6 +132,12 @@ body {
   display: inline-block;
 }
 
+.login-beheer {
+  display: flex;
+  justify-content: center;
+  height: auto;
+}
+
 .box-button-secundary {
   cursor: pointer;
   outline: none;
@@ -146,10 +152,8 @@ body {
   transition: all 0.15s ease-in-out;
   background-color: #2979FF;
   text-decoration: none;
-  position: absolute;
-  top: calc(8vh);
-  right: 4vw;
-  text-decoration: none;
+  display: block;
+  margin: 2rem 10px;
 }
 
 .box-button-default {
@@ -188,7 +192,6 @@ body {
   margin: 1px 0;
   margin-left: 10px;
   text-decoration: none;
-  display: inline-block;
 }
 
 .box-button-yellow {
@@ -344,6 +347,14 @@ li#groep {
 
 /*#endregion */
 /*#region Option Container */
+.options-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
 .option {
   width: 100px;
   height: 50px;
@@ -352,24 +363,22 @@ li#groep {
   justify-content: center;
   align-items: center;
   color: white;
-  position: absolute;
-  right: 1vw;
-  top: 30px;
+  margin-left: 50px;
+  position: relative;
 }
 
 .option::before {
   content: ' ';
-  position: absolute;
-  top: 50%;
-  left: -60%;
-  transform: translateY(-50%);
-  background-image: url(/images/icons/question-sign-blue.svg);
-  background-position: center;
-  background-size: 59%;
-  background-repeat: no-repeat;
   height: 100%;
+  width: 50px;
+  position: absolute;
+  top: 0;
+  left: -50px;
   background-color: white;
-  width: 60%;
+  background-image: url(/images/icons/checkmark-blue.svg);
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 /*#endregion */
