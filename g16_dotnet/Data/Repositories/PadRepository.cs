@@ -25,7 +25,7 @@ namespace g16_dotnet.Data.Repositories
                     .ThenInclude(pa => pa.Actie)
                 .SingleOrDefault(p => p.PadId == id);
 
-            pad.Opdrachten.OrderBy(po => po.Order);
+            pad.Opdrachten = pad.Opdrachten.OrderBy(po => po.Order).ToList();
             pad.Acties.OrderBy(pa => pa.Order);
 
             switch (pad.State)

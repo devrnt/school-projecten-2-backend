@@ -11,6 +11,7 @@
         <div style="display: flex; flex-direction:column;margin-bottom: 10px; align-items:flex-start;">
             <p class="p-margin-top"><strong>Naam : </strong>@($"\t{Model.SessieNaam}")</p>
             <p class="p-margin-top"><strong>Code : </strong>@($"\t{Model.SessieCode}")</p>
+            <p class="p-margin-top"><strong>Klas : </strong>@($"\t{Model.Klas.Naam}")</p>
             <p class="p-margin-top" style="min-width:150px"><strong>Omschrijving : </strong>@($"\t{Model.SessieOmschrijving}")</p>
             <form method="post" asp-action="SelecteerDoelgroep" asp-route-sessieId="@Model.SessieCode">
                 <label for="doelgroep"><strong>Doelgroep: </strong></label>
@@ -20,11 +21,12 @@
             <p class="text-danger" style="display:none;" id="succes-doelgroep">De doelgroep werd succesvol gewijzigd</p>
 
             <div style="margin: 15px 0; width:100%; text-align:right">
-                @if (Model.IsActief && Model.Groepen.Count(g => g.DeelnameBevestigd) > 0) {
-                    <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="0" class="box-button-danger box-button-small" style="margin-top: 20px;">Blokkeer Alle Groepen</a>
-                    <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="1" class="box-button-default box-button-small">Deblokkeer Alle Groepen</a>
+                @if (Model.IsActief && Model.Groepen.Count(g => g.DeelnameBevestigd) > 0)
+        {
+            <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="0" class="box-button-danger box-button-small" style="margin-top: 20px;">Blokkeer Alle Groepen</a>
+            <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="1" class="box-button-default box-button-small">Deblokkeer Alle Groepen</a>
 
-                }
+}
             </div>
         </div>
         <table class="table">
@@ -70,6 +72,9 @@
     window.localStorage.setItem("sessieId", @Model.SessieCode);
 </script>
 <script type="text/javascript" src="~/js/checkDeelnames.js">
+    $(document).ready(function () {
+        checkDeelnamesModule.checkDeel();
+    });
 </script>    
 
 @* Script van jonas *@

@@ -14,7 +14,7 @@
                     setTimeout(checkDeelnames, 3000);
                 }
             });
-        }
+        };
         checkDeelnames();
     }
 
@@ -26,4 +26,4 @@
 
 $(document).ready(function () {
     checkDeelnamesModule.init();
-})
+});

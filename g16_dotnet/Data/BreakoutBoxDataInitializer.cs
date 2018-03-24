@@ -58,25 +58,25 @@ namespace g16_dotnet.Data
                 pad.AddActie(actie3, 3);
                 var pad2 = new Pad();
                 pad2.AddOpdracht(opdracht1, 1);
-                pad2.AddOpdracht(opdracht2, 2);
-                pad2.AddOpdracht(opdracht3, 3);
+                pad2.AddOpdracht(opdracht2, 3);
+                pad2.AddOpdracht(opdracht3, 2);
                 pad2.AddActie(actie1, 1);
-                pad2.AddActie(actie2, 2);
-                pad2.AddActie(actie3, 3);
+                pad2.AddActie(actie2, 3);
+                pad2.AddActie(actie3, 2);
                 var pad3 = new Pad();
-                pad3.AddOpdracht(opdracht1, 1);
-                pad3.AddOpdracht(opdracht2, 2);
+                pad3.AddOpdracht(opdracht1, 2);
+                pad3.AddOpdracht(opdracht2, 1);
                 pad3.AddOpdracht(opdracht3, 3);
-                pad3.AddActie(actie1, 1);
-                pad3.AddActie(actie2, 2);
+                pad3.AddActie(actie1, 2);
+                pad3.AddActie(actie2, 1);
                 pad3.AddActie(actie3, 3);
                 var pad4 = new Pad();
-                pad4.AddOpdracht(opdracht1, 1);
+                pad4.AddOpdracht(opdracht1, 3);
                 pad4.AddOpdracht(opdracht2, 2);
-                pad4.AddOpdracht(opdracht3, 3);
-                pad4.AddActie(actie1, 1);
+                pad4.AddOpdracht(opdracht3, 1);
+                pad4.AddActie(actie1, 3);
                 pad4.AddActie(actie2, 2);
-                pad4.AddActie(actie3, 3);
+                pad4.AddActie(actie3, 1);
                 var paden = new List<Pad> { pad, pad2, pad3, pad4 };
                 foreach (var item in paden)
                     item.PadState = new OpdrachtPadState("Opdracht");
@@ -93,10 +93,8 @@ namespace g16_dotnet.Data
                     new Leerling("Beesley", "Pam"),
                     new Leerling("Schrute", "Dwight"),
                     new Leerling("Howard", "Ryan"),
-                     new Leerling("Vandam", "Alain"),
-                    new Leerling("Pallemans", "Guido"),
                     new Leerling("Drets", "Michel"),
-                    new Leerling("Loosveld", "Franky")
+                    new Leerling("Loosveld", "Franky", "franky@school.be")
                 };
 
                 foreach (var leerling in leerlingen1)
@@ -114,7 +112,7 @@ namespace g16_dotnet.Data
                     groep2.Leerlingen.Add(leerlingen1[i]);
                 }
 
-                for (int i = 4; i < leerlingen1.Length; i++)
+                for (int i = 4; i < leerlingen1.Length-1; i++)
                 {
                     groep.Leerlingen.Add(leerlingen1[i]);
                 }
@@ -127,20 +125,25 @@ namespace g16_dotnet.Data
 
 
                 // Sessie
-                var sessie = new Sessie(123, "2A : Hoofdrekenen", "Enkel een pen en papier dienen gebruikt te worden", new List<Groep> { groep, groep2 }, klas);
-                var sessie2 = new Sessie(321, "2TILE: Brugcursus Wiskunde", "Enkel een pen en papier dienen gebruikt te worden", new List<Groep> { groep3, groep4 }, klas2) { Doelgroep = DoelgroepEnum.Volwassenen};
+                var sessie = new Sessie(123, "Hoofdrekenen", "Enkel een pen en papier dienen gebruikt te worden", new List<Groep> { groep, groep2 }, klas);
+                var sessie2 = new Sessie(321, "Brugcursus Wiskunde", "Enkel een pen en papier dienen gebruikt te worden", new List<Groep> { groep3, groep4 }, klas2) { Doelgroep = DoelgroepEnum.Volwassenen};
                 Sessie[] sessies = { sessie, sessie2 };
 
                 _context.Sessies.AddRange(sessies);
                 _context.SaveChanges();
 
-                // Leerkracht
+                // Leerkracht + user account
                 var leerkracht = new Leerkracht("Protut", "Lydia", "leerkracht@school.be") { Sessies = new List<Sessie> { sessie, sessie2 } };
                 _context.Leerkrachten.Add(leerkracht);
                 ApplicationUser user = new ApplicationUser { UserName = "leerkracht@school.be", Email = "leerkracht@school.be" };
                 await _userManager.CreateAsync(user, "P@ssword1");
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerkracht"));
+
+                // Leerling user account
                 user = new ApplicationUser { UserName = "leerling@school.be", Email = "leerling@school.be" };
+                await _userManager.CreateAsync(user, "P@ssword1");
+                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerling"));
+                user = new ApplicationUser { UserName = "franky@school.be", Email = "franky@school.be" };
                 await _userManager.CreateAsync(user, "P@ssword1");
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Leerling"));
 

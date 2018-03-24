@@ -3,8 +3,16 @@
     <h2 class="box-title box-title-display">Hoera!</h2>
     <div class="box-container">
         <h2>Proficiat, jullie hebben de schatkist gevonden!</h2>
+        <a asp-action="Index" asp-controller="Sessie" class="box-button" id="begin">Terug naar beginscherm</a>
     </div>
     <img src="~/images/balloon.png" alt="balloon" class="balloon" />
 
     <img src="~/images/treasure.png" alt="treasure" class="treasure" />
 </div>
+
+<script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $("#begin").on("click", function () {
+        window.localStorage.clear();
+    });
+</script>

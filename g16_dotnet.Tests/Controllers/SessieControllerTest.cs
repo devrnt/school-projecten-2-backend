@@ -80,10 +80,10 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
-        public void ValideerSessieCode_JuisteCode_PassesGroepenToViewViaModel()
+        public void ValideerSessieCode_JuisteCode_PassesSessieToViewViaModel()
         {
             var result = _controller.ValideerSessiecode("123") as ViewResult;
-            Assert.Single(result?.Model as IEnumerable<Groep>);
+            Assert.Equal(123, (result?.Model as Sessie).SessieCode);
         }
 
         [Fact]

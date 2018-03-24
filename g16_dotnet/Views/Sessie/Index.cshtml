@@ -1,11 +1,14 @@
-﻿@model g16_dotnet.Models.Domain.Sessie
+﻿@using Microsoft.AspNetCore.Identity
+@using g16_dotnet.Models
+@model g16_dotnet.Models.Domain.Sessie
 @{
     ViewData["Title"] = "Deelnemen sessie";
 }
 
-<a asp-action="BeheerSessies" class="box-button-secundary" style="margin-bottom:10px">
-    Beheer sessies
-</a>
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
 
 @if ((bool)(ViewData["codeIngegeven"]))
 {
@@ -15,7 +18,9 @@
             @Html.Partial($"_{Model.Doelgroep.ToString()}", Model.Groepen)
         </div>
     </div>
-
+    <script type="text/javascript">
+        window.localStorage.setItem("doelgroep", @(((int)Model.Doelgroep).ToString()));
+    </script>
 }
 else
 {
@@ -27,6 +32,20 @@ else
             </div>
         </form>
     </div>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+            <button type="submit" class="box-button-secundary">Uitloggen</button>
+        </form>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Sessie" class="box-button-secundary">Inloggen</a>
+    }
+
+    <a asp-action="BeheerSessies" class="box-button-secundary" style="margin-right:10em;">
+        Beheer sessies
+    </a>
 }
 
 <script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>

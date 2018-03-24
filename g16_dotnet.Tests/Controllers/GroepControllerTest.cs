@@ -80,24 +80,40 @@ namespace g16_dotnet.Tests.Controllers
 
         #region === StartSpel ===
         [Fact]
-        public void StartSpel_RedirectsToActionIndexInSpelController()
+        public void StartSpel_SessieActief_RedirectsToActionIndexInSpelController()
         {
-            var result = _groepController.StartSpel(1) as RedirectToActionResult;
+            _context.SessieAlleDeelnamesBevestigd.IsActief = true;
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
             Assert.Equal("Spel", result?.ControllerName);
         }
 
         [Fact]
-        public void StartSpel_PassesPadIdToActionIndexInSpelController()
+        public void StartSpel_SessieActief_PassesPadIdToActionIndexInSpelController()
         {
-            var result = _groepController.StartSpel(1) as RedirectToActionResult;
-            Assert.Equal(1, (result?.RouteValues.Values.First()));
+            _context.SessieAlleDeelnamesBevestigd.IsActief = true;
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as RedirectToActionResult;
+            Assert.Equal(1, result?.RouteValues.Values.First());
+        }
+
+        [Fact]
+        public void StartSpel_SessieNietActief_ReturnsGroepOverzichtView()
+        {
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as ViewResult;
+            Assert.Equal("GroepOverzicht", result?.ViewName);
+        }
+
+        [Fact]
+        public void StartSpel_SessieNietActief_PassesGroepToViewViaModel()
+        {
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as ViewResult;
+            Assert.Equal(1, (result?.Model as Groep).GroepId);
         }
 
         [Fact]
         public void StartSpel_GroepNietGevonden_ReturnsNotFoundResult()
         {
-            var result = _groepController.StartSpel(2);
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 2);
             Assert.IsType<NotFoundResult>(result);
         }
 

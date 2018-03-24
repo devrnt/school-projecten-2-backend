@@ -38,6 +38,8 @@ namespace g16_dotnet.Data.Repositories
             return _leerkrachten.Include(l => l.Sessies)
                 .ThenInclude(s => s.Groepen)
                 .ThenInclude(g => g.Leerlingen)
+                .Include(l => l.Sessies)
+                    .ThenInclude(s => s.Klas)
                 .SingleOrDefault(l => l.Email == email);
         }
 
@@ -46,6 +48,8 @@ namespace g16_dotnet.Data.Repositories
             return _leerkrachten.Include(l => l.Sessies)
                 .ThenInclude(s => s.Groepen)
                 .ThenInclude(g => g.Leerlingen)
+                .Include(l => l.Sessies)
+                    .ThenInclude(s => s.Klas)
                 .SingleOrDefault(l => l.LeerkrachtId == id);
         }
 

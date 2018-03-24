@@ -64,7 +64,11 @@ namespace g16_dotnet.Data.Repositories {
                             break;
                     }
                 }
+                sessie.Groepen = sessie.Groepen.OrderBy(g => g.Groepsnaam).ToList();
             }
+
+
+
             return sessie;
         }
 
