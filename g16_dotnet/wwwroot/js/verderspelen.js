@@ -31,6 +31,7 @@
     }
 
     function init() {
+
         $(document).ajaxStart(function () {
             $("#ajaxLoading").removeAttr("hidden");
         });

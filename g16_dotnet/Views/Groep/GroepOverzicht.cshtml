@@ -38,5 +38,6 @@
 <script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
     window.localStorage.setItem("sessieId", @ViewData["sessieId"]);
+    window.localStorage.setItem("padId", @Model.Pad.PadId);
 </script>
 <script type="text/javascript" src="~/js/checkSessie.js"></script>
