@@ -8,7 +8,7 @@
         <p class="action-description">
             @Model.HuidigeActie.Actie.Omschrijving
         </p>
-        <form asp-action="VoerActieUit" asp-route-padId="@Model.PadId">
+        <form asp-action="VoerActieUit" asp-route-padId="@Model.PadId" autocomplete="nope">
 
             <div>
                 <label for="toegangsCode" class="box-label"><b>Antwoord: </b></label>

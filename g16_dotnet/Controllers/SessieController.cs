@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace g16_dotnet.Controllers
@@ -167,34 +166,34 @@ namespace g16_dotnet.Controllers
             return PartialView("_GroepenOverzicht", new SessieDetailViewModel(sessie));
         }
 
-        /// <summary>
-        ///     Selecteer de Doelgroep voor een specifieke Sessie
-        /// </summary>
-        /// <param name="sessieId">De Sessie waarvoor de Doelgroep moet ingesteld worden</param>
-        /// <param name="doelgroep">De waarde van de gekozen DoelgroepEnum</param>
-        /// <returns>SessieDetail View met een SessieDetailViewModel als Model</returns>
-        [HttpPost]
-        [ServiceFilter(typeof(SessieFilter))]
-        public IActionResult SelecteerDoelgroep(int sessieId, int doelgroep) {
-            DoelgroepEnum gekozen = ((DoelgroepEnum)doelgroep);
-            var sessie =_sessieRepository.GetById(sessieId);
-            if (sessie == null) {
-                return NotFound();
-            }
-            if (Enum.GetValues(typeof(DoelgroepEnum)).Length > doelgroep && doelgroep >= 0)
-            {
-                ViewData["sessieCode"] = sessieId.ToString();
-                sessie.Doelgroep = gekozen;
-                _sessieRepository.SaveChanges();
-                ViewData["Doelgroep"] = JsonConvert.SerializeObject(sessie.Doelgroep);
-            } else
-            {
-                TempData["error"] = "Ongeldige doelgroep";
-            }
+        ///// <summary>
+        /////     Selecteer de Doelgroep voor een specifieke Sessie
+        ///// </summary>
+        ///// <param name="sessieId">De Sessie waarvoor de Doelgroep moet ingesteld worden</param>
+        ///// <param name="doelgroep">De waarde van de gekozen DoelgroepEnum</param>
+        ///// <returns>SessieDetail View met een SessieDetailViewModel als Model</returns>
+        //[HttpPost]
+        //[ServiceFilter(typeof(SessieFilter))]
+        //public IActionResult SelecteerDoelgroep(int sessieId, int doelgroep) {
+        //    DoelgroepEnum gekozen = ((DoelgroepEnum)doelgroep);
+        //    var sessie =_sessieRepository.GetById(sessieId);
+        //    if (sessie == null) {
+        //        return NotFound();
+        //    }
+        //    if (Enum.GetValues(typeof(DoelgroepEnum)).Length > doelgroep && doelgroep >= 0)
+        //    {
+        //        ViewData["sessieCode"] = sessieId.ToString();
+        //        sessie.Doelgroep = gekozen;
+        //        _sessieRepository.SaveChanges();
+        //        ViewData["Doelgroep"] = JsonConvert.SerializeObject(sessie.Doelgroep);
+        //    } else
+        //    {
+        //        TempData["error"] = "Ongeldige doelgroep";
+        //    }
 
-            return RedirectToAction(nameof(SelecteerSessie), new { sessieId });
+        //    return RedirectToAction(nameof(SelecteerSessie), new { sessieId });
 
-        }
+        //}
 
         /// <summary>
         ///     Controleert of de meegegeven sessie actief is

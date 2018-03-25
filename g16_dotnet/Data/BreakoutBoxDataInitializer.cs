@@ -79,7 +79,7 @@ namespace g16_dotnet.Data
                 pad4.AddActie(actie3, 1);
                 var paden = new List<Pad> { pad, pad2, pad3, pad4 };
                 foreach (var item in paden)
-                    item.PadState = new OpdrachtPadState("Opdracht");
+                    item.PadState = new OpdrachtPadState();
                 _context.Paden.AddRange(paden);
 
                 // Klas

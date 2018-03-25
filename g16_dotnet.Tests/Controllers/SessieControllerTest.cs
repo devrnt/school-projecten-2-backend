@@ -208,31 +208,31 @@ namespace g16_dotnet.Tests.Controllers
         }
         #endregion
 
-        #region === SelecteerDoelgroep ===
-        [Fact]
-        public void SelecteerDoelGroep_SessieNotFound_ReturnsNotFoundResult()
-        {
-            var result = _controller.SelecteerDoelgroep(321, 0);
-            Assert.IsType<NotFoundResult>(result);
-        }
+        //#region === SelecteerDoelgroep ===
+        //[Fact]
+        //public void SelecteerDoelGroep_SessieNotFound_ReturnsNotFoundResult()
+        //{
+        //    var result = _controller.SelecteerDoelgroep(321, 0);
+        //    Assert.IsType<NotFoundResult>(result);
+        //}
 
-        [Fact]
-        public void SelecteerDoelGroep_SessieValidDoelGroepInvalid_DoesNotChangeOrPersistData()
-        {
-            var sessie = _context.SessieAlleDeelnamesBevestigd;
-            var result = _controller.SelecteerDoelgroep(123, -1) as ViewResult;
-            Assert.Equal(DoelgroepEnum.Jongeren, sessie.Doelgroep);
-            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
-        }
+        //[Fact]
+        //public void SelecteerDoelGroep_SessieValidDoelGroepInvalid_DoesNotChangeOrPersistData()
+        //{
+        //    var sessie = _context.SessieAlleDeelnamesBevestigd;
+        //    var result = _controller.SelecteerDoelgroep(123, -1) as ViewResult;
+        //    Assert.Equal(DoelgroepEnum.Jongeren, sessie.Doelgroep);
+        //    _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Never);
+        //}
 
-        [Fact]
-        public void SelecteerDoelGroep_SessieValidDoelGroepValid_DoesNotChangeOrPersistData()
-        {
-            var sessie = _context.SessieAlleDeelnamesBevestigd;
-            var result = _controller.SelecteerDoelgroep(123, 1) as ViewResult;
-            Assert.Equal(DoelgroepEnum.Volwassenen, sessie.Doelgroep);
-            _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
-        }
-        #endregion
+        //[Fact]
+        //public void SelecteerDoelGroep_SessieValidDoelGroepValid_DoesNotChangeOrPersistData()
+        //{
+        //    var sessie = _context.SessieAlleDeelnamesBevestigd;
+        //    var result = _controller.SelecteerDoelgroep(123, 1) as ViewResult;
+        //    Assert.Equal(DoelgroepEnum.Volwassenen, sessie.Doelgroep);
+        //    _mockSessieRepository.Verify(m => m.SaveChanges(), Times.Once);
+        //}
+        //#endregion
     }
 }

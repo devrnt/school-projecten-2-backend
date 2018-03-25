@@ -7,7 +7,8 @@
                 class: "box-input",
                 name: "code",
                 id: "sessieCode",
-                placeholder: "Sessie code"
+                placeholder: "Sessie code",
+                autocomplete: "nope"
             })
         ).append(
             $("<button>").attr({

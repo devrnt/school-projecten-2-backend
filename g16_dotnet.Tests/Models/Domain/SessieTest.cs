@@ -37,7 +37,7 @@ namespace g16_dotnet.Tests.Models.Domain
         [Fact]
         public void WijzigGroepen_BlokkeerBehaviourBehaviourId2_SetsPadOntgrendeldInAllGroep()
         {
-            _sessie.Groepen.All(g => { g.Pad.PadState = new VergrendeldPadState("Vergrendeld"); return true; });
+            _sessie.Groepen.All(g => { g.Pad.PadState = new VergrendeldPadState(); return true; });
             _sessie.WijzigGroepen(2, 0);
             Assert.True(_sessie.Groepen.All(g => g.Pad.PadState.StateName == "Opdracht"));
         }

@@ -128,11 +128,27 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
-        public void NeemDeel_RedirectsToActionValideerSessieCodeInSessieController()
+        public void NeemDeel_DoelgroepJongeren_RedirectsToActionValideerSessieCodeInSessieController()
         {
             var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
             Assert.Equal("ValideerSessieCode", result?.ActionName);
             Assert.Equal("Sessie", result?.ControllerName);
+        }
+
+        [Fact]
+        public void NeemDeel_DoelgroepVolwassenen_RedirectsToActionStartSpel()
+        {
+            _context.SessieNogDeelnamesTeBevestigen.Doelgroep = DoelgroepEnum.Volwassenen;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal("StartSpel", result?.ActionName);
+        }
+
+        [Fact]
+        public void NeemDeel_DoelgroepVolwassenen_PassesGroepIdToActionStartSpel()
+        {
+            _context.SessieNogDeelnamesTeBevestigen.Doelgroep = DoelgroepEnum.Volwassenen;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal(3, result?.RouteValues.Values.First());
         }
 
         [Fact]
@@ -151,8 +167,18 @@ namespace g16_dotnet.Tests.Controllers
         }
 
         [Fact]
-        public void NeemDeel_LeerlingNietInKlas_DoesNotChangeNorPersistData()
+        public void NeemDeel_LeerlingNietInKlasJongeren_DoesNotChangeNorPersistData()
         {
+            var aantal = _context.Groep2.Leerlingen.Count;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling1, 3);
+            Assert.Equal(aantal, _context.Groep2.Leerlingen.Count);
+            _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
+
+        [Fact]
+        public void NeemDeel_LeerlingNietInKlasVolwassenen_DoesNotChangeNorPersistData()
+        {
+            _context.SessieNogDeelnamesTeBevestigen.Doelgroep = DoelgroepEnum.Volwassenen;
             var aantal = _context.Groep2.Leerlingen.Count;
             var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling1, 3);
             Assert.Equal(aantal, _context.Groep2.Leerlingen.Count);

@@ -22,7 +22,7 @@
         <h3 class="groepsBewerking">
             @Model.HuidigeOpdracht.Opdracht.GroepsBewerking.Omschrijving
         </h3>
-        <form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId">
+        <form asp-action="BeantwoordVraag" asp-route-padId="@Model.PadId" autocomplete="nope">
             <div class="form-inline">
                 <div class="">
                     <label for="groepsAntwoord"></label>

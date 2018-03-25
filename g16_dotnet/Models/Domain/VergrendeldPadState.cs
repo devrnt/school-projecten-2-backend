@@ -4,14 +4,14 @@ namespace g16_dotnet.Models.Domain
 {
     public class VergrendeldPadState : PadState
     {
-        public VergrendeldPadState(string name) : base(name)
+        public VergrendeldPadState() : base("Vergrendeld")
         {
 
         }
 
         public override void Ontgrendel(Pad pad)
         {
-            pad.PadState = new OpdrachtPadState("Opdracht");
+            pad.PadState = new OpdrachtPadState();
             pad.HuidigeOpdracht.AantalPogingen = 0;
         }
 

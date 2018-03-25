@@ -30,12 +30,12 @@ namespace g16_dotnet.Models.Domain
 
         public virtual void Vergrendel(Pad pad)
         {
-            pad.PadState = new VergrendeldPadState("Vergrendeld");
+            pad.PadState = new VergrendeldPadState();
         }
 
         public virtual void Blokkeer(Pad pad)
         {
-            pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+            pad.PadState = new GeblokkeerdPadState();
         }
 
         public virtual void Deblokkeer(Pad pad)

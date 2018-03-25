@@ -124,7 +124,7 @@ namespace g16_dotnet.Tests.Controllers
         public void BeantwoordVraag_PadNietInOpdrachtPadState_DoesNotChangeOrPersistData()
         {
             PadOpdracht opdracht = _context.Pad.HuidigeOpdracht;
-            _context.Pad.PadState = new ActiePadState("Actie");
+            _context.Pad.PadState = new ActiePadState();
             _spelController.BeantwoordVraag(1, "2");
             Assert.Equal(0, _context.Pad.HuidigeOpdracht.AantalPogingen);
             Assert.False(opdracht.IsVoltooid);
@@ -138,7 +138,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_JuisteCode_RedirectsToIndex()
         {
             _context.Pad.HuidigeOpdracht.IsVoltooid = true;
-            _context.Pad.PadState = new ActiePadState("Actie");
+            _context.Pad.PadState = new ActiePadState();
             var result = _spelController.VoerActieUit(_context.Pad.PadId, "toegangsCode678") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
         }
@@ -147,7 +147,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_FouteCode_RedirectsToIndex()
         {
             _context.Pad.HuidigeOpdracht.IsVoltooid = true;
-            _context.Pad.PadState = new ActiePadState("Actie");
+            _context.Pad.PadState = new ActiePadState();
             var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
 
@@ -157,7 +157,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_JuisteCode_PassesPadIdToIndexAction()
         {
             _context.Pad.HuidigeOpdracht.IsVoltooid = true;
-            _context.Pad.PadState = new ActiePadState("Actie");
+            _context.Pad.PadState = new ActiePadState();
             var result = _spelController.VoerActieUit(_context.Pad.PadId, "toegangsCode678") as RedirectToActionResult;
             Assert.Equal(1, result?.RouteValues.Values.First());
         }
@@ -166,7 +166,7 @@ namespace g16_dotnet.Tests.Controllers
         public void VoerActieUit_FouteCode_PassesPadIdToIndexAction()
         {
             _context.Pad.HuidigeOpdracht.IsVoltooid = true;
-            _context.Pad.PadState = new ActiePadState("Actie");
+            _context.Pad.PadState = new ActiePadState();
             var result = _spelController.VoerActieUit(_context.Pad.PadId, "uvw") as RedirectToActionResult;
             Assert.Equal(1, result?.RouteValues.Values.First());
         }
@@ -174,7 +174,7 @@ namespace g16_dotnet.Tests.Controllers
         [Fact]
         public void VoerActieUit_PadNietInActiePadState_DoesNotChangeOrPersistData()
         {
-            _context.Pad.PadState = new OpdrachtPadState("Opdracht");
+            _context.Pad.PadState = new OpdrachtPadState();
             PadActie actie = _context.Pad.HuidigeActie;
             _spelController.VoerActieUit(1, "abc");
             Assert.False(actie.IsUitgevoerd);

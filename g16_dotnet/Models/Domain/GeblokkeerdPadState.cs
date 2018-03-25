@@ -5,7 +5,7 @@ namespace g16_dotnet.Models.Domain
 {
     public class GeblokkeerdPadState : PadState
     {
-        public GeblokkeerdPadState(string name) : base(name)
+        public GeblokkeerdPadState() : base("Geblokkeerd")
         {
 
         }
@@ -13,9 +13,9 @@ namespace g16_dotnet.Models.Domain
         public override void Deblokkeer(Pad pad)
         {
             if (pad.Voortgang <= pad.Acties.Count(a => a.IsUitgevoerd))
-                pad.PadState = new OpdrachtPadState("Opdracht");
+                pad.PadState = new OpdrachtPadState();
             else
-                pad.PadState = new ActiePadState("Actie");
+                pad.PadState = new ActiePadState();
         }
     }
 }

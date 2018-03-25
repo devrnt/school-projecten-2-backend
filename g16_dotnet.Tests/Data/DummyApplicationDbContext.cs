@@ -59,15 +59,15 @@ namespace g16_dotnet.Tests.Data
             Pad.AddOpdracht(Opdracht2, 2);
             Pad.AddActie(Actie1, 1);
             Pad.AddActie(Actie2, 2);
-            Pad.PadState = new OpdrachtPadState("Opdracht");
+            Pad.PadState = new OpdrachtPadState();
             PadMet1Opdracht = new Pad() { PadId = 5 };
             PadMet1Opdracht.AddOpdracht(Opdracht1, 1);
             PadMet1Opdracht.AddActie(Actie1, 1);
-            PadMet1Opdracht.PadState = new OpdrachtPadState("Opdracht");
+            PadMet1Opdracht.PadState = new OpdrachtPadState();
             PadGeblokkeerd = new Pad() { PadId = 2 };
             PadGeblokkeerd.AddOpdracht(Opdracht1, 1);
             PadGeblokkeerd.AddOpdracht(Opdracht2, 2);
-            PadGeblokkeerd.PadState = new GeblokkeerdPadState("Geblokkeerd");
+            PadGeblokkeerd.PadState = new GeblokkeerdPadState();
 
 
             Groep1 = new Groep("Groep1") { GroepId = 1, Pad = Pad, DeelnameBevestigd = true };

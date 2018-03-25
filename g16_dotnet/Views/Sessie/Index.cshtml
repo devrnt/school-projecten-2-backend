@@ -16,8 +16,13 @@
         <h2 class="box-title box-title-display">Kies Groep</h2>
         <div class="box-container">
             @Html.Partial($"_{Model.Doelgroep.ToString()}", Model.Groepen)
+            <div class="box-button-group">
+                <a asp-action="Index" asp-controller="Sessie" class="box-button" id="begin">Terug naar beginscherm</a>
+            </div>
         </div>
+
     </div>
+
     <script type="text/javascript">
         window.localStorage.setItem("doelgroep", @(((int)Model.Doelgroep).ToString()));
     </script>
@@ -33,13 +38,16 @@ else
         </form>
     </div>
     <div class="login-beheer">
-        @if (SignInManager.IsSignedIn(User)) {
-        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
-            <button type="submit" class="box-button-secundary" id="uitloggen">Uitloggen</button>
-        </form>
-} else {
-    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Sessie" class="box-button-secundary">Inloggen</a>
-}
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                <button type="submit" class="box-button-secundary" id="uitloggen">Uitloggen</button>
+            </form>
+        }
+        else
+        {
+            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Sessie" class="box-button-secundary">Inloggen</a>
+        }
 
         <a asp-action="BeheerSessies" class="box-button-secundary">
             Beheer sessies

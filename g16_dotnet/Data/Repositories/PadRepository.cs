@@ -31,19 +31,19 @@ namespace g16_dotnet.Data.Repositories
             switch (pad.State)
             {
                 case States.Geblokkeerd:
-                    pad.PadState = new GeblokkeerdPadState("Geblokkeerd");
+                    pad.PadState = new GeblokkeerdPadState();
                     break;
                 case States.Opdracht:
-                    pad.PadState = new OpdrachtPadState("Opdracht");
+                    pad.PadState = new OpdrachtPadState();
                     break;
                 case States.Actie:
-                    pad.PadState = new ActiePadState("Actie");
+                    pad.PadState = new ActiePadState();
                     break;
                 case States.Vergrendeld:
-                    pad.PadState = new VergrendeldPadState("Vergrendeld");
+                    pad.PadState = new VergrendeldPadState();
                     break;
                 case States.Schatkist:
-                    pad.PadState = new SchatkistPadState("Schatkist");
+                    pad.PadState = new SchatkistPadState();
                     break;
             }
 

@@ -50,6 +50,7 @@ namespace g16_dotnet.Controllers {
         /// <summary>
         ///     Start het spel voor de gekozen groep
         /// </summary>
+        /// <param name="sessie">De huidige sessie</param>
         /// <param name="groepId">Id van de gekozen groep</param>
         /// <returns>
         ///     RedirectToAction Index in SpelController
@@ -88,16 +89,17 @@ namespace g16_dotnet.Controllers {
             {
                 groep.Leerlingen.Add(leerling);
                 _groepsRepository.SaveChanges();
+                if (sessie.Doelgroep == DoelgroepEnum.Volwassenen)
+                {
+                    groep.DeelnameBevestigd = true;
+                    _groepsRepository.SaveChanges();
+                    return RedirectToAction(nameof(StartSpel), new { groepId });
+                }
             } else
             {
                 TempData["error"] = "Je zit niet in de klas voor deze sessie!";
             }
-            if (sessie.Doelgroep == DoelgroepEnum.Volwassenen)
-            {
-                groep.DeelnameBevestigd = true;
-                _groepsRepository.SaveChanges();
-                return RedirectToAction(nameof(StartSpel), new { groepId });
-            }
+            
             return RedirectToAction("ValideerSessieCode", "Sessie", new { code = sessie.SessieCode.ToString()});
         }
     }
