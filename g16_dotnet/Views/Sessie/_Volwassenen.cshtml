@@ -1,0 +1,50 @@
+﻿@model IEnumerable<g16_dotnet.Models.Domain.Groep>
+
+
+<div>
+    <p style="margin-bottom: 15px ">
+        <strong> Omschrijving</strong> : @ViewData["sessieOmschrijving"]
+    </p>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Plaats</th>
+            <th>Student</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var groep in Model)
+        {
+            <tr>
+                <td>@groep.Groepsnaam</td>
+                <td>
+                    <ul class="table-ul">
+                        @if (groep.Leerlingen.Count == 0)
+                        {
+                            <li>Deze plaats is nog vrij</li>
+                        }
+                        else
+                        {
+                            <li>
+                                @($"{groep.Leerlingen.FirstOrDefault()?.Voornaam} {groep.Leerlingen.FirstOrDefault()?.Naam}")
+                            </li>
+
+                        }
+                    </ul>
+                </td>
+                <td style="text-align:right;">
+                    @if (!groep.DeelnameBevestigd)
+                    {
+                        <a asp-controller="Groep" class="table-button" asp-action="NeemDeel" asp-route-groepId="@groep.GroepId">Deelnemen</a>
+                    }
+                    else
+                    {
+                        <span>Deze plaats is al ingenomen</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -4,12 +4,11 @@ using g16_dotnet.Tests.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Xunit;
 
-namespace g16_dotnet.Tests.Controllers {
+namespace g16_dotnet.Tests.Controllers
+{
     public class GroepControllerTest {
         private readonly DummyApplicationDbContext _context;
         private GroepController _groepController;
@@ -24,19 +23,35 @@ namespace g16_dotnet.Tests.Controllers {
             _groepController = new GroepController(_mockGroepRepository.Object) { TempData = new Mock<ITempDataDictionary>().Object };
         }
 
+        #region === Index ===
+        [Fact]
+        public void Index_ReturnsNotFoundResult()
+        {
+            var result = _groepController.Index();
+            Assert.IsType<NotFoundResult>(result);
+        }
+        #endregion
+
         #region === KiesGroep ===
         [Fact]
         public void KiesGroep_GeldigeGroep_ReturnsGroepOverzichtView() {
             var session = _context.SessieNogDeelnamesTeBevestigen;
-            var result = _groepController.KiesGroep(session, 3) as ViewResult;
+            var result = _groepController.KiesGroep(1, 3) as ViewResult;
             Assert.Equal("GroepOverzicht", result?.ViewName);
         }
 
         [Fact]
         public void KiesGroep_GeldigeGroep_CallsSaveChanges() {
             var session = _context.SessieNogDeelnamesTeBevestigen;
-            var result = _groepController.KiesGroep(session, 3) as ViewResult;
+            var result = _groepController.KiesGroep(1, 3) as ViewResult;
             _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Once());
+        }
+
+        [Fact]
+        public void KiesGroep_GeldigeGroep_PassesSessieIdInViewData()
+        {
+            var result = _groepController.KiesGroep(1, 3) as ViewResult;
+            Assert.Equal(1, result?.ViewData["sessieId"]);
         }
 
         [Fact]
@@ -49,14 +64,14 @@ namespace g16_dotnet.Tests.Controllers {
         [Fact]
         public void KiesGroep_OngeldigeGroep_ReturnsNotFound() {
             var session = _context.SessieNogDeelnamesTeBevestigen;
-            var result = _groepController.KiesGroep(session, 1222);
+            var result = _groepController.KiesGroep(1, 1222);
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
         public void KiesGroep_GroepIsAlGekozen_RedirectsToIndexInSessieController()
         {
-            var result = _groepController.KiesGroep(_context.SessieNogDeelnamesTeBevestigen, 1) as RedirectToActionResult;
+            var result = _groepController.KiesGroep(1, 1) as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
             Assert.Equal("Sessie", result?.ControllerName);
         }
@@ -67,25 +82,32 @@ namespace g16_dotnet.Tests.Controllers {
         [Fact]
         public void StartSpel_SessieActief_RedirectsToActionIndexInSpelController()
         {
-            var sessie = _context.SessieAlleDeelnamesBevestigd;
-            sessie.IsActief = true;
-            var result = _groepController.StartSpel(sessie, 1) as RedirectToActionResult;
+            _context.SessieAlleDeelnamesBevestigd.IsActief = true;
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as RedirectToActionResult;
             Assert.Equal("Index", result?.ActionName);
             Assert.Equal("Spel", result?.ControllerName);
         }
 
         [Fact]
+        public void StartSpel_SessieActief_PassesPadIdToActionIndexInSpelController()
+        {
+            _context.SessieAlleDeelnamesBevestigd.IsActief = true;
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as RedirectToActionResult;
+            Assert.Equal(1, result?.RouteValues.Values.First());
+        }
+
+        [Fact]
         public void StartSpel_SessieNietActief_ReturnsGroepOverzichtView()
         {
-            var result = _groepController.StartSpel(_context.SessieNogDeelnamesTeBevestigen, 1) as ViewResult;
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as ViewResult;
             Assert.Equal("GroepOverzicht", result?.ViewName);
         }
 
         [Fact]
         public void StartSpel_SessieNietActief_PassesGroepToViewViaModel()
         {
-            var result = _groepController.StartSpel(_context.SessieNogDeelnamesTeBevestigen, 1) as ViewResult;
-            Assert.Equal(_context.Groep1.Groepsnaam, (result?.Model as Groep).Groepsnaam);
+            var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 1) as ViewResult;
+            Assert.Equal(1, (result?.Model as Groep).GroepId);
         }
 
         [Fact]
@@ -94,7 +116,74 @@ namespace g16_dotnet.Tests.Controllers {
             var result = _groepController.StartSpel(_context.SessieAlleDeelnamesBevestigd, 2);
             Assert.IsType<NotFoundResult>(result);
         }
+
+
         #endregion
+
+        [Fact]
+        public void NeemDeel_GroepNotFound_ReturnsNotFoundResult()
+        {
+            var result = _groepController.NeemDeel(_context.SessieAlleDeelnamesBevestigd, _context.Leerling1, 2);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void NeemDeel_DoelgroepJongeren_RedirectsToActionValideerSessieCodeInSessieController()
+        {
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal("ValideerSessieCode", result?.ActionName);
+            Assert.Equal("Sessie", result?.ControllerName);
+        }
+
+        [Fact]
+        public void NeemDeel_DoelgroepVolwassenen_RedirectsToActionStartSpel()
+        {
+            _context.SessieNogDeelnamesTeBevestigen.Doelgroep = DoelgroepEnum.Volwassenen;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal("StartSpel", result?.ActionName);
+        }
+
+        [Fact]
+        public void NeemDeel_DoelgroepVolwassenen_PassesGroepIdToActionStartSpel()
+        {
+            _context.SessieNogDeelnamesTeBevestigen.Doelgroep = DoelgroepEnum.Volwassenen;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal(3, result?.RouteValues.Values.First());
+        }
+
+        [Fact]
+        public void NeemDeel_PassesSessieCodeToRedirectToAction()
+        {
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3) as RedirectToActionResult;
+            Assert.Equal("321", result?.RouteValues.Values.First());
+        }
+
+        [Fact]
+        public void NeemDeel_LeerlingInKlas_AddsLeerlingToGroep()
+        {
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling3, 3);
+            Assert.Contains(_context.Groep2.Leerlingen, l => l.LeerlingId == _context.Leerling3.LeerlingId);
+            _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Once);
+        }
+
+        [Fact]
+        public void NeemDeel_LeerlingNietInKlasJongeren_DoesNotChangeNorPersistData()
+        {
+            var aantal = _context.Groep2.Leerlingen.Count;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling1, 3);
+            Assert.Equal(aantal, _context.Groep2.Leerlingen.Count);
+            _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
+
+        [Fact]
+        public void NeemDeel_LeerlingNietInKlasVolwassenen_DoesNotChangeNorPersistData()
+        {
+            _context.SessieNogDeelnamesTeBevestigen.Doelgroep = DoelgroepEnum.Volwassenen;
+            var aantal = _context.Groep2.Leerlingen.Count;
+            var result = _groepController.NeemDeel(_context.SessieNogDeelnamesTeBevestigen, _context.Leerling1, 3);
+            Assert.Equal(aantal, _context.Groep2.Leerlingen.Count);
+            _mockGroepRepository.Verify(m => m.SaveChanges(), Times.Never);
+        }
 
     }
 }

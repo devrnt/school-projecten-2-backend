@@ -7,8 +7,6 @@ namespace g16_dotnet.Models.Domain
         #region Fields and Properties
         public int VolgNr { get; set; }
         public string ToegangsCode { get; set; }
-        public bool IsVoltooid { get; set; }
-        public int AantalPogingen { get; set; }
         public Oefening Oefening { get; set; }
         public GroepsBewerking GroepsBewerking { get; set; }
         #endregion
@@ -19,12 +17,10 @@ namespace g16_dotnet.Models.Domain
             ToegangsCode = toegangsCode;
             Oefening = oefening;
             GroepsBewerking = groepsBewerking;
-            AantalPogingen = 0;
         }
 
         public Opdracht()
         {
-            AantalPogingen = 0;
         }
         #endregion
 

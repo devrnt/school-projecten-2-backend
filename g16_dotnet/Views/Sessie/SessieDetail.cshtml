@@ -8,85 +8,85 @@
 <div class="box">
     <h2 class="box-title box-title-display">Details van de sessie</h2>
     <div class="box-container">
-        <div style="display: flex; flex-direction:row;margin-bottom: 30px; align-items:center;">
-            <p><strong>Naam</strong>@($"\t{Model.SessieNaam}")</p>
-            <p><strong>Code</strong>@($"\t{Model.SessieCode}")</p>
+        <div style="display: flex; flex-direction:column;margin-bottom: 10px; align-items:flex-start;">
+            <p class="p-margin-top">
+                <strong>Naam: </strong>@($"\t{Model.SessieNaam}")
+            </p>
+            <p class="p-margin-top">
+                <strong>Code: </strong>@($"\t{Model.SessieCode}")
+            </p>
+            <p class="p-margin-top">
+                <strong>Klas: </strong>@($"\t{Model.Klas.Naam}")
+            </p>
+            <p class="p-margin-top" style="min-width:150px">
+                <strong>Omschrijving: </strong>@($"\t{Model.SessieOmschrijving}")
+            </p>
+            <p class="p-margin-top">
+                <strong>Doelgroep: </strong>@($"\t{Model.Doelgroep}")
+            </p>
+            @*<form method="post" asp-action="SelecteerDoelgroep" asp-route-sessieId="@Model.SessieCode">
+                    <label for="doelgroep"><strong>Doelgroep: </strong></label>
+                    <select asp-for="@Model.Doelgroep" asp-items="@(ViewData["Doelgroepen"] as SelectList)" id="doelgroep" name="doelgroep" class="select-input"></select>
+                    <button type="submit" class="box-button box-button-small" style="margin: 8px;margin-left: 5px; margin-bottom:0px; padding: 8px 14px">Bevestigen</button>
+                </form>*@
+            @*<p class="text-danger" style="display:none;" id="succes-doelgroep">De doelgroep werd succesvol gewijzigd</p>*@
+            <div id="groepenOverzicht">
+                @Html.Partial("_GroepenOverzicht", Model)
 
-            <div style="margin: 30px 0; width:100%; text-align:right">
-                @if (Model.IsActief)
-                {
-                    <a asp-action="BlokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-danger">Blokkeer Alle Groepen</a>
-                    <a asp-action="DeblokkeerAlleGroepen" asp-route-sessieId="@Model.SessieCode" class="box-button-default">Deblokkeer Alle Groepen</a>
-
-                }
             </div>
-        </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Groepen)
-
-                    </th>
-                    <th>
-                        Leerlingen
-                    </th>
-                    <th>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var groep in Model.Groepen)
+            <div class="box-button-group">
+                @if (!Model.IsActief)
                 {
-                    <tr style="vertical-align: text-top">
-                        <td id="groep">
-                            <b>@groep.Groepsnaam</b>
-                        </td>
-                        <td>
-                            <ul class="table-ul" id="scroll">
-                                @foreach (var leerling in groep.Leerlingen)
-                                {
-                                    <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
-
-                                }
-
-                            </ul>
-                        </td>
-                        <td id="vertical-align">
-                            @if (Model.IsActief)
-                            {
-                                @if (groep.Pad.IsGeblokkeerd)
-                                {
-                                    <a asp-action="DeblokkeerGroep" asp-route-sessieId="@Model.SessieCode" asp-route-groepId="@groep.GroepId" class="box-button-default">Deblokkeer</a>
-                                }
-                                else
-                                {
-                                    <a asp-action="BlokkeerGroep" asp-route-sessieId="@Model.SessieCode" asp-route-groepId="@groep.GroepId" class="box-button-danger">Blokkeer</a>
-                                }
-
-                            }
-
-                        </td>
-                    </tr>
+                    <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="box-button">Activeer deze sessie</a>
                 }
-            </tbody>
-        </table>
-        <div class="box-button-group">
-            @if (!Model.IsActief)
-            {
-                <a asp-action="ActiveerSessie" asp-route-sessieId="@Model.SessieCode" class="box-button">Activeer deze sessie</a>
-            }
-            else
-            {
-                <span>Deze sessie is al geactiveerd</span>
-            }
-            <a asp-action="BeheerSessies" class="box-button-default">Terug naar lijst sessies</a>
+                else
+                {
+                    <span>Deze sessie is al geactiveerd</span>
+                }
+                <a asp-action="BeheerSessies" class="box-button-default">Terug naar lijst sessies</a>
+            </div>
         </div>
     </div>
 
-
 </div>
+
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    window.localStorage.setItem("sessieId", @Model.SessieCode);
+</script>
+<script type="text/javascript" src="~/js/checkDeelnames.js">
+    $(document).ready(function () {
+        checkDeelnamesModule.checkDeel();
+    });
+</script>
+
+@* Script van jonas *@
+@*<script>
+        function selecteerDoelGroep() {
+            $('#succes-doelgroep').css('display', 'none');
+
+        console.log('Ajax post called');
+        let doelgroep = document.querySelector('#doelgroepSelect').value;
+        let passData = {}
+        passData.sessieId = "@Model.SessieCode";
+        passData.doelgroep = doelgroep;
+        console.log(passData);
+        if (doelgroep !== '' && doelgroep != null) {
+            let url = '@Url.Action("SelecteerDoelgroep", "Sessie")';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(passData),
+                contentType: 'application/json',
+                success: function (data) {
+                    $('#succes-doelgroep').css('display', 'block');
+                }
+            })
+        }
+
+    }
+    </script>*@
 
 
 <!--

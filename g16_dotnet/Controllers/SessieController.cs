@@ -3,14 +3,15 @@ using g16_dotnet.Models.Domain;
 using g16_dotnet.Models.SessieViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace g16_dotnet.Controllers
 {
     [Authorize(Policy = "Leerkracht")]
-    [ServiceFilter(typeof(LeerkrachtFilter))]
     public class SessieController : Controller
     {
         private readonly ISessieRepository _sessieRepository;
@@ -29,7 +30,6 @@ namespace g16_dotnet.Controllers
         public IActionResult Index()
         {
             ViewData["codeIngegeven"] = false;
-
             return View();
         }
 
@@ -38,15 +38,16 @@ namespace g16_dotnet.Controllers
         /// </summary>
         /// <param name="code">De code van de sessie waarbij men moet aansluiten</param>
         /// <returns>
-        /// Juiste code: Index View met als Model een IEnumerable van type Groep
+        /// Juiste code: Index View met als Model een IEnumerable<Groep>
         ///
         /// Foute code: RedirectToAction Index
         /// </returns>
         [AllowAnonymous]
+        [ServiceFilter(typeof(SessieFilter))]
         public IActionResult ValideerSessiecode(string code)
         {
             if (code == null || code.Trim().Length == 0)
-                TempData["error"] = "Geef een code in: ";
+                TempData["error"] = "Geef een code in";
             else
             {
                 try
@@ -56,11 +57,15 @@ namespace g16_dotnet.Controllers
                     if (sessie != null)
                     {
                         ViewData["codeIngegeven"] = true;
-                        return View("Index", sessie.Groepen);
+                        ViewData["sessieOmschrijving"] = sessie.Omschrijving;
+                        // om via de filter in Session weg te schrijven
+                        ViewData["sessieCode"] = sessieCode.ToString();
+                        ViewData["Doelgroep"] = JsonConvert.SerializeObject(sessie.Doelgroep);
+                        return View("Index", sessie);
                     }
                     else
                     {
-                        TempData["error"] = $"{code} hoort niet bij een sessie, vraag hulp aan je leerkracht";
+                        TempData["error"] = $"{code} hoort niet bij een sessie, vraag hulp aan je lesgever";
                     }
                 }
                 catch (FormatException)
@@ -75,8 +80,9 @@ namespace g16_dotnet.Controllers
         /// <summary>
         ///     Laat een leerkracht zijn/haar sessies beheren
         /// </summary>
-        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
-        /// <returns>BeheerSessies View met een ICollection van SessieLijstViewModel als Model</returns>
+        /// <param name="leerkracht">De leerkracht voor wie de bijhorende sessie worden opgevraagd</param>
+        /// <returns>BeheerSessies View met een ICollection<SessieLijstViewModel> als Model</returns>
+        [ServiceFilter(typeof(LeerkrachtFilter))]
         public IActionResult BeheerSessies(Leerkracht leerkracht)
         {
             ICollection<SessieLijstViewModel> sessieLijst = new List<SessieLijstViewModel>();
@@ -88,18 +94,18 @@ namespace g16_dotnet.Controllers
         /// <summary>
         ///     Selecteert een sessie om de details ervan te kunnen bekijken.
         /// </summary>
-        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
         /// <param name="sessieId">Het id van de geselecteerde sessie</param>
         /// <returns>
         ///     SessieDetail View met een SessieDetailViewModel als Model.
         ///     Indien er geen Sessie wordt gevonden met het meegegeven id wordt er een
         ///     NotFoundResult teruggeven.
         /// </returns>
-        public IActionResult SelecteerSessie(Leerkracht leerkracht, int sessieId)
+        public IActionResult SelecteerSessie(int sessieId)
         {
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
+            ViewData["Doelgroepen"] = GetDoelgroepenAsSelectList(sessie.Doelgroep);
 
             return View("SessieDetail", new SessieDetailViewModel(sessie));
         }
@@ -108,140 +114,134 @@ namespace g16_dotnet.Controllers
         /// <summary>
         ///     Activeert de sessie waarvan het detail werd weergegeven.
         /// </summary>
-        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
-        /// <param name="sessieId">Id van de Sessie waarvan het detail werd weergegeven</param>
+        /// <param name="sessieId">Id van de te activeren Sessie</param>
         /// <returns>
         ///     RedirectToAction BeheerSessies
         ///     Indien er geen Sessie wordt gevonden met het meegegeven id wordt er een
         ///     NotFoundResult teruggeven.
-        ///     Indien nog niet alle deelnames werden bevestigd wordt opnieuw de SessieDetail
-        ///     View teruggeven met een SessieDetailViewModel als Model.
         /// </returns>
-        public IActionResult ActiveerSessie(Leerkracht leerkracht, int sessieId)
+        public IActionResult ActiveerSessie(int sessieId)
         {
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
 
-            try
-            {
-                sessie.ActiveerSessie();
-                _sessieRepository.SaveChanges();
-                TempData["message"] = "Sessie is succesvol geactiveerd.";
-                return RedirectToAction(nameof(BeheerSessies));
-            }
-            catch (InvalidOperationException e)
-            {
-                TempData["error"] = e.Message;
-            }
-            return View("SessieDetail", new SessieDetailViewModel(sessie));
-        }
-
-        /// <summary>
-        /// Blokkeer een groep op basis van groepId + sessieId
-        /// </summary>
-        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
-        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
-        /// <param name="groepId">Id van de corresponderende groep</param>
-        /// <returns>
-        /// geeft huidige view geupdate terug</returns>
-        public IActionResult BlokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
-        {
-            Sessie sessie = _sessieRepository.GetById(sessieId);
-            if (sessie == null)
-                return NotFound();
-            Groep groep = sessie.Groepen.FirstOrDefault(g => g.GroepId == groepId); // gebruik linq
-            //foreach (Groep g in sessie.Groepen)
-            //{
-            //    if (g.GroepId == groepId)
-            //    {
-            //        groep = g;
-            //    }
-
-            //}
-            if (groep == null)
-            {
-                TempData["error"] = "Groep niet gevonden";
-            }
-            else
-            {
-                groep.BlokkeerPad();
-                _sessieRepository.SaveChanges();
-                TempData["message"] = "Groep werd succesvol geblokkeerd.";
-            }
-
-            return View("SessieDetail", new SessieDetailViewModel(sessie));
-        }
-
-        /// <summary>
-        /// Delokkeer een groep op basis van groepId + sessieId
-        /// </summary>
-        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
-        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
-        /// <param name="groepId">Id van de corresponderende groep</param>
-        /// <returns>
-        /// geeft huidige view geupdate terug</returns>
-        public IActionResult DeblokkeerGroep(Leerkracht leerkracht, int sessieId, int groepId)
-        {
-            Sessie sessie = _sessieRepository.GetById(sessieId);
-            if (sessie == null)
-                return NotFound();
-            Groep groep = sessie.Groepen.FirstOrDefault(g => g.GroepId == groepId);
-            if (groep != null)
-            {
-                groep.DeblokkeerPad();
-                _sessieRepository.SaveChanges();
-                TempData["message"] = "Groep werd succesvol gedeblokkeerd.";
-            }
-            else
-            {
-                TempData["error"] = "Groep niet gevonden.";
-            }
-            return View("SessieDetail", new SessieDetailViewModel(sessie));
-        }
-
-        /// <summary>
-        /// Blokkeer alle groepen op basis van sessieId
-        /// </summary>
-        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
-        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
-        /// <returns>
-        /// geeft huidige view geupdate terug</returns>
-        public IActionResult BlokkeerAlleGroepen(Leerkracht leerkracht, int sessieId)
-        {
-            Sessie sessie = _sessieRepository.GetById(sessieId);
-            if (sessie == null)
-                return NotFound();
-            sessie.BlokkeerAlleGroepen();
-            //foreach (Groep g in sessie.Groepen)
-            //{
-            //    g.BlokkeerPad();
-
-            //}
+            sessie.ActiveerSessie();
             _sessieRepository.SaveChanges();
-            TempData["message"] = "Alle groepen werden succesvol geblokkeerd.";
-            return View("SessieDetail", new SessieDetailViewModel(sessie));
+            TempData["message"] = "Sessie is succesvol geactiveerd.";
+            return RedirectToAction(nameof(SelecteerSessie), new { sessieId });
+
         }
 
         /// <summary>
-        /// Deblokkeer alle groepen op basis van sessieId
+        ///     Wijzigt de Groepen in de Sessie
         /// </summary>
-        /// <param name="leerkracht">Aangeleverd door LeerkrachtFilter</param>
-        /// <param name="sessieId">Id van de sessie van het huidig detailvenster</param>
-        /// <returns>
-        /// geeft huidige view geupdate terug</returns>
-        public IActionResult DeblokkeerAlleGroepen(Leerkracht leerkracht, int sessieId)
+        /// <param name="sessieId">Id van de Sessie waarvoor de Groepen moeten gewijzigd worden</param>
+        /// <param name="behaviourId">0: Blokkeren, 1: Deblokkeren, 2: Ontgrendelen</param>
+        /// <param name="groepId">Id van de te wijzigen Groep (of 0 voor alle Groepen)</param>
+        /// <returns></returns>
+        public IActionResult WijzigGroepen(int sessieId, int behaviourId, int groepId = 0)
         {
-
             Sessie sessie = _sessieRepository.GetById(sessieId);
             if (sessie == null)
                 return NotFound();
-            sessie.DeblokkeerAlleGroepen();
+
+            sessie.WijzigGroepen(behaviourId, groepId);
             _sessieRepository.SaveChanges();
-            TempData["message"] = "Alle groepen werden succesvol gedeblokkeerd.";
-            return View("SessieDetail", new SessieDetailViewModel(sessie));
+
+            return RedirectToAction(nameof(SelecteerSessie), new { sessieId });
         }
+
+        /// <summary>
+        ///     Haalt een Sessie op een geeft deze mee in een Partial View
+        /// </summary>
+        /// <param name="sessieId">De te op te halen Sessie</param>
+        /// <returns>PartialView _GroepenOverzicht met als Model een SessieDetailViewModel</returns>
+        [HttpGet]
+        public IActionResult CheckDeelnames(int sessieId)
+        {
+            Sessie sessie = _sessieRepository.GetById(sessieId);
+            if (sessie == null)
+                return NotFound();
+            return PartialView("_GroepenOverzicht", new SessieDetailViewModel(sessie));
+        }
+
+        ///// <summary>
+        /////     Selecteer de Doelgroep voor een specifieke Sessie
+        ///// </summary>
+        ///// <param name="sessieId">De Sessie waarvoor de Doelgroep moet ingesteld worden</param>
+        ///// <param name="doelgroep">De waarde van de gekozen DoelgroepEnum</param>
+        ///// <returns>SessieDetail View met een SessieDetailViewModel als Model</returns>
+        //[HttpPost]
+        //[ServiceFilter(typeof(SessieFilter))]
+        //public IActionResult SelecteerDoelgroep(int sessieId, int doelgroep) {
+        //    DoelgroepEnum gekozen = ((DoelgroepEnum)doelgroep);
+        //    var sessie =_sessieRepository.GetById(sessieId);
+        //    if (sessie == null) {
+        //        return NotFound();
+        //    }
+        //    if (Enum.GetValues(typeof(DoelgroepEnum)).Length > doelgroep && doelgroep >= 0)
+        //    {
+        //        ViewData["sessieCode"] = sessieId.ToString();
+        //        sessie.Doelgroep = gekozen;
+        //        _sessieRepository.SaveChanges();
+        //        ViewData["Doelgroep"] = JsonConvert.SerializeObject(sessie.Doelgroep);
+        //    } else
+        //    {
+        //        TempData["error"] = "Ongeldige doelgroep";
+        //    }
+
+        //    return RedirectToAction(nameof(SelecteerSessie), new { sessieId });
+
+        //}
+
+        /// <summary>
+        ///     Controleert of de meegegeven sessie actief is
+        /// </summary>
+        /// <param name="sessieId">Id van de te controleren Sessie</param>
+        /// <returns>
+        ///     JsonObject met de property IsActief
+        /// </returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult IsSessieActief(string sessieId)
+        {
+            Sessie sessie = null;
+            int id = 0;
+            if (int.TryParse(sessieId, out id))
+                sessie = _sessieRepository.GetById(id);
+            return Json(new { sessie?.IsActief });
+        }
+
+        /// <summary>
+        ///     Speelt het spel verder met meegegeven Pad
+        /// </summary>
+        /// <param name="padId">Het id van het te spelen Pad</param>
+        /// <returns>PartialView met een Pad als Model</returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult VerderSpelen(int padId)
+        {
+            Pad pad = new Pad() { PadId = padId };
+            return PartialView("_VerderSpelen", pad);
+        }
+
+        private SelectList GetDoelgroepenAsSelectList(DoelgroepEnum doelgroep) {
+            return new SelectList(Enum.GetValues(typeof(DoelgroepEnum))
+                .Cast<DoelgroepEnum>()
+                .Select(d => new SelectListItem {
+                    Text = d.ToString(),
+                    Value = ((int)d).ToString()
+                }).ToList(), "Value", "Text", doelgroep);
+        }
+
+
+     
     }
+
+
+   
+
 
 
 }

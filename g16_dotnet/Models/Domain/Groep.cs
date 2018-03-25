@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace g16_dotnet.Models.Domain
 {
@@ -9,7 +10,6 @@ namespace g16_dotnet.Models.Domain
         public string Groepsnaam { get; set; }
         public ICollection<Leerling> Leerlingen { get; set; }
         public bool DeelnameBevestigd { get; set; }
-        public bool IsVergrendeld { get; set; }
         public Pad Pad { get; set; }
         #endregion
 
@@ -17,7 +17,6 @@ namespace g16_dotnet.Models.Domain
         public Groep()
         {
             Leerlingen = new List<Leerling>();
-            IsVergrendeld = false;
             DeelnameBevestigd = false;
         }
 
@@ -28,13 +27,25 @@ namespace g16_dotnet.Models.Domain
         #endregion
 
         #region Methods
+
+        public void VerwijderLeerlingUitGroep(Leerling lln)
+        {
+            Leerlingen.Remove(lln);
+        }
+
         public void BlokkeerPad()
         {
-            Pad.IsGeblokkeerd = true;
+            Pad.Blokkeer();
         }
+
         public void DeblokkeerPad()
         {
-            Pad.IsGeblokkeerd = false;
+            Pad.DeBlokkeer();
+        }
+
+        public void OntgrendelPad()
+        {
+            Pad.Ontgrendel();
         }
         #endregion
     }

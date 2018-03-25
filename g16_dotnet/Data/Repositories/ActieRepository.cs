@@ -28,12 +28,12 @@ namespace g16_dotnet.Data.Repositories
 
         public IEnumerable<Actie> GetAll()
         {
-            return _acties.Include(a => a.GelinkteOpdracht).ToList();
+            return _acties.ToList();
         }
 
         public Actie GetById(int id)
         {
-            return _acties.Include(a => a.GelinkteOpdracht).SingleOrDefault(a => a.ActieId == id);
+            return _acties.SingleOrDefault(a => a.ActieId == id);
         }
 
         public void SaveChanges()

@@ -7,7 +7,7 @@ namespace g16_dotnet.Models.Domain
 {
     public class SchatkistPadState : PadState
     {
-        public SchatkistPadState(string name) : base(name)
+        public SchatkistPadState() : base("Schatkist")
         {
 
         }

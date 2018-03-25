@@ -270,3 +270,4 @@ __pycache__/
 /._.DS_Store
 /g16_dotnet/Controllers/.DS_Store
 /g16_dotnet/Controllers/._.DS_Store
+*.cs

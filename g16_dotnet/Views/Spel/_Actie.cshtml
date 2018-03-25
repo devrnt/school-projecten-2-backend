@@ -6,15 +6,15 @@
     <h2 class="box-title box-title-display">Actie</h2>
     <div class="box-container">
         <p class="action-description">
-            @Model.HuidigeActie.Omschrijving
+            @Model.HuidigeActie.Actie.Omschrijving
         </p>
-        <form asp-action="VoerActieUit">
+        <form asp-action="VoerActieUit" asp-route-padId="@Model.PadId" autocomplete="nope">
 
             <div>
-                <label for="toegangsCode" class="box-label"><b>Toegangscode: </b></label>
+                <label for="toegangsCode" class="box-label"><b>Antwoord: </b></label>
                 <input type="text" id="toegangsCode" name="toegangsCode" class="box-input" placeholder="Code" />
             </div>
-            <button type="submit" class="box-button">Bevestig</button>
+            <button type="submit" class="box-button" style="width:100%">Bevestig</button>
         </form>
     </div>
 </div>

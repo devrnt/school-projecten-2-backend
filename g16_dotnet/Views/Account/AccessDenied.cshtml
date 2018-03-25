@@ -1,8 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Toegang geweigerd";
 }
 
-<header>
-    <h2 class="text-danger">@ViewData["Title"]</h2>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div class="box">
+    <h2 class="box-title box-title-display">Toegang geweigerd</h2>
+    <div class="box-container">
+        <p>
+            Je hebt niet de juiste rechten voor deze actie
+        </p>
+        <a asp-action="Index" asp-controller="Sessie" class="box-button">Keer terug naar het beginscherm</a>
+    </div>
+</div>

@@ -78,7 +78,7 @@ namespace g16_dotnet.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Email en/of wachtwoord is verkeerd.");
                     return View(model);
                 }
             }
@@ -247,7 +247,7 @@ namespace g16_dotnet.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(SessieController.Index), "Sessie");
         }
 
         [HttpPost]

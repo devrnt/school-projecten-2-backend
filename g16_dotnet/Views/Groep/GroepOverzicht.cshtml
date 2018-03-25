@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "GroepOverzicht";
 }
+
 <div class="box">
     <h2 class="box-title box-title-display">Uw Groep</h2>
     <div class="box-container">
@@ -19,16 +20,24 @@
                     <td>
                         <ul class="table-ul">
 
-                            @foreach (var leerling in Model.Leerlingen) {
-                            <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
-                    }
+                            @foreach (var leerling in Model.Leerlingen)
+                            {
+                                <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
+                            }
                         </ul>
                     </td>
                     <td class="table-align-right">
-                        <a asp-action="StartSpel" asp-route-groepId="@Model.GroepId" class="table-button table-button-large">Start Spel</a>
+                        <a asp-action="StartSpel" id="startspel" asp-route-groepId="@Model.GroepId" class="table-button table-button-large not-active">Start Spel</a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.localStorage.setItem("sessieId", @ViewData["sessieId"]);
+    window.localStorage.setItem("padId", @Model.Pad.PadId);
+</script>
+<script type="text/javascript" src="~/js/checkSessie.js"></script>

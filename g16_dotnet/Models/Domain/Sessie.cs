@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -15,6 +14,8 @@ namespace g16_dotnet.Models.Domain
         public bool IsActief { get; set; }
         public IEnumerable<Groep> Groepen { get; set; }
         public Klas Klas { get; set; }
+        public DoelgroepEnum Doelgroep { get; set; } //nodig voor de custom css per 'doelgroep'
+        public IGroepBehaviour GroepBehaviour { get; set; }
         #endregion
 
         #region Constructor
@@ -25,6 +26,7 @@ namespace g16_dotnet.Models.Domain
             Omschrijving = omschrijving;
             Groepen = groepen;
             Klas = klas;
+            Doelgroep = DoelgroepEnum.Jongeren;
         }
 
         public Sessie()
@@ -36,19 +38,19 @@ namespace g16_dotnet.Models.Domain
         #region Methods
         public void ActiveerSessie()
         {
-            if (Groepen.Any(g => !g.DeelnameBevestigd))
-                throw new InvalidOperationException("Alle groepen moeten eerst hun deelname bevestigd hebben!");
             IsActief = true;
         }
 
-        public void BlokkeerAlleGroepen()
+        public void WijzigGroepen(int behaviourId, int groepId)
         {
-            Groepen.All(g => { g.Pad.IsGeblokkeerd = true; return true; });
-        }
+            switch (behaviourId)
+            {
+                case 0: GroepBehaviour = new BlokkeerGroepBehaviour(); break;
+                case 1: GroepBehaviour = new DeblokkeerGroepBehaviour(); break;
+                case 2: GroepBehaviour = new OntgrendelGroepBehaviour(); break;
+            }
 
-        public void DeblokkeerAlleGroepen()
-        {
-            Groepen.All(g => { g.Pad.IsGeblokkeerd = false; return true; });
+            Groepen = GroepBehaviour.VoerUit(Groepen, groepId);
         }
         #endregion
     }

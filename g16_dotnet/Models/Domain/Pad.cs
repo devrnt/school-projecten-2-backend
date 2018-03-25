@@ -7,21 +7,45 @@ namespace g16_dotnet.Models.Domain
 {
     public class Pad
     {
+        private PadState _padState;
         #region Fields and Properties
         public int PadId { get; set; }
         public int? AantalOpdrachten { get { return Opdrachten?.Count(); } }
-        public int? Voortgang { get { return Opdrachten?.Where(po => po.Opdracht.IsVoltooid).Count(); } }
-        public Opdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(po => !po.Opdracht.IsVoltooid)?.Opdracht; } }
-        public PadState PadState { get; set; }
-
-        public Actie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.Actie.IsUitgevoerd)?.Actie; } }
-        public ICollection<PadOpdracht> Opdrachten { get; set; }
-        public ICollection<PadActie> Acties { get; set; }
-        public bool IsGeblokkeerd { get; set; }
+        public int? Voortgang { get { return Opdrachten?.Where(po => po.IsVoltooid).Count(); } }
+        public PadOpdracht HuidigeOpdracht { get { return Opdrachten?.FirstOrDefault(po => !po.IsVoltooid); } }
+        public PadState PadState { get { return _padState; }
+            set
+            {
+                switch (value.StateName)
+                {
+                    case "Geblokkeerd":
+                        State = States.Geblokkeerd;
+                        break;
+                    case "Opdracht":
+                        State = States.Opdracht;
+                        break;
+                    case "Actie":
+                        State = States.Actie;
+                        break;
+                    case "Vergrendeld":
+                        State = States.Vergrendeld;
+                        break;
+                    case "Schatkist":
+                        State = States.Schatkist;
+                        break;
+                }
+                _padState = value;
+            }
+        }
+        // Voor persistentie
+        public States State { get; set; }
+        public PadActie HuidigeActie { get { return Acties?.FirstOrDefault(pa => !pa.IsUitgevoerd); } }
+        public IList<PadOpdracht> Opdrachten { get; set; }
+        public IList<PadActie> Acties { get; set; }
         #endregion
 
         #region Constructors
-        public Pad(ICollection<PadOpdracht> opdrachten, ICollection<PadActie> acties)
+        public Pad(IList<PadOpdracht> opdrachten, IList<PadActie> acties)
         {
             Opdrachten = opdrachten;
             Acties = acties;
@@ -31,18 +55,19 @@ namespace g16_dotnet.Models.Domain
         {
             Opdrachten = new List<PadOpdracht>();
             Acties = new List<PadActie>();
+
         }
         #endregion
 
         #region Methods
-        public void AddOpdracht(Opdracht opdracht)
+        public void AddOpdracht(Opdracht opdracht, int order)
         {
-            Opdrachten.Add(new PadOpdracht(this, opdracht));
+            Opdrachten.Add(new PadOpdracht(this, opdracht, order));
         }
 
-        public void AddActie(Actie actie)
+        public void AddActie(Actie actie, int order)
         {
-            Acties.Add(new PadActie(this, actie));
+            Acties.Add(new PadActie(this, actie, order));
         }
 
         public bool ControleerAntwoord(int antwoord)
@@ -51,8 +76,28 @@ namespace g16_dotnet.Models.Domain
         }
 
         public bool ControleerToegangsCode(string code)
-        {           
+        {
             return PadState.ControleerToegangsCode(this, code);
+        }
+
+        public void Ontgrendel()
+        {
+            PadState.Ontgrendel(this);
+        }
+
+        public void Vergrendel()
+        {
+            PadState.Vergrendel(this);
+        }
+
+        public void Blokkeer()
+        {
+            PadState.Blokkeer(this);
+        }
+
+        public void DeBlokkeer()
+        {
+            PadState.Deblokkeer(this);
         }
         #endregion
     }

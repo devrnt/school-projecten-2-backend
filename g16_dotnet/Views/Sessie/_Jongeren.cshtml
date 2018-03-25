@@ -1,0 +1,56 @@
+﻿@model IEnumerable<g16_dotnet.Models.Domain.Groep>
+
+<div><p style="margin-bottom: 15px "><strong> Omschrijving</strong> : @ViewData["sessieOmschrijving"]</p></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Groepsnaam</th>
+            <th>Groepsleden</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var groep in Model)
+        {
+            <tr>
+                <td>@groep.Groepsnaam</td>
+                <td>
+                    <ul class="table-ul">
+                        @foreach (var leerling in groep.Leerlingen)
+                        {
+                            <li>
+                                @($"{leerling.Voornaam} {leerling.Naam}")
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    @if (groep.Leerlingen.Count < 4)
+                    {
+                        <a asp-controller="Groep" class="table-button" asp-action="NeemDeel" asp-route-groepId="@groep.GroepId">Deelnemen</a>
+
+                    }
+                </td>
+                <td>
+                    @if (!groep.DeelnameBevestigd)
+                    {@if (groep.Leerlingen.Count() < 2)
+                        {
+                            <a asp-controller="Groep" asp-action="KiesGroep" class="table-button not-active ">Minimaal 2 spelers</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Groep" asp-action="KiesGroep" asp-route-sessieId="@(int.Parse(ViewData["sessieCode"] as string))" asp-route-groepsId="@groep.GroepId" class="table-button">Selecteer</a>
+                        }
+
+                }
+                else
+                {
+                    <span>Deze groep is al gekozen!</span>
+                }
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

@@ -10,6 +10,7 @@ namespace g16_dotnet.Models.SessieViewModel
         public int SessieCode { get; set; }
         [Display(Name = "Sessie naam")]
         public string SessieNaam { get; set; }
+        public Klas Klas { get; set; }
         public string Omschrijving { get; set; }
         
 
@@ -17,6 +18,7 @@ namespace g16_dotnet.Models.SessieViewModel
         {
             SessieCode = sessie.SessieCode;
             SessieNaam = sessie.Naam;
+            Klas = sessie.Klas;
             Omschrijving = sessie.Omschrijving;
         }
     }

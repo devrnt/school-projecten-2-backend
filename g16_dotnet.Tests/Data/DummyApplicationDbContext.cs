@@ -13,6 +13,7 @@ namespace g16_dotnet.Tests.Data
 
         public Pad Pad { get; }
         public Pad PadMet1Opdracht { get; set; }
+        public Pad PadGeblokkeerd { get; set; }
 
         public Oefening Oef1 { get; }
         public Oefening Oef2 { get; }
@@ -27,8 +28,10 @@ namespace g16_dotnet.Tests.Data
         public Groep Groep1 { get; set; }
         public Groep Groep2 { get; set; }
         public Klas Klas1 { get; set; }
+        public Klas Klas2 { get; set; }
         public Leerling Leerling1 { get; set; }
         public Leerling Leerling2 { get; set; }
+        public Leerling Leerling3 { get; set; }
 
         public Opdracht PadOpdracht1 { get; }
         public Leerkracht Leerkracht1 { get; set; }
@@ -52,24 +55,30 @@ namespace g16_dotnet.Tests.Data
             Acties = new[] { Actie1, Actie2 };
 
             Pad = new Pad() { PadId = 1 };
-            Pad.AddOpdracht(Opdracht1);
-            Pad.AddOpdracht(Opdracht2);
-            Pad.AddActie(Actie1);
-            Pad.AddActie(Actie2);
-            Pad.PadState = new OpdrachtPadState("Opdracht");
+            Pad.AddOpdracht(Opdracht1, 1);
+            Pad.AddOpdracht(Opdracht2, 2);
+            Pad.AddActie(Actie1, 1);
+            Pad.AddActie(Actie2, 2);
+            Pad.PadState = new OpdrachtPadState();
             PadMet1Opdracht = new Pad() { PadId = 5 };
-            PadMet1Opdracht.AddOpdracht(Opdracht1);
-            PadMet1Opdracht.AddActie(Actie1);
-            PadMet1Opdracht.PadState = new OpdrachtPadState("Opdracht");
+            PadMet1Opdracht.AddOpdracht(Opdracht1, 1);
+            PadMet1Opdracht.AddActie(Actie1, 1);
+            PadMet1Opdracht.PadState = new OpdrachtPadState();
+            PadGeblokkeerd = new Pad() { PadId = 2 };
+            PadGeblokkeerd.AddOpdracht(Opdracht1, 1);
+            PadGeblokkeerd.AddOpdracht(Opdracht2, 2);
+            PadGeblokkeerd.PadState = new GeblokkeerdPadState();
 
 
             Groep1 = new Groep("Groep1") { GroepId = 1, Pad = Pad, DeelnameBevestigd = true };
-            Groep2 = new Groep("Groep2") { Pad = Pad, DeelnameBevestigd = false };
+            Groep2 = new Groep("Groep2") { GroepId = 2, Pad = PadGeblokkeerd, DeelnameBevestigd = false };
             Leerling1 = new Leerling("McDerp", "Derp");
             Leerling2 = new Leerling("Cena", "John");
+            Leerling3 = new Leerling("Flib", "Flub") { LeerlingId = 3};
             Klas1 = new Klas("Klas1", new List<Leerling> { Leerling1, Leerling2 });
+            Klas2 = new Klas("Klas2", new List<Leerling> { Leerling3 });
             SessieAlleDeelnamesBevestigd = new Sessie(123, "Sessie1", "Dit is sessie1", new List<Groep> { Groep1 }, Klas1);
-            SessieNogDeelnamesTeBevestigen = new Sessie(321, "Sessie2", "Dit is sessie2", new List<Groep> { Groep2 }, Klas1);
+            SessieNogDeelnamesTeBevestigen = new Sessie(321, "Sessie2", "Dit is sessie2", new List<Groep> { Groep2 }, Klas2);
             Leerkracht1 = new Leerkracht("VanDam", "Alain", "alain.vandam@synalco.be") { Sessies = new List<Sessie> { SessieAlleDeelnamesBevestigd } };
         }
 

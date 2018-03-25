@@ -9,4 +9,4 @@
         node.style.display = 'none';
     }
 
-}
+};

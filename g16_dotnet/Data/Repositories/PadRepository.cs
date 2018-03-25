@@ -14,7 +14,7 @@ namespace g16_dotnet.Data.Repositories
 
         }
         public Pad GetById(int id) {
-            return _paden
+            var pad =  _paden
                 .Include(p => p.Opdrachten)
                     .ThenInclude(po => po.Opdracht)
                     .ThenInclude(o => o.GroepsBewerking)
@@ -24,6 +24,30 @@ namespace g16_dotnet.Data.Repositories
                 .Include(p => p.Acties)
                     .ThenInclude(pa => pa.Actie)
                 .SingleOrDefault(p => p.PadId == id);
+
+            pad.Opdrachten = pad.Opdrachten.OrderBy(po => po.Order).ToList();
+            pad.Acties.OrderBy(pa => pa.Order);
+
+            switch (pad.State)
+            {
+                case States.Geblokkeerd:
+                    pad.PadState = new GeblokkeerdPadState();
+                    break;
+                case States.Opdracht:
+                    pad.PadState = new OpdrachtPadState();
+                    break;
+                case States.Actie:
+                    pad.PadState = new ActiePadState();
+                    break;
+                case States.Vergrendeld:
+                    pad.PadState = new VergrendeldPadState();
+                    break;
+                case States.Schatkist:
+                    pad.PadState = new SchatkistPadState();
+                    break;
+            }
+
+            return pad;
         }
 
         public IEnumerable<Pad> GetAll() {

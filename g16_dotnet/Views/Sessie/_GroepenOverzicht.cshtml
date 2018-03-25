@@ -1,0 +1,78 @@
+﻿@model g16_dotnet.Models.SessieViewModel.SessieDetailViewModel
+
+<div style="margin: 15px 0; width:100%; text-align:right">
+    @if (Model.IsActief && Model.Groepen.Count(g => g.DeelnameBevestigd) > 0 && !Model.Groepen.All(g => g.Pad.State == g16_dotnet.Models.Domain.States.Schatkist))
+    {
+        <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="0" class="box-button-danger box-button-small" style="margin-top: 20px;">Blokkeer Alle Groepen</a>
+        <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="1" class="box-button-default box-button-small">Deblokkeer Alle Groepen</a>
+
+    }
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @($"{(Model.Doelgroep == g16_dotnet.Models.Domain.DoelgroepEnum.Jongeren ? "Groepen" : "Plaatsen")}")
+            </th>
+            <th>
+                Leerling@($"{(Model.Doelgroep == g16_dotnet.Models.Domain.DoelgroepEnum.Jongeren ? "en" : "")}")
+            </th>
+            <th style="text-align:center;">
+                Deelname bevestigd
+            </th>
+            <th>
+                Voortgang (oefening)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var groep in Model.Groepen)
+        {
+            <tr style="vertical-align: text-top">
+                <td id="groep">
+                    <b>@groep.Groepsnaam</b>
+                </td>
+                <td>
+                    <ul class="table-ul" id="scroll">
+                        @foreach (var leerling in groep.Leerlingen)
+                        {
+                            <li>@($"{leerling.Voornaam} {leerling.Naam}")</li>
+
+                        }
+
+                    </ul>
+                </td>
+                <td style="text-align:center; vertical-align:middle;">
+                    <input type="checkbox" onclick="return false;" @(groep.DeelnameBevestigd ? "checked" : "") class="checkbox">
+                </td>
+                <td style="vertical-align: middle; text-align:center;">
+                    @groep.Pad.Voortgang / @groep.Pad.AantalOpdrachten
+                </td>
+                <td id="vertical-align">
+                    @if (Model.IsActief)
+                    {
+                        @if (groep.DeelnameBevestigd)
+                        {
+                            @if (groep.Pad.State == g16_dotnet.Models.Domain.States.Geblokkeerd)
+                            {
+                                <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="1" asp-route-groepId="@groep.GroepId" class="box-button-default">Deblokkeer</a>
+                            }
+                            else if (groep.Pad.State == g16_dotnet.Models.Domain.States.Vergrendeld)
+                            {
+                                <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="2" asp-route-groepId="@groep.GroepId" class="box-button-default">Ontgrendel</a>
+                            }
+                            else if (groep.Pad.State != g16_dotnet.Models.Domain.States.Schatkist)
+                            {
+                                <a asp-action="WijzigGroepen" asp-route-sessieId="@Model.SessieCode" asp-route-behaviourId="0" asp-route-groepId="@groep.GroepId" class="box-button-danger">Blokkeer</a>
+                            }
+
+                        }
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

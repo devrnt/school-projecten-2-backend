@@ -3,6 +3,11 @@
     ViewData["Title"] = "Spel spelen";
 }
 
+
+
 @Html.Partial($"_{Model.PadState.StateName}", Model)
 
 
+<script type="text/javascript">
+    window.localStorage.setItem("padId", @Model.PadId);
+</script>

@@ -1,0 +1,6 @@
+﻿@model g16_dotnet.Models.Domain.Pad
+
+<p style="margin-bottom: 1.5rem">Je hebt nog een actief spel</p>
+<a asp-controller="Spel" id="startspel" asp-action="Index" asp-route-padId="@Model.PadId" class="box-button not-active">Verder spelen!</a>
+
+<script src="~/js/checkSessie.js" type="text/javascript"></script>

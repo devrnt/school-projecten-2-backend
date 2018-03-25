@@ -11,17 +11,28 @@ namespace g16_dotnet.Models.SessieViewModel
         public int SessieCode { get; set; }
         [Display(Name = "Sessie naam")]
         public string SessieNaam { get; set; }
+        public Klas Klas { get; set; }
+        [Display(Name = "Sessie omschrijving")]
+        public string SessieOmschrijving { get; set; }
         public IEnumerable<Groep> Groepen { get; set; }
         [HiddenInput]
         public bool IsActief { get; set; }
         public bool IsGeblokkeerd { get; set; }
+        public DoelgroepEnum Doelgroep { get; set; }
 
         public SessieDetailViewModel(Sessie sessie)
         {
             SessieNaam = sessie.Naam;
             SessieCode = sessie.SessieCode;
+            Klas = sessie.Klas;
+            SessieOmschrijving = sessie.Omschrijving;
             Groepen = sessie.Groepen;
             IsActief = sessie.IsActief;
+            Doelgroep = sessie.Doelgroep;
+        }
+
+        public SessieDetailViewModel() {
+
         }
     }
 }

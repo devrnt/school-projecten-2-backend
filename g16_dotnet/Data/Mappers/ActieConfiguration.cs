@@ -14,8 +14,6 @@ namespace g16_dotnet.Data.Mappers
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.HasOne(a => a.GelinkteOpdracht)
-                .WithMany();
         }
     }
 }
