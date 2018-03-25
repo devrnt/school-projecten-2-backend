@@ -2,11 +2,10 @@
 
 <div class="box">
     <h2 class="box-title box-title-display">Groep geblokkeerd</h2>
-
     <div class="box-container">
         <br />
         <p>
-            Jullie groep is eventjes geblokkeerd zodat je kan pauzeren, wacht op je leerkracht om verder te gaan!
+            Het spel is eventjes geblokkeerd, wacht op je leerkracht om verder te gaan.
         </p>
         <br />
         <br />
@@ -15,25 +14,4 @@
 </div>
 
 <script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
-<script type="text/javascript">
-    var checkPad = function () {
-        console.log("Checking pad...");
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("CheckPad", "Spel")",
-            data: {padId: JSON.stringify(@Model.PadId)},
-            contentType: "application/json;",
-            dataType: "json",
-            success: function (response) {
-                if (!response.isGeblokkeerd) {
-                    $("#verdergaan").removeClass("not-active");
-                } else {
-                    setTimeout(checkPad, 3000);
-                }
-            }
-        });
-    }
-
-    checkPad();
-
-</script>
+<script type="text/javascript" src="~/js/checkPad.js"></script>
